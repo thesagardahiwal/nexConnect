@@ -13,20 +13,10 @@ export const SocketProvider = ({ children }) => {
       reconnectionDelay: 1000,  // Delay between reconnection attempts (in milliseconds)
     });
 
+    console.log(socket);
+    console.log("Reloaded!")
+
     setSocket(newSocket);
-
-    // Optional: Add event listeners for reconnection events
-    newSocket.on('reconnect', (attemptNumber) => {
-      console.log('Reconnected after attempt number:', attemptNumber);
-    });
-
-    newSocket.on('reconnecting', (attemptNumber) => {
-      console.log('Attempting to reconnect. Attempt number:', attemptNumber);
-    });
-
-    newSocket.on('reconnect_error', (error) => {
-      console.error('Reconnection error:', error.message);
-    });
 
     return () => newSocket.disconnect();
   }, []);
@@ -39,5 +29,10 @@ export const SocketProvider = ({ children }) => {
 };
 
 export const useSocket = () => {
-  return useContext(SocketContext);
+  const socket = useContext(SocketContext);
+  if (!socket) {
+    // throw new Error('useSocket must be used within a SocketProvider');
+    console.log("Not Load");
+  }
+  return socket;
 };

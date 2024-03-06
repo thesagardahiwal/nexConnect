@@ -5,6 +5,7 @@ import { FirebaseProvider } from './firebase/FirebaseContext';
 import { SocketProvider } from "./socket/SocketContext";
 import LoginPage from './pages/LoginPage';
 import ChatPage from './pages/ChatPage';
+import GroupPage from "./pages/GroupPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/chat/:roomId" element={<ChatPage />} />
+            <Route path='/chat/:roomId/files' element={<GroupPage />} />
           </Routes>
         </Router>
       </SocketProvider>
