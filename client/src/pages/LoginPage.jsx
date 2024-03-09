@@ -1,94 +1,77 @@
 // src/pages/LoginPage.jsx
-import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useFirebase } from '../firebase/FirebaseContext';
-import { useSocket } from '../socket/SocketContext';
-
-
-localStorage.clear();
+import React, { useEffect, useRef, useState } from 'react';
+import Logo from '../components/Logo.jsx';
+import CreateRoom from '../forms/CreateRoom.jsx';
+import JoinRoom from '../forms/JoinRoom.jsx';
+import LogoBigView from '../components/LogoBigView.jsx';
+import RoomButton from '../components/RoomButton.jsx';
+import { back } from "../assets/icons/index.js"
+import BackHandle from '../hooks/BackHandle.jsx';
 
 function LoginPage() {
-  const [roomID, setRoomID] = useState('');
-  const navigate = useNavigate();
-  const firebase = useFirebase();
-  const socket = useSocket();
 
-  const handleCreatingButton = () => {
-    // Check if the username is available
-    //const userExists = await firebase.checkUsername(username);
-    // if (!userExists) {
-    //   // Log in the user
-    //   firebase.login(username);
-    //   localStorage.setItem('username', username);
-    //   // Redirect to the main chat page
-    //   navigate('/chat');
-    // } else {
-    //   await firebase.logout(username);
-    //   localStorage.removeItem('username');
-    //   alert('Username already in use. Please choose another.');
-    // }
-    const generatedRoomID = Math.floor(100000 + Math.random() * 900000).toString();
-    if(socket) {
-      console.log("Creating Room!")
-      socket.emit("create-room", {id: generatedRoomID});
-      socket.on("room-chat", (data) => {
-        console.log(data);
-        if (isAvailable(data[1])) {
-          console.log("Available", data[1]);
-          navigate(`/chat/${data[1]}`);
-        }
-      })
-    }
+  const [ createButtonActive, setCreateButtonActive ] = useState(false);
+  const [ joinButtonActive, setJoinButtonActive ] = useState(false);
 
-    const isAvailable = async(roomNumber) => {
-      const isInUse = await firebase.checkUsername(roomNumber);
-      if (!isInUse) {
-        await firebase.login(roomNumber);
-        localStorage.setItem('room', roomNumber);
-        return true;
-      }
-      return false;
+  const myElementRef = useRef();
+  const [elementWidth, setElementWidth] = useState(0);
+  const [elementHeight, setElementHeight] = useState(0);
+
+
+  const handleResize = () => {
+    if (myElementRef.current) {
+      setElementWidth(myElementRef.current.offsetWidth);
+      setElementHeight(myElementRef.current.offsetHeight);
     }
   };
 
-  useEffect(()=>{
-    if (socket) {
-      console.log(socket.id);
-      socket.on("message", (data) => {
-        console.log("Recieved:", data);
-      })
-    }
-  }, [socket]);
 
-  const isExist = async () => {
-    if (socket) {
-      const isExist = await firebase.checkUsername(roomID);
-      if (isExist) {
-        socket.emit("join-room", roomID);
-        navigate(`/chat/${roomID}`);
-      }
-    }
-  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    isExist();
-    
-  }
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+
+  }, []);
+
 
   return (
-    <div className='bg-slate-300 h-[100vh]'>
-      <div>
-        <h2>Home Page</h2>
-      </div>
-      <div>
-        <button className='btn rounded-md border bg-red-500 p-1 m-1' onClick={handleCreatingButton}>Create Group</button> <br /><br />
+    <div className=' h-[100vh]' ref={myElementRef}>
+      <div className='flex h-full w-full'>
+        <div className={`${elementWidth > 1023 && elementHeight < 1100 ? "w-[50%]" : 'w-full'} h-full flex items-center justify-center p-4 bg-gradient-to-r from-sky-500 to-indigo-500`}>
+          <div className={`w-[400px] h-full sm:h-fit ${elementWidth < 700 ? "mt-[120px]" : ""}`}>
+            {(elementWidth < 1023 || elementHeight > 1023) && <Logo />}
+            {joinButtonActive ? 
+            (
+              <>
+              <JoinRoom />
+              <BackHandle active={setJoinButtonActive}/>
+              </>
+            ) : createButtonActive ? 
+                (
+                  <>
+                    <CreateRoom />
+                    <BackHandle active={setCreateButtonActive}/>
+                  </>
+                ) :
+                    ( 
+                      <>
+                      <RoomButton Active={setCreateButtonActive} IDE={"Create"} />
+                      <RoomButton Active={setJoinButtonActive} IDE={"Join"}/>
+                      </>
+                    ) }
 
-        <form onSubmit={e => handleSubmit(e)}>
-          <input type="text"  className='rounded-md border p-1' value={roomID} onChange={e => setRoomID(e.target.value)} placeholder='Enter Group Code'/>
-          <button type='submit' className='btn rounded-md border bg-red-200 p-1 m-1'>Join</button>
-        </form>
+          </div>
+        </div>
+        {/* Right Ride */}
+        {elementWidth > 1023 && elementHeight < 1200 && <LogoBigView />}
       </div>
+
+
+
     </div>
   );
 }
