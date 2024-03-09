@@ -30,6 +30,7 @@ class Firebase {
   login = async (username) => {
     await signInAnonymously(this.auth);
     await setDoc(doc(this.db, 'users', username), { online: true });
+    console.log(`User ${username} logged in successfully.`);
   };
 
   logout = async (username) => {

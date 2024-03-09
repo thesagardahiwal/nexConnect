@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '../socket/SocketContext';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { screenShare, fileupload,sender} from '../assets/icons/index.js';
 
 const BottomBar = ({width}) => {
@@ -8,7 +8,7 @@ const BottomBar = ({width}) => {
   const [ file, setFile ] = useState(null);
   const socket = useSocket();
   const roomID = useParams();
-
+  const navigate = useNavigate();
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -52,6 +52,7 @@ const BottomBar = ({width}) => {
   }
 
   const handleScreenShare = () => {
+    navigate('/screen');
     console.log("Screen Share");
   }
 

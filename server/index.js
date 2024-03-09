@@ -2,7 +2,6 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import { rootCertificates } from "tls";
 
 const app = express();
 const PORT = 3000;
@@ -17,39 +16,74 @@ const io = new Server(server, {
       }
 });
 
-let total_members = 0;
+const roomIdToOwner = new Map();
+const socketIdToUser = new Map();
+const userToSocketId = new Map();
+
+
 io.on("connection", (socket) => {
-    io.emit("message", "Welcome to NexConnect");
 
     socket.on("create-room", (data) => {
-        total_members++;
-        socket.join(data.id);
-        io.to(data.id).emit("room-chat", ["Room Created!", data.id]);
+        const { id, username } = data;
+        socket.join(id);
+        roomIdToOwner.set(id, socket.id);
+        socketIdToUser.set(socket.id, username);
+        userToSocketId.set(username, socket.id);
+        io.to(id).emit("room-chat", { roomId: id });
+        io.to(id).emit("welcome-msg", { message: "🎊 Room is created successfully 🎊"});
+    });
+    
+    socket.on("join-room", (data) => {
+        const {roomId , username } = data;
+        socket.join(roomId);
+        const isUsernameTaken = userToSocketId.get(username);
+        if ( isUsernameTaken ) {
+            io.to(roomId).emit("isUsernameTaken", { id: socket.id });
+        } else {
+            socketIdToUser.set(socket.id, username);
+            socket.emit("isJoined", { Id: socket.id, roomId: roomId });
+            socket.broadcast.to(roomId).emit("member-joined", { username: username });
+        }
+    });
+
+    socket.on("get-username", (data) => {
+        const { id } = data;
+        io.to(id).emit("recieve-username", { username: socketIdToUser.get(id) || "Avator"})
     })
-    //io.in("room-101").disconnectSockets()
+
 
     socket.on("group-message", (data) => {
-        socket.join(data.roomId);
-        io.to(data.roomId).emit('group-mess', {message:data.message, id:data.id});
+        const { message, id, roomId } = data;
+        const username = socketIdToUser.get(id);
+        socket.join(roomId);
+        io.to(roomId).emit('group-mess', {message:message, id:id, username: username});
     });
+
 
     socket.on("share-file", (data) => {
         socket.join(data.roomId);
-        io.to(data.roomId).emit("media-file", {filename: data.filename, content: data.content});
+        socket.to(data.roomId).emit("media-file", {filename: data.filename, content: data.content});
     })
 
-    socket.on("join-room", (roomID) => {
-        total_members++;
-        socket.join(roomID);
-        io.to(roomID).emit("member-joined", "Room Joined!");
+    socket.on("logout", (data) => {
+        const {  Id , roomId } = data;
+        let Owner = roomIdToOwner.get(roomId);
+        if (!Owner) {
+            roomIdToOwner.set(roomId, socket.id);
+            Owner = roomIdToOwner.get(roomId);
+        }
+        if (Id == Owner) {
+            roomIdToOwner.delete(Owner);
+            socket.join(roomId);
+            io.to(roomId).emit("owner-logout", {online: false});
+        } else {
+            const username = socketIdToUser.delete(socket.id);
+            userToSocketId.delete(username);
+            socket.join(roomId);
+            io.to(Id).emit("owner-logout", { online : true});
+        }
     });
 
-    io.emit("memberCount", total_members);
-
-
-    socket.on("disconnect", () => {
-        total_members--;
-    })
 });
 
 
@@ -62,7 +96,7 @@ app.use(cors({
 
 app.get("/", (req, res) => {
     res.send("Welcome!");
-})
+});
 
 
 server.listen(PORT, ()=> {

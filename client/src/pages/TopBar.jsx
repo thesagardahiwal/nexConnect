@@ -1,11 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useSocket } from '../socket/SocketContext';
 import { logout } from "../assets/icons/index.js";
-import { Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { logo } from "../assets/icons/index.js";
 
 const TopBar = ({width}) => {
   const socket = useSocket();
+  const { roomId } = useParams();
+  const navigator = useNavigate();
+  const handleLogout = () => {
+    if (socket) {
+      socket.emit("logout", { Id: socket.id, roomId: roomId});
+    } else {
+      navigator('/');
+    }
+  };
+
   
   return (
     <div className="w-full h-[70px] flex sticky top-0 bg-gradient-to-r from-pink-400 to-indigo-400">
@@ -21,9 +31,7 @@ const TopBar = ({width}) => {
             {width > 440 && <li className='text-sm text-white gap-2 flex'>ID: <span className='text-slate-700'>{socket?.id}</span></li>}
             
             <li className='text-red-600 flex font-semibold bg-gray-200 rounded-lg p-1'>
-              <Link to={`/`}>
-                <img src={logout} width={25} alt="logout" />
-              </Link>
+                <img src={logout} width={25} alt="logout" onClick={handleLogout}/>
             </li>
           </ul>
         </div>

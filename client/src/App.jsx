@@ -5,7 +5,7 @@ import { FirebaseProvider } from './firebase/FirebaseContext';
 import { SocketProvider } from "./socket/SocketContext";
 import LoginPage from './pages/LoginPage';
 import ChatPage from './pages/ChatPage';
-import GroupPage from "./pages/GroupPage";
+import ScreenShare from './pages/ScreenShare';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/chat/:roomId" element={<ChatPage />} />
-            <Route path='/chat/:roomId/files' element={<GroupPage />} />
+            <Route path='/screen' element={<ScreenShare />} />
           </Routes>
         </Router>
       </SocketProvider>
