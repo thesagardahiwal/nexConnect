@@ -4,7 +4,7 @@ import TopBar from './TopBar';
 import ChatContainer from './ChatContainer';
 import BottomBar from './BottonBar';
 import LeftBar from './LeftBar';
-import { useSocket } from '../socket/SocketContext';
+import { useSocket } from '../contexts/SocketContext';
 
 function ChatPage() {
   const myElementRef = useRef(null);

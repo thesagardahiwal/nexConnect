@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
-import { useSocket } from '../socket/SocketContext.jsx';
+import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { loader, join } from "../assets/icons/index.js";
 import DisplayMsg from '../hooks/DisplayMsg.jsx';
@@ -60,7 +60,7 @@ function JoinGroup() {
         if (socket && roomID.length == 6 && name) {
           const isExist = await firebase.checkRoomId(roomID);
           if (isExist) {
-            const result = await firebase.addParticipant(roomID, name);
+            const result = await firebase.login({room_id: roomID, username: name, isOwner: false});
             console.log("Result:", result);
             result && socket.emit("join-room", {roomId: roomID, username: name});
           } else {

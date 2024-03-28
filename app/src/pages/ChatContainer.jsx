@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSocket } from '../socket/SocketContext';
-import GroupPage from './GroupPage.jsx';
+import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
+import Alerts from '../hooks/Alerts.jsx';
 
 const ChatContainer = ({width}) => {
   const socket = useSocket();
   const [ messages, setMessages ] = useState([]);
-  const [ showSlider, setShowSlider ] = useState(false);
-  const [ holdTimeout, setHoldTimeout ] = useState(null);
   const [ newMember, setNewMember ] = useState('');
   const [ mediaFiles, setMediaFiles ] = useState([]);
   const { roomId } = useParams();
@@ -109,64 +107,25 @@ const ChatContainer = ({width}) => {
 
   }, [])
 
-  const handleTouchStart = () => {
-    setHoldTimeout(setTimeout(() => setShowSlider(true), 1000));
-  };
-  
-  const handleTouchEnd = () => {
-      clearTimeout(holdTimeout);
-  };
-  
-  const handleSliderClick = () => {
-    setShowSlider(false);
-  };
 
   return (
     <div className="bg-gradient-to-r from-pink-500 to-indigo-500 sm:h-full h-[90vh] p-4 sm:px-5 pb-[80px] w-full">
-      <div className={`${width > 800 ? "hidden" : ""} transition-all`}>
-          <div
-            className={`slider-container ${showSlider ? 'visible' : 'hidden'}`}
-          >
-            {/* Add your slider content here */}
-            <div className="slider-content mb-1">
-              <GroupPage mediaFiles={mediaFiles}/>
-              <div className='flex justify-end w-full'>
-                <button className='p-1 text-white bg-red-500 rounded-md'
-                  onClick={handleSliderClick}
-                  >Close</button>
-              </div>
-            </div>
-          </div>
-      </div>
-      {newMember &&
-          <div className='w-full h-[70px] absolute flex justify-center items-center bg-gradient-to-r from-pink-600 to-violet-700'>
-            <h1 className='text-white font-semibold'>
-            🎊'{newMember}' is joined in Room 🎊
-            </h1>
-          </div>
-          }
+
+      {newMember && <Alerts message={`${newMember} is joined`} type={"success"} /> }
+
       <div 
         className="main-container hide-scrool-bar"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchEnd}
         ref={chatting} style={{overflowY:"auto", height: "100%"} }>
         {/* Show chats */}
         
+        {/*  MESSAGE UI */}
         {messages.map((m, i) => (
-          m.id == currentUser ? 
-          <div key={i+1} className='flex my-2 justify-end'>
-            <div className='w-fit text-white mb-1'>
-              <h1 className='border bg-gradient-to-r from-cyan-500 to-blue-500 px-2 p-1 rounded-lg'>{m.message}</h1>
+          <div key={`index${i+1}`} className={`flex my-2 ${m.id === currentUser ? "justify-end" : "justify-start"}`}>
+            <div className='min-w-[3rem] max-w-1/3'>
+              <h1 className={`flex w-full p-2 text-white my-1 ${m.id === currentUser ? "rounded-l-2xl rounded-tr-2xl justify-end bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl justify-start bg-gradient-to-r from-pink-400 to-pink-400"} texl-xl`}>{m.message}</h1>
+              <p className={`text-slate-200 flex w-full  ${m.id === currentUser ? "justify-end" : "justify-start" } text-[10px]`}>{m.time}</p>
             </div>
-            <div className='w-1 h-1 bg-blue-400 rounded-full'></div>
-          </div>
-          :
-          <div key={`index${i+1}`} className='flex my-2 justify-start'>
-            <div className='w-1 h-1 bg-blue-400 rounded-full'></div>
-            <div className='w-fit text-white my-1'>
-              <h1 className='border bg-gradient-to-r from-cyan-500 to-blue-500 px-2 p-1 rounded-lg'>{m.message}</h1>
-              <span className='text-slate-200 text-[12px] font-semibold flex justify-start '>@{m.username}</span>
-            </div>
+            
           </div>
         ))}
 

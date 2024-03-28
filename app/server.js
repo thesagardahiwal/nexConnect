@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
     socket.on("call-members", (data) => {
         const { roomId } = data;
         socket.join(roomId);
-        io.to(roomId).emit("recieve-member", { answer : true });
+        io.to(roomId).emit("recieve-member", "New Member Joined");
     })
 
     socket.on("get-username", (data) => {
@@ -59,15 +59,17 @@ io.on("connection", (socket) => {
 
 
     socket.on("group-message", (data) => {
-        const { message, id, username, roomId } = data;
+        const { message, id, username, roomId, time } = data;
         socket.join(roomId);
-        io.to(roomId).emit('group-mess', {message:message, id:id, username: username});
+        io.to(roomId).emit('group-mess', {message:message, id:id, username: username, time: time});
     });
 
 
     socket.on("share-file", (data) => {
-        socket.join(data.roomId);
-        socket.to(data.roomId).emit("media-file", {filename: data.filename, content: data.content});
+        const { filename, roomId } = data;
+        socket.join(roomId);
+        console.log("File Shared!")
+        io.to(roomId).emit("media-file", "New File shared!");
     });
 
     socket.on("logout", (data) => {

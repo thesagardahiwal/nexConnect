@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext';
-import { useSocket } from '../socket/SocketContext';
+import { useSocket } from '../contexts/SocketContext.jsx';
 import { loader, join } from "../assets/icons/index.js";
 
 function CreateGroup() {
   const navigate = useNavigate();
   const firebase = useFirebase();
   const socket = useSocket();
-
   const [loading, setLoading] = useState(false);
   const [ username, setUsername ] = useState('');
 
@@ -41,7 +40,7 @@ function CreateGroup() {
     try {
       const loggedIn = await firebase.checkRoomId(room_id);
       if (!loggedIn) {
-        await firebase.login(room_id, username);
+        await firebase.login({room_id: room_id, username: username,isOwner: true});
         return true;
       }
       return false;
