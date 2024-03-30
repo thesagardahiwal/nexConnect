@@ -7,8 +7,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { CircularProgress } from '@mui/material';
+import { useTheme } from '../contexts/ThemeContext.jsx';
 
-const BottomBar = ({width}) => {
+const BottomBar = ({width, isChatWithAI}) => {
   const [ message, setMessage ] = useState("");
   const [ file, setFile ] = useState(null);
   const [ username, setUsername ] = useState('');
@@ -18,11 +19,12 @@ const BottomBar = ({width}) => {
   const navigate = useNavigate();
   const currentUser = firebase.getCurrentUser();
   const [ isLoading, setIsLoading ] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const getTime = () => {
     const currentDate = new Date();
         let hours = currentDate.getHours();
-        const minutes = currentDate.getMinutes();
+        let minutes = currentDate.getMinutes();
         let meridiem = "AM";
         if (hours > 12) {
           hours -= 12;
@@ -30,21 +32,27 @@ const BottomBar = ({width}) => {
         } else if (hours === 0) {
           hours = 12;
         }
+        if (minutes < 10) {
+          minutes = `0${minutes}`;
+        }
         const time = `${hours}:${minutes} ${meridiem}`;
         return time;
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if(socket.id) {
-      if(message) {
-        socket.emit("group-message", {message: message, id:currentUser, username: username, roomId: roomId, time: getTime()});
-        setMessage("");
-        firebase.sendMessage({message: message, id: currentUser, username: username, roomId: roomId, time: getTime()});
-      };
+    if (!socket.id) return;
+    if (message.length < 1) return;
+    if (isChatWithAI) {
+      socket.emit("ai-chat", {message: message, id:currentUser, username: username, roomId: roomId, time: getTime()});
+      setMessage("");
+      return;
+    };
+
+    socket.emit("group-message", {message: message, id:currentUser, username: username, roomId: roomId, time: getTime()});
+    setMessage("");
+    firebase.sendMessage({message: message, id: currentUser, username: username, roomId: roomId, time: getTime()});
       
-    }
   };
 
   const handleFileChange = (e) => {
@@ -59,9 +67,9 @@ const BottomBar = ({width}) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         const fileContent = e.target.result;
-        socket.emit("share-file", {filename: file.name, roomId: roomId})
-        firebase.sendFile(username, file.name, fileContent, roomId, () => { 
+        firebase.sendFile(username, file.name, fileContent, roomId, getTime() , () => { 
           setIsLoading(() => false);
+          socket.emit("share-file", {filename: file.name, roomId: roomId})
           setFile(null);
          });
       }
@@ -122,7 +130,7 @@ const BottomBar = ({width}) => {
 
 
   return (
-    <div className="p-4 w-full bg-gradient-to-r from-pink-500 to-indigo-500 sticky bottom-0 h-[80px]">
+    <div className={`p-4 w-full ${theme == 'light' ? "light-rev": "dark"} sticky bottom-0 h-[80px]`}>
       {/* Input, Media send button, Send message button */}
 
       <div className='w-full flex justify-between items-center h-full'>

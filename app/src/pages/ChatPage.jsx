@@ -5,10 +5,12 @@ import ChatContainer from './ChatContainer';
 import BottomBar from './BottonBar';
 import LeftBar from './LeftBar';
 import { useSocket } from '../contexts/SocketContext';
+import AIChatContainer from './AIChatContainer';
 
 function ChatPage() {
   const myElementRef = useRef(null);
   const [elementWidth, setElementWidth] = useState(0);
+  const [ isChatWithAI, setIsChatWithAI ] = useState(false);
   const socket = useSocket();
   const handleResize = () => {
     if (myElementRef.current) {
@@ -36,10 +38,10 @@ function ChatPage() {
       ref={myElementRef}
     >
       <div className={`${elementWidth > 800 ? "flex h-full w-full" : 'h-screen'}`}>
-          {elementWidth > 800 ? <LeftBar/> : <TopBar width={elementWidth}/>} 
+          {elementWidth > 800 ? <LeftBar setIsChatWithAI={setIsChatWithAI}/> : <TopBar width={elementWidth}/>} 
           <div className='w-full h-full'>
-            <ChatContainer width={elementWidth}  />
-            <BottomBar width={elementWidth} />
+            { isChatWithAI ? <AIChatContainer /> : <ChatContainer width={elementWidth}  /> }
+            <BottomBar width={elementWidth} isChatWithAI={isChatWithAI} />
           </div>
       </div>
     </div>

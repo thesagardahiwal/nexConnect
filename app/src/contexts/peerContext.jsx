@@ -1,6 +1,6 @@
 import Peer from "peerjs";
 import React, { useEffect, useMemo, useState } from "react"
-
+import PEER from "./peer.js";
 const peerContex = React.createContext(null);
 
 export const usePeer = () => {
@@ -8,22 +8,13 @@ export const usePeer = () => {
 }
 
 export const PeerProvider = ({children}) => {
-    const [ id, setId ] = useState(null);
-    const peer = useMemo(() => {
-        new Peer ( undefined, {
-            host: '/',
-            port:'3001'
-          });
-        return Peer
-    }, []);
+    const peer = new PEER();
 
-    useEffect(() => {
-        return () => {
-            peer.on('open', id => {
-                setId(id);
-            })
-        };
-    })
+    // useEffect(() => {
+    //     return () => {
+    //         peer.peer.disconnect();
+    //     }
+    // }, [])
 
     return (
         <peerContex.Provider value={peer}>

@@ -6,6 +6,11 @@ const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const socket = useMemo(() => io("http://localhost:3000"), []);
 
+  useEffect(()=> {
+    return () => {
+      socket.disconnect();
+    }
+  },[])
   return (
     <SocketContext.Provider value={socket}>
       {children}

@@ -19,3 +19,48 @@
     padding: 5px;
     margin: 10px;
 }
+
+.light-item {
+    @apply bg-violet-700 text-white
+}
+.light-item-2 {
+    @apply bg-gradient-to-r from-purple-400 to-pink-400
+}
+.light-item-3 {
+    @apply bg-gradient-to-r from-blue-600 to-violet-500
+}
+
+.light {
+    @apply bg-gradient-to-r from-purple-500 to-pink-500
+}
+.extralight {
+    @apply bg-gradient-to-r from-purple-400 to-pink-400
+}
+.light-rev {
+    @apply bg-gradient-to-r from-pink-500 to-purple-500
+}
+
+.light-rev-v2 {
+    @apply bg-gradient-to-r from-pink-900 to-purple-900
+}
+
+
+.dark-item {
+    @apply bg-slate-200 text-black
+}
+.dark-item-2 {
+    @apply bg-slate-700
+}
+.dark-item-3 {
+    @apply bg-slate-600
+}
+.dark {
+    @apply bg-slate-800
+}
+.darklight {
+    @apply bg-slate-700
+}
+
+body {
+    @apply bg-gradient-to-r from-purple-500 to-pink-500
+}

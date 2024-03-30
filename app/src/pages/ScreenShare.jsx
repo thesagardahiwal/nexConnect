@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import Peer from 'peerjs';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useParams, useNavigate } from "react-router-dom";
 import BackHandle from '../hooks/BackHandle';
@@ -7,6 +6,9 @@ import { useFirebase } from '../firebase/FirebaseContext.jsx'
 import ScreenShareSharpIcon from '@mui/icons-material/ScreenShareSharp';
 import StopScreenShareSharpIcon from '@mui/icons-material/StopScreenShareSharp';
 import DuoSharpIcon from '@mui/icons-material/DuoSharp';
+import Peer from "peerjs";
+import { useTheme } from '../contexts/ThemeContext.jsx';
+// import { usePeer } from '../contexts/peerContext.jsx';
 
 function ScreenShare() {
   const screenRecieve = useRef(null);
@@ -15,19 +17,25 @@ function ScreenShare() {
   const pushTo = useNavigate();
   const [ onCall, setOnCall ] = useState(null);
   const [ isBack, setIsBack ] = useState(true);
+  const [ isCasting, setIsCasting ] = useState(false);
   const firebase = useFirebase();
+  const [ username, setUsername ] = useState('');
+  const { theme, toggleTheme } = useTheme();
   let mediaStream;
 
-
+  // const Peer = usePeer();
   const peer = new Peer ( undefined, {
     host: '/',
     port:'3001'
   });
 
-  peer.on('open', id => {
-    socket.emit("join-screen", {userId: id, roomId: roomId});
-  });
-  
+  peer.on("open", id => {
+    console.log("New User:", id)
+    socket.emit("join-screen", { id , roomId });
+  })
+
+  // console.log(Peer);
+
   const Callhelper = (request) => {
     if (request == 'screen-share') {
       return navigator.mediaDevices.getDisplayMedia({video: true, audio: false})
@@ -40,30 +48,40 @@ function ScreenShare() {
   const handleCalling = (request) => {
     const video = Callhelper(request);
     video.then((stream) => {
+      console.log("Started")
       mediaStream = stream;
+      setIsCasting(() => true);
+      console.log("Started -2");
       socket.on("new-user-connection", (newUser) => {
+        console.log("Started -3");
+        console.log("USER_ADDED", newUser);
         if (newUser) {
           peer.call(newUser, stream);
+          console.log("CALL FIRED!")
         };
       });
-      socket.emit("calling", {roomId: roomId});
+      socket.emit("calling", {roomId: roomId, username: username });
       startVideoStreaming(stream);
     })
     .catch((e) => {
       console.log("Request is Cancelled!");
+      setIsCasting(() => false);
     })
   };
 
   peer.on('call', (call) => {
     call.answer(undefined);
+    console.log("Calling", call);
+    setIsCasting(() => true);
     call.on("stream", (remoteStream) => {
-      mediaStream = remoteStream;;
+      mediaStream = remoteStream;
       startVideoStreaming(remoteStream);
     })
   });
 
   const callHandlerListener = useCallback((data) => {
     setOnCall((prev) => true);
+    
   }, [])
 
   useEffect(() => {
@@ -78,11 +96,12 @@ function ScreenShare() {
     return () => {
       socket.off("on-call", callHandlerListener)
     }
-  });
+  }, [isBack]);
 
   useEffect(() => {
     firebase.onAuthStateChanged((user) => {
       if (user) {
+        
         console.log("User Logged In!", user.uid);
       } else {
         console.log("User Looged Out!");
@@ -109,6 +128,7 @@ function ScreenShare() {
               console.error('Error playing video:', error);
               pushTo(`/chat/${roomId}`);
             });
+          
         });
       }
     }
@@ -123,33 +143,37 @@ function ScreenShare() {
           track.stop();
       });
       mediaStream = null;
+      
     }
+    setIsCasting(() => false);
   };
 
 
 
   return (
-    <div className='w-[100vw] h-[100vh] '>
-      <div className='bg-gradient-to-r h-[7%] flex px-3 items-center from-pink-400 to-indigo-400'>
-        <BackHandle active={setIsBack} />
+    <div className='w-[100vw] h-[100vh] overflow-hidden'>
+      <div className='h-[10%] w-[100%] absolute flex p-2 items-center bg-transperent'>
+        <BackHandle active={setIsBack} /> {Peer.id}
       </div>
-      <div className='w-full h-[86%] bg-gradient-to-r from-pink-900 to-indigo-900 flex justify-center items-center'>
-        
-
+      <div className={`w-full h-[100%]
+      ${isCasting ? "bg-blue-900" : `${theme == 'light' ? "light-rev-v2": "dark"}`}
+        flex justify-center items-center`}>
         <video className='w-auto h-[90%] rounded-md' ref={screenRecieve} muted></video>
       </div>
-      <div className='w-[100%] px-10 flex gap-2 bg-gradient-to-r from-pink-400 to-indigo-400 items-center h-[7vh]'>
-          <button className='border rounded-md px-2 py-1 text-white'
+      <div className='w-[100%] sticky bottom-0 p-10 flex bg-transperent justify-center items-center h-[7%]'>
+        {!isCasting ?
+          <button className='border rounded-full p-3 bg-purple-600 text-white'
             onClick={() => handleCalling('screen-share')}
             >
               <ScreenShareSharpIcon />
             </button>
-          <button className='border hover:bg-red-600 rounded-md px-2 py-1 bg-red-400 text-white'
+            :
+          <button className='border rounded-full p-3 bg-red-600 text-white'
             onClick={handdleStopCalling}
             >
               <StopScreenShareSharpIcon />
             </button>
-
+        }
       </div>
     </div>
   )

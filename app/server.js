@@ -3,6 +3,8 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import fs from "fs";
 import cors from "cors";
+import OpenAI from 'openai';
+import axios from "axios";
 
 const app = express();
 const PORT = 3000;
@@ -20,21 +22,48 @@ const io = new Server(server, {
       }
 });
 
+const openai = new OpenAI({
+    apiKey: "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", // This is the default and can be omitted
+  });
 
+function reqEndUser (req, res){
+    async function generateText () {
+        try {
 
-const roomIdToOwner = new Map();
-const socketIdToUser = new Map();
-const userToSocketId = new Map();
+            const response = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [
+                  {
+                    "role": "user",
+                    "content": "Where is India"
+                  }
+                ],
+                temperature: 1,
+                max_tokens: 256,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0,
+              });
+            
+            console.log(response.choices[0])
+
+        } catch (e) {
+            console.log("ERROR", e);
+        }
+    }
+    generateText()
+}
+
 
 
 io.on("connection", (socket) => {
-
+    
     console.log("User Connected:", socket.id);
-
+    
     socket.on("create-room", (data) => {
         const { id, username, userId } = data;
         socket.join(id);
-        io.to(id).emit("room-chat", { roomId: id });
+        io.to(id).emit("room-chat", { roomId: id, username: username, userId: userId  });
         io.to(id).emit("welcome-msg", { message: "🎊 Room is created successfully 🎊"});
     });
     
@@ -54,7 +83,7 @@ io.on("connection", (socket) => {
 
     socket.on("get-username", (data) => {
         const { id } = data;
-        io.to(id).emit("recieve-username", { username: socketIdToUser.get(id) || "Avtar"})
+        io.to(id).emit("recieve-username", "Avtar" )
     })
 
 
@@ -72,6 +101,14 @@ io.on("connection", (socket) => {
         io.to(roomId).emit("media-file", "New File shared!");
     });
 
+    // AI - CHAT
+
+    socket.on("ai-chat", (data) => {
+        const { message, id, username, roomId, time } = data;
+        socket.join(roomId);
+        io.to(roomId).emit("message-with-ai", {message: message, id: id, username: username, time: time});
+    })
+
     socket.on("logout", (data) => {
         console.log("Logout Request:", data);
     });
@@ -79,16 +116,16 @@ io.on("connection", (socket) => {
     // Peer Connection
 
     socket.on("join-screen", (data) => {
-        const { userId, roomId } = data;
+        const { id, roomId } = data;
         socket.join(roomId);
-        socket.broadcast.to(roomId).emit("new-user-connection", userId);
+        socket.broadcast.to(roomId).emit("new-user-connection", id);
 
     });
 
     socket.on('calling', (data) => {
-        const { roomId } = data;
+        const { roomId, username } = data;
         socket.join(roomId);
-        socket.to(roomId).emit("on-call", true);
+        socket.to(roomId).emit("on-call", username);
     });
 
     socket.on('disconnect', () => {
@@ -103,7 +140,6 @@ app.use(cors({
     methods: ["GET", "POST"],
     credentials: true
   }));
-  
 
 app.get("/", (req, res) => {
     res.send("Welcome!");

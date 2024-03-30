@@ -1,13 +1,21 @@
 // src/pages/LoginPage.jsx
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Logo from '../components/Logo.jsx';
 import CreateRoom from '../forms/CreateRoom.jsx';
 import JoinRoom from '../forms/JoinRoom.jsx';
 import LogoBigView from '../components/LogoBigView.jsx';
 import RoomButton from '../components/RoomButton.jsx';
 import BackHandle from '../hooks/BackHandle.jsx';
+import { useSocket } from '../contexts/SocketContext.jsx';
+import { useFirebase } from '../firebase/FirebaseContext.jsx';
+import { useNavigate } from 'react-router-dom';
+
 
 function LoginPage() {
+
+  const socket = useSocket();
+  const firebase = useFirebase();
+  const navigate = useNavigate();
 
   const [ createButtonActive, setCreateButtonActive ] = useState(false);
   const [ joinButtonActive, setJoinButtonActive ] = useState(false);
@@ -24,7 +32,43 @@ function LoginPage() {
     }
   };
 
+  const roomCreationListner = useCallback((data) => {
+    const { roomId , username , userId } = data;
+    console.log(data);
+    firebase.onAuthStateChanged((user) => {
+      if (user) {
+        navigate(`/chat/${roomId}`)
+      } else {
+        navigate('/');
+      }
+    });
 
+  }, [firebase, socket]);
+
+  const isJoinedListener = useCallback(
+    async (data) => {
+      const { Id, roomId } = data;
+      if( Id == socket.id ) {
+        firebase.onAuthStateChanged((user) => {
+          if (user) {
+            navigate(`/chat/${roomId}`)
+          } else {
+            navigate('/');
+          }
+        }) 
+      } 
+    }, []
+  )
+
+
+  useEffect(() => {
+        socket.on("room-chat", roomCreationListner);
+        socket.on("isJoined", isJoinedListener)
+
+        return () => {
+          socket.off("room-chat", roomCreationListner);
+        }
+  }, []);
 
 
   useEffect(() => {

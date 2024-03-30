@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import Alerts from '../hooks/Alerts.jsx';
+import BackgroundLetterAvatars from "../components/Avatar.jsx";
+import { useTheme } from '../contexts/ThemeContext.jsx';
 
 const ChatContainer = ({width}) => {
   const socket = useSocket();
@@ -14,8 +16,9 @@ const ChatContainer = ({width}) => {
   const navigate = useNavigate();
   const chatting = useRef();
   const currentUser = firebase.getCurrentUser();
+  const [ username, setUsername ] = useState('');
+  const { theme, toggleTheme } = useTheme();
 
-  
 
   const groupMessageListner = useCallback(
     (data) => {
@@ -74,7 +77,6 @@ const ChatContainer = ({width}) => {
     }
 
 
-
     return () => {
       socket.off("group-mess", groupMessageListner);
       socket.off("media-file", mediaFileListner);
@@ -99,6 +101,10 @@ const ChatContainer = ({width}) => {
     firebase.onAuthStateChanged((user) => {
       if (user) {
         socket.emit("get-username", { id: socket.id });
+        const responce = firebase.getCurrentUserDetails(roomId)
+        responce.then((user) => {
+          (username != user) && setUsername((prev) => user);
+        })
       } else {
         navigate('/');
       }
@@ -109,7 +115,7 @@ const ChatContainer = ({width}) => {
 
 
   return (
-    <div className="bg-gradient-to-r from-pink-500 to-indigo-500 sm:h-full h-[90vh] p-4 sm:px-5 pb-[80px] w-full">
+    <div className={`${theme == 'light' ? "light-rev": "dark"} h-[90vh] p-4 sm:px-5 pb-[80px] w-full`}>
 
       {newMember && <Alerts message={`${newMember} is joined`} type={"success"} /> }
 
@@ -120,10 +126,28 @@ const ChatContainer = ({width}) => {
         
         {/*  MESSAGE UI */}
         {messages.map((m, i) => (
-          <div key={`index${i+1}`} className={`flex my-2 ${m.id === currentUser ? "justify-end" : "justify-start"}`}>
-            <div className='min-w-[3rem] max-w-1/3'>
-              <h1 className={`flex w-full p-2 text-white my-1 ${m.id === currentUser ? "rounded-l-2xl rounded-tr-2xl justify-end bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl justify-start bg-gradient-to-r from-pink-400 to-pink-400"} texl-xl`}>{m.message}</h1>
-              <p className={`text-slate-200 flex w-full  ${m.id === currentUser ? "justify-end" : "justify-start" } text-[10px]`}>{m.time}</p>
+          <div key={`index${i+1}`} className={`flex my-2 ${m.id === currentUser && m.username === username ? "justify-end" : "justify-start"}`}>
+            <div className='max-w-[80%]'>
+              <h1 className={`flex p-2 w-fit text-white my-1 ${m.id === currentUser && m.username === username ? "rounded-l-2xl rounded-tr-2xl bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl bg-gradient-to-r mx-2 from-pink-400 to-pink-400"} justify-center  texl-xl`}
+                style={{minWidth: "40px"}}
+              >{m.message}</h1>
+              <div className={`text-slate-200 flex w-full 
+               ${m.id === currentUser ? "justify-end" : "justify-start" } 
+               text-[10px] items-center gap-1`}>
+                {m.id === currentUser && m.username === username ?
+                  <>
+                    {m.time}
+                  </>
+                  :
+                  <>
+                    <BackgroundLetterAvatars username={m.username} size='10px' />
+                    <p className='font-semibold'>
+                      ~ {m.username}
+                    </p>
+                    &nbsp; {m.time}
+                  </>
+                }
+                </div>
             </div>
             
           </div>

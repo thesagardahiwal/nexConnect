@@ -4,6 +4,7 @@ import {
   signInAnonymously,
   onAuthStateChanged,
   deleteUser,
+  signOut,
 } from 'firebase/auth';
 import { getFirestore, doc, arrayRemove, setDoc, getDoc, deleteDoc, collection, updateDoc, arrayUnion, addDoc, getDocs, where, query, deleteField } from 'firebase/firestore';
 import { ref, get, child, push, onValue, getDatabase, remove, set } from 'firebase/database';
@@ -29,54 +30,50 @@ class Firebase {
   }
 
   login = async ({room_id, username, isOwner}) => {
+    if (!room_id && !username) return false;
+    const roomRef = doc(this.db, 'rooms', room_id)
+    const snapDoc = await getDoc(roomRef);
+    if (isOwner && !snapDoc.exists()) {
       await signInAnonymously(this.auth);
-      const roomRef = doc(this.db, 'rooms', room_id)
-      if (isOwner) {
-        await setDoc(roomRef, { 
-            username,
-            id: this.auth.currentUser.uid,
-            participants: [username],
-         });
-      }
-      const snapDoc = await getDoc(roomRef);
-      if (!snapDoc.exists()) return false;
-
+      await setDoc(roomRef, { 
+        username,
+        id: this.auth.currentUser.uid,
+        participants: [username],
+      });
+      await set(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid), {
+        username: username,
+        id: this.auth.currentUser.uid
+      });
+      return true;
+    }
+    if (snapDoc.exists()) {
+      await signInAnonymously(this.auth);
       await set(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid), {
         username: username,
         id: this.auth.currentUser.uid
       });
       console.log(`User ${room_id} logged in successfully.`);
       return true;
+    }
+    return false;
+
   };
 
   logout = async ({room_id, isOwner, username}) => {
     try {
-        if (isOwner) {
-          await remove(ref(this.database, `${room_id}`));
-          this.getMediaFiles(room_id, async ({filename, downloadUrl}) => {
-            await deleteObject(Ref(this.storage, filename.fullPath))
-          })
-          await deleteDoc(doc(this.db, 'rooms', room_id));
-          deleteUser(this.auth.currentUser)
-            .then(() => {
-              console.log(`User ${room_id} logged out successfully.`);
-              return true;
-            });
+      if (!room_id && !username) return;
+        const docSnap = await getDoc(doc(this.db, "rooms", room_id));
+        const responce = await get(child(ref(this.database), `${room_id}/users/`+this.auth.currentUser.uid))
+        if (!docSnap.exists() && !responce.exists()) {
+          deleteUser(this.auth.currentUser);
           return;
         }
-        get(child(ref(this.database), `${room_id}/users/`+this.auth.currentUser.uid))
-        .then((snapShot) => {
-          if(snapShot.exists()) {
-            remove(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid));
-          }
-        })
-        .catch((e) => console.log(e));
-
-        deleteUser(this.auth.currentUser)
-        .then(() => {
-          console.log(`User ${room_id} logged out successfully.`);
-          return true;
-        });
+        await remove(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid))
+        if (isOwner) {
+          await deleteDoc(doc(this.db, "rooms", room_id));
+        }
+        await deleteUser(this.auth.currentUser);
+        
 
       } catch (error) {
         console.error('Logout error:', error);
@@ -88,10 +85,10 @@ class Firebase {
     if (!result.exists()) return false;
     const docSnap = await getDoc(doc(this.db, 'rooms', room_id));
     if(!docSnap.exists()) return false;
-
     return true;
 
   };
+
 
   isOwnerLogout = async (room_id, username) => {
     const roomRef = doc(this.db, "rooms", room_id);
@@ -104,6 +101,18 @@ class Firebase {
 
   }
 
+  isUsernameAvailable = async (room_id, username) => {
+    const snapshot = await get(child(ref(this.database), `${room_id}/users/`));
+    if (snapshot.exists()) {
+      let result = true;
+      snapshot.forEach((user) => {
+        if (username === user.val().username) {
+          result = false;
+        }
+      })
+      return result
+    }
+  }
 
   getCurrentUser = () => {
     const id = this.auth.currentUser?.uid;
@@ -134,6 +143,7 @@ class Firebase {
 
   sendMessage = async ({message, id, username, roomId, time}) => {
         if (!username || !message || !id || !roomId || !time) return;
+        if (this.auth.currentUser?.uid != id ) return;
         const messages = {
           message,
           id,
@@ -174,15 +184,14 @@ class Firebase {
     }
   }
 
-  sendFile = (sender, filename, content, room_id, callback) => {
+  sendFile = (sender, filename, content, room_id, time, callback) => {
     const file = {
       sender,
       filename,
       content: new Uint8Array(content),
     };
-
     // Broadcast the file to all connected clients
-    const storageRef = Ref(this.storage, `${room_id}/${filename}`);
+    const storageRef = Ref(this.storage, `${room_id}/${filename}`+` time:${time}`);
     uploadBytes(storageRef, file.content).then((url) => {
       console.log("Uploaded Successfully!");
       callback()
@@ -194,18 +203,28 @@ class Firebase {
   getMediaFiles = async (room_id, callback, setIsLoading) => {
     try {
       const res = await listAll(Ref(this.storage, `${room_id}`));
-      if (res.items.length < 1) return;
+      if (res.items.length < 1) return setIsLoading(() => false);
       let list = [];
       res.items.forEach( async (item) => {
         const url = await getDownloadURL(Ref(this.storage, item.fullPath));
         list.push({filename: item.name, downloadUrl: url})
-        callback(list, res.items.length);
         if (list.length == res.items.length) {
           setIsLoading(() => false);
+          callback(list);
         }
       });
     } catch (e) {
       console.log("ERROR!", e);
+    }
+  }
+
+  getFileCount = async (room_id) => {
+    try {
+      const res = await listAll(Ref(this.storage, `${room_id}`));
+      return res.items.length;
+
+    } catch(e) {
+      console.log(e);
     }
   }
 
