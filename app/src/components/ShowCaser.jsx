@@ -3,10 +3,12 @@ import { useSocket } from '../contexts/SocketContext';
 import { useParams } from "react-router-dom"
 import { useFirebase } from '../firebase/FirebaseContext';
 import DownloadIcon from '@mui/icons-material/Download';
-import { CircularProgress } from '@mui/material';
+import {CircularProgress } from '@mui/material';
+import BackgroundLetterAvatars from "./Avatar";
+import { useTheme } from '../contexts/ThemeContext';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
-
-function SharedFiles({ showFiles }) {
+function SharedFiles({ showFiles, setIsChatWithAI }) {
     const socket = useSocket();
     const { roomId } = useParams();
     const [mediaFiles, setMediaFiles] = useState([]);
@@ -15,11 +17,19 @@ function SharedFiles({ showFiles }) {
     const firtDiv = useRef(null);
     const [ isMediaLoading, setIsMediaLoading ] = useState(true);
     const [ isMembersLoading, setIsMembersLoading ] = useState(true);
+    const { theme, toggleTheme } = useTheme();
+    const MediaLenght = useMemo(() => {
+         firebase.getFileCount(roomId).then((res) => {return res})
+    }, [])
 
     useMemo(() => socket.emit("call-members", { roomId: roomId }), [showFiles]);
 
     const callback = (list) => {
-        setMediaFiles((prev) => list);
+        let newArr = [];
+        list.map((e) => {
+            newArr.push({filename: e.filename.split("time:")[0], time: e.filename.split("time:")[1], downloadUrl: e.downloadUrl})
+        });
+        setMediaFiles((prev) => newArr);
     }
 
     const callbackMember = (peoples) => {
@@ -29,9 +39,8 @@ function SharedFiles({ showFiles }) {
 
     const mediaFileListner = useCallback(
         (data) => {
-            console.log("File Recieved")
             console.log(data);
-            firebase.getMediaFiles(roomId, callback);
+            data && firebase.getMediaFiles(roomId, callback, setIsMediaLoading);
         }, [mediaFiles, firebase, roomId, showFiles]
     );
 
@@ -47,6 +56,11 @@ function SharedFiles({ showFiles }) {
         downloadLink.href = data.downloadUrl;
         downloadLink.download = data.filename;
         downloadLink.click();
+    };
+
+    const handleAI = () => {
+        console.log("Clicked! AI CHAT");
+        setIsChatWithAI((prev) => !prev);
     }
 
     useEffect(() => {
@@ -59,7 +73,7 @@ function SharedFiles({ showFiles }) {
             socket.off("media-file", mediaFileListner);
         }
 
-    }, []);
+    }, [mediaFiles, showFiles]);
 
     useEffect(() => {
 
@@ -67,11 +81,13 @@ function SharedFiles({ showFiles }) {
             firebase.getMembers(roomId, callbackMember);
         }
 
-        if (!mediaFiles.length) {
+        if (mediaFiles.length != MediaLenght) {
             firebase.getMediaFiles(roomId, callback, setIsMediaLoading);
         }
-   
-    }, [showFiles])
+        
+        
+
+    }, [showFiles]);
 
     
     useEffect(() => {
@@ -79,26 +95,27 @@ function SharedFiles({ showFiles }) {
     if(container) {
         container.scrollTop = container.scrollHeight;
     };
-    }, [])
+    }, []);
 
 
     return (
         <div 
             
-            className='bg-gradient-to-r w-full overflow-hidden from-purple-400 to-pink-400 h-full mt-2 p-1 rounded-md'>
+            className={`w-full overflow-hidden ${theme == 'light' ? "extralight": "darklight"} h-full mt-2 p-1 rounded-md`}>
             {showFiles ?
                 (<>
                     <ul className='p-2 w-full h-full ' style={{overflowY: "auto"}} ref={firtDiv}>
-                        {mediaFiles?.map((item, i) => (
-                            <li className='text-white bg-gradient-to-r w-full from-sky-500 to-indigo-500 my-1 rounded-md p-1' key={`index-Of${i}`}>
+                        {mediaFiles?.map((file, i) => (
+                            <li className={`text-white w-full  ${theme == 'light' ? "light-item-3": "dark-item-3"} my-1 rounded-md p-1`} key={`index-Of${i}`}>
                                 <div className="text-sm">
-                                    {item.filename}
+                                    <p>{file.filename}</p>
                                 </div>
-                                <button className="flex w-full justify-end rounded-md p-1" onClick={() => {
-                                    handleDownload(item)
+                                <div className="flex w-full gap-1 rounded-md p-1" onClick={() => {
+                                    handleDownload(file)
                                 }}>
+                                    <p className='w-full text-sm flex items-center justify-end'>{file.time}</p>
                                     <DownloadIcon style={{border: "1px solid white", borderRadius: ".55rem", padding:2}}/>
-                                </button>
+                                </div>
                             </li>
                         ))}
                         {isMediaLoading && 
@@ -111,10 +128,19 @@ function SharedFiles({ showFiles }) {
                 : (<>
 
                 <ul className="w-[95%]">
+                        <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3": "dark-item-3"} m-1 rounded-md p-1`} key={"Chat-AI"}>
+                            <div className="text-sm flex items-center gap-2 font-semibold">
+                                <BackgroundLetterAvatars username={"AI"} size='30px' />
+                                <p>Chat With AI</p>
+                            </div>
+                            <button className='border relative right-2 bg-violet-400 rounded-lg px-1'
+                                onClick={handleAI}
+                                ><ChatBubbleIcon style={{width:'20px', height:"20px"}} /></button>
+                        </li>
                     {members?.map((m, i) => (
-                        <li className="w-full items-center justify-between flex px-2 text-white bg-gradient-to-r from-blue-600 to-violet-500 m-1 rounded-md p-1" key={i + 3}>
+                        <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3": "dark-item-3"} m-1 rounded-md p-1`} key={i + 3}>
                             <div className='flex gap-1 items-center'>
-                            <img src={`https://avatar.iran.liara.run/public/boy?username=${m}`} height={30} width={30} alt="id" />
+                            <BackgroundLetterAvatars username = {m} size='30px' />
                             <p className='font-semibold p-1'>{m}</p>
                             </div>
                             <span className='w-2 h-2 bg-green-500 rounded-xl relative right-5'></span>

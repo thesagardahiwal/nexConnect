@@ -2,96 +2,58 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import { loader, join } from "../assets/icons/index.js";
+import { loader } from "../assets/icons/index.js";
 import DisplayMsg from '../hooks/DisplayMsg.jsx';
+import JoinFullIcon from '@mui/icons-material/JoinFull';
 
 function JoinGroup() {
     const socket = useSocket();
     const [loading, setLoading] = useState(false);
-    const [ name, setName ] = useState('');
+    const [ username, setUsername ] = useState('');
     const [ roomID, setRoomID ] = useState('');
     const [ message, setMessage ] = useState('');
-    const navigate = useNavigate();
     const firebase = useFirebase();
 
-    const isUsernameTakenListener = useCallback(
-      (data) => {
-        const { id } = data;
-        if ( socket.id == id) {
-          setMessage("Name is already taken! Pleace try something differrent!");
-        }
-        setLoading(false);
-      }, [message]
-    );
+    const loginMember = async () => {
+
+      const isRoomExist = await firebase.checkRoomId(roomID);
+      if (!isRoomExist) return setMessage("Room Does not exist!");
+
+      const isUsernameAvailable = await firebase.isUsernameAvailable(roomID, username);
+      if (!isUsernameAvailable) return setMessage("This username is already exist, try some other usenames");
+      
+      const responce = await firebase.login({room_id: roomID, username: username, isOwner: false})
+      responce && socket.emit("join-room", {roomId: roomID, username: username});
+
+    }
     
     
+    const handleSubmit = (e) => {
+      e.preventDefault();
 
-    const isJoinedListener = useCallback(
-      async (data) => {
-        const { Id, roomId } = data;
-        if( Id == socket.id ) {
-          setLoading(false);
-          roomId.length == 6 ? 
-          firebase.onAuthStateChanged((user) => {
-            if (user) {
-              console.log("User Logged In!", user.uid);
-              navigate(`/chat/${roomId}`)
-            } else {
-              console.log("User Looged Out!");
-              navigate('/');
-            }
-          }) : setMessage("Enter Room ID !"), setRoomID(''), setName('');
-        } 
-      }, []
-    )
+      if (!socket) return setMessage("Internet Problem!, Please refresh it.");
+      if (roomID.length != 6) return setMessage("Room ID does not exist!");
+      if (username && username.length < 3) return setMessage("Name should be greather than 3 characters!");
+      loginMember();
 
+    }
 
     useEffect(() => {
-      socket.on("isUsernameTaken", isUsernameTakenListener);
-      socket.on("isJoined", isJoinedListener);
-
-      return () => {
-        socket.off("isUsernameTaken", isUsernameTakenListener);
-        socket.off("isJoined", isJoinedListener);
+      if (message.length > 2) {
+        setLoading(() => false);
       }
-    }, []);
-
-    const isExist = async () => {
-        if (socket && roomID.length == 6 && name) {
-          const isExist = await firebase.checkRoomId(roomID);
-          if (isExist) {
-            const result = await firebase.login({room_id: roomID, username: name, isOwner: false});
-            console.log("Result:", result);
-            result && socket.emit("join-room", {roomId: roomID, username: name});
-          } else {
-            setMessage(`Room Does not exist at ID : ${roomID}`);
-            setLoading(false);
-          }
-        } else {
-          setMessage("Something went wrong !! Please refresh page ");
-          setLoading(false);
-        }
-    
-      }
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        isExist();
-      }
+    }, [message])
 
   return (
-    <div>
-        <div className='w-full absolute top-10 flex justify-center'>
-            {message.length > 2 && <DisplayMsg message={message} setMessage={setMessage}/>}
-        </div>
+    <div className='w-full'>
             <form onSubmit={e => handleSubmit(e)} className='flex flex-col items-center w-full justify-center'>
               {/* Input Field */}
               <div className='flex-col justify-center w-full'>
                 <input 
                     type="text" 
                     className='rounded-md border text-white w-full bg-gradient-to-r from-sky-800 to-indigo-800 p-3' 
-                    value={name}
-                    onChange={e => setName(e.target.value)} 
+                    value={username}
+                    onChange={e => setUsername(e.target.value)} 
                     placeholder='Enter your name'
                      />
 
@@ -110,15 +72,18 @@ function JoinGroup() {
                     type='submit' 
                     onClick={() => setLoading(true)} 
                     className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center bg-green-500 p-3 my-1'>
-                      <h1 className='font-blod text-white mx-2'>Enter in Room </h1>
                         <span>
-                          {loading ? <img src={loader} width={23} alt="loading" /> : <img src={join} style={{width:"40px"}} alt='join' />}
+                          {loading ? <img src={loader} width={23} alt="loading" /> : <JoinFullIcon /> }
                         </span>
                 </button>
               </div>
 
             </form>
             
+            <div className='absolute w-[90vw] top-10 justify-center'>
+              {message.length > 2 && <DisplayMsg message={message} setMessage={setMessage}/>}
+            </div>
+
     </div>
   )
 }

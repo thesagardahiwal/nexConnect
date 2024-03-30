@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { logo } from "../assets/icons/index.js";
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import TemporaryDrawer from '../components/Drawer.jsx';
+import { useTheme } from '../contexts/ThemeContext.jsx';
 
 
 const TopBar = ({width}) => {
@@ -11,7 +12,7 @@ const TopBar = ({width}) => {
   const { roomId } = useParams();
   const [ username, setUsername ] = useState('');
   const firebase = useFirebase();
-
+  const { theme, toggleTheme } = useTheme();
 
   const recieveUsernameListener = useCallback(
     (data) => {
@@ -36,7 +37,7 @@ const TopBar = ({width}) => {
 
   
   return (
-    <div className="w-full h-[70px] flex items-center sticky top-0 bg-gradient-to-r from-pink-400 to-indigo-400">
+    <div className={`w-full h-[70px] flex items-center sticky top-0 ${theme == 'light' ? "extralight": "darklight"} `}>
       {/* Show room ID */}
       <div className='flex p-4 w-full gap-2 items-center justify-between'>
         <div className='text-2xl flex font-semibold items-center mr-2 gap-2 w-[30%] text-white'>
