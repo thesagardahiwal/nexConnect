@@ -98,8 +98,11 @@ const ChatContainer = ({width}) => {
   }, [messages]);
 
   useEffect (() => {
-    firebase.onAuthStateChanged((user) => {
+    firebase.onAuthStateChanged(async (user) => {
       if (user) {
+        setTimeout(() => {
+          firebase.isMeExist(roomId, user.uid)
+        }, [10000])
         socket.emit("get-username", { id: socket.id });
         const responce = firebase.getCurrentUserDetails(roomId)
         responce.then((user) => {
@@ -111,7 +114,7 @@ const ChatContainer = ({width}) => {
     });
     
 
-  }, [])
+  }, [messages, leaveGroupListener, firebase, socket])
 
 
   return (
@@ -131,7 +134,7 @@ const ChatContainer = ({width}) => {
               <h1 className={`flex p-2 w-fit text-white my-1 ${m.id === currentUser && m.username === username ? "rounded-l-2xl rounded-tr-2xl bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl bg-gradient-to-r mx-2 from-pink-400 to-pink-400"} justify-center  texl-xl`}
                 style={{minWidth: "40px"}}
               >{m.message}</h1>
-              <div className={`text-slate-200 flex w-full 
+              <div className={`flex w-full 
                ${m.id === currentUser ? "justify-end" : "justify-start" } 
                text-[10px] items-center gap-1`}>
                 {m.id === currentUser && m.username === username ?

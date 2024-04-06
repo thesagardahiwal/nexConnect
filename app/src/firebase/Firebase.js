@@ -11,13 +11,13 @@ import { ref, get, child, push, onValue, getDatabase, remove, set } from 'fireba
 import { deleteObject, getDownloadURL, getStorage, list, listAll, ref as Ref, uploadBytes } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBOmHlPgUxBw4IShj4jv9X2K1kporIsBYc',
-  authDomain: 'nexconnect-7361a.firebaseapp.com',
-  projectId: 'nexconnect-7361a',
-  storageBucket: 'nexconnect-7361a.appspot.com',
-  messagingSenderId: '218877273069',
-  appId: '1:218877273069:web:9a10ea19c75a94d000bde4',
-  measurementId: "G-3DML8LLK1P"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
 class Firebase {
@@ -39,14 +39,16 @@ class Firebase {
         username,
         id: this.auth.currentUser.uid,
         participants: [username],
+        isOpen: false
       });
       await set(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid), {
         username: username,
-        id: this.auth.currentUser.uid
+        id: this.auth.currentUser.uid,
+        
       });
       return true;
     }
-    if (snapDoc.exists()) {
+    if (snapDoc.exists() && snapDoc.data().isOpen) {
       await signInAnonymously(this.auth);
       await set(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid), {
         username: username,
@@ -59,21 +61,21 @@ class Firebase {
 
   };
 
-  logout = async ({room_id, isOwner, username}) => {
+  logout = async ({room_id, isOwner}) => {
     try {
-      if (!room_id && !username) return;
+      if (!room_id) return;
         const docSnap = await getDoc(doc(this.db, "rooms", room_id));
         const responce = await get(child(ref(this.database), `${room_id}/users/`+this.auth.currentUser.uid))
         if (!docSnap.exists() && !responce.exists()) {
           deleteUser(this.auth.currentUser);
           return;
         }
-        await remove(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid))
         if (isOwner) {
           await deleteDoc(doc(this.db, "rooms", room_id));
+          await remove(ref(this.database, `${room_id}`));
         }
+        await remove(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid));
         await deleteUser(this.auth.currentUser);
-        
 
       } catch (error) {
         console.error('Logout error:', error);
@@ -89,16 +91,30 @@ class Firebase {
 
   };
 
+  allowParticipants = async (room_id, callback, allow) => {
+    const snapShot = await getDoc(doc(this.db, "rooms", room_id));
+    if (!snapShot.exists()) return false;
+    if (this.auth.currentUser.uid === snapShot.data().id) {
+      await updateDoc(doc(this.db, "rooms", room_id), {
+        isOpen: allow ? false : true
+      });
+      callback(snapShot.data().isOpen);
+    }
+  }
 
-  isOwnerLogout = async (room_id, username) => {
+
+  isOwnerLogout = async (room_id) => {
     const roomRef = doc(this.db, "rooms", room_id);
     const docSnap = await getDoc(roomRef);
     if(docSnap.exists() && docSnap.data().id === this.auth.currentUser.uid) {
-      this.logout({room_id: room_id, isOwner: true, username: username});
+      await this.logout({room_id: room_id, isOwner: true});
+      
     } else if (docSnap.exists()) {
-      this.logout({room_id: room_id, isOwner: false, username: username});
-    }
+      await this.logout({room_id: room_id, isOwner: false});
 
+    } else {
+      await deleteUser(this.auth.currentUser);
+    }
   }
 
   isUsernameAvailable = async (room_id, username) => {
@@ -114,19 +130,47 @@ class Firebase {
     }
   }
 
+  getRoomOwner = async (room_id) => {
+    const docSnap = await getDoc(doc(this.db, "rooms", room_id));
+    if (!docSnap.exists()) return '';
+    return docSnap.data().username;
+  }
+
   getCurrentUser = () => {
     const id = this.auth.currentUser?.uid;
     return id;
   }
 
+  removeParticipant = async (room_id, id) => {
+      if (!room_id && !id) return;
+      const docSnap = await getDoc(doc(this.db, "rooms", room_id));
+      const responce = await get(child(ref(this.database), `${room_id}/users/`+id))
+      if (!docSnap.exists() && !responce.exists()) return;
+      await remove(ref(this.database, `${room_id}/users/`+id));
+  }
+
   getCurrentUserDetails = async (room_id) => {
     try {
-      const result = await get(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid))
+      const result = await get(ref(this.database, `${room_id}/users/`+this.auth.currentUser?.uid))
       if(!result.exists()) return '';
       return result.val().username;
     } catch (e) {
       console.log(e);
     }
+  }
+
+  isOwner = async (room_id) => {
+    const docSnap = await getDoc(doc(this.db, "rooms", room_id));
+    if (docSnap.exists()) return docSnap.data().id == this.auth.currentUser?.uid;
+  }
+
+  isMeExist = async (room_id, id) => {
+    if (!room_id) return;
+    const docSnap = await get(ref(this.database, `${room_id}/users/${id}`));
+    if (!docSnap.exists()) {
+      await deleteUser(this.auth.currentUser);
+    } 
+    
   }
 
   onAuthStateChanged = (callback) => {
@@ -173,10 +217,9 @@ class Firebase {
         let list = [];
         res.forEach((snap) => {
           const value = snap.val();
-          list.push(value.username);
+          list.push({username: value.username, id: value.id});
         })
         callbackMember(list);
-  
       }
       
     } catch (error) {
