@@ -7,8 +7,10 @@ import {CircularProgress } from '@mui/material';
 import BackgroundLetterAvatars from "./Avatar";
 import { useTheme } from '../contexts/ThemeContext';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import { loader } from '../assets/icons';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-function SharedFiles({ showFiles, setIsChatWithAI }) {
+function SharedFiles({ showFiles, roomOwner, setIsChatWithAI, isOwner }) {
     const socket = useSocket();
     const { roomId } = useParams();
     const [mediaFiles, setMediaFiles] = useState([]);
@@ -18,6 +20,7 @@ function SharedFiles({ showFiles, setIsChatWithAI }) {
     const [ isMediaLoading, setIsMediaLoading ] = useState(true);
     const [ isMembersLoading, setIsMembersLoading ] = useState(true);
     const { theme, toggleTheme } = useTheme();
+    const [ iskickLoading, setIsKickLoading ] = useState(false);
     const MediaLenght = useMemo(() => {
          firebase.getFileCount(roomId).then((res) => {return res})
     }, [])
@@ -45,9 +48,8 @@ function SharedFiles({ showFiles, setIsChatWithAI }) {
     );
 
     const recieveMemberListener = useCallback(
-        (data) => {
-            const { msg } = data;
-            msg && firebase.getMembers(roomId, callbackMember);
+        async (data) => {
+            await firebase.getMembers(roomId, callbackMember);
         }, [showFiles, firebase, roomId, socket]
     )
 
@@ -63,10 +65,22 @@ function SharedFiles({ showFiles, setIsChatWithAI }) {
         setIsChatWithAI((prev) => !prev);
     }
 
+    const handleKick = async (data) => {
+        if(iskickLoading) return;
+        setIsKickLoading(() => true)
+        await firebase.removeParticipant(roomId, data.id);
+        setIsKickLoading(() => false)
+    }
+
+    const newMemberListener = useCallback((data) => {
+        const { username } = data;
+        setMembers((prev) =>[...prev, {username: username}]);
+    }, [members, socket, firebase])
+
     useEffect(() => {
         socket.on("media-file", mediaFileListner);
         socket.on("recieve-member", recieveMemberListener);
-        
+        socket.on("member-joined", newMemberListener);
 
         return () => {
             socket.off("recieve-member", recieveMemberListener);
@@ -77,11 +91,11 @@ function SharedFiles({ showFiles, setIsChatWithAI }) {
 
     useEffect(() => {
 
-        if (!members.length) {
+        if (!members?.length) {
             firebase.getMembers(roomId, callbackMember);
         }
 
-        if (mediaFiles.length != MediaLenght) {
+        if (mediaFiles?.length != MediaLenght) {
             firebase.getMediaFiles(roomId, callback, setIsMediaLoading);
         }
         
@@ -128,7 +142,7 @@ function SharedFiles({ showFiles, setIsChatWithAI }) {
                 : (<>
 
                 <ul className="w-[95%]">
-                        <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3": "dark-item-3"} m-1 rounded-md p-1`} key={"Chat-AI"}>
+                        {/* <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3": "dark-item-3"} m-1 rounded-md p-1`} key={"Chat-AI"}>
                             <div className="text-sm flex items-center gap-2 font-semibold">
                                 <BackgroundLetterAvatars username={"AI"} size='30px' />
                                 <p>Chat With AI</p>
@@ -136,14 +150,28 @@ function SharedFiles({ showFiles, setIsChatWithAI }) {
                             <button className='border relative right-2 bg-violet-400 rounded-lg px-1'
                                 onClick={handleAI}
                                 ><ChatBubbleIcon style={{width:'20px', height:"20px"}} /></button>
-                        </li>
-                    {members?.map((m, i) => (
-                        <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3": "dark-item-3"} m-1 rounded-md p-1`} key={i + 3}>
+                        </li> */}
+                    {members?.map((data, i) => (
+                        data &&
+                        <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3" : "dark-item-3"} m-1 rounded-md p-1`} key={i + 3}>
                             <div className='flex gap-1 items-center'>
-                            <BackgroundLetterAvatars username = {m} size='30px' />
-                            <p className='font-semibold p-1'>{m}</p>
+                                <BackgroundLetterAvatars username={data.username} size='30px' />
+                                <p className='font-semibold p-1'>{data.username}</p>
+                                
                             </div>
-                            <span className='w-2 h-2 bg-green-500 rounded-xl relative right-5'></span>
+                            {!isOwner || (roomOwner === data.username) ?
+                            <span className='w-2 h-2 bg-green-500 rounded-xl relative right-3'>
+                            </span>
+                            : 
+                            <button className='w-fit p-1 bg-slate-200 flex rounded-xl'
+                                onClick={() => handleKick(data)}    
+                            >
+                                {iskickLoading ? <CircularProgress disableShrink size={20}/>
+                                :    
+                                    <RemoveCircleOutlineIcon style={{color:"red"}} />
+                                }
+                            </button>
+                            }
                         </li>
                     ))}
                     {isMembersLoading && 

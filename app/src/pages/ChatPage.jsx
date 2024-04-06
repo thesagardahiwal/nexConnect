@@ -6,12 +6,17 @@ import BottomBar from './BottonBar';
 import LeftBar from './LeftBar';
 import { useSocket } from '../contexts/SocketContext';
 import AIChatContainer from './AIChatContainer';
+import { useFirebase } from '../firebase/FirebaseContext';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function ChatPage() {
   const myElementRef = useRef(null);
   const [elementWidth, setElementWidth] = useState(0);
   const [ isChatWithAI, setIsChatWithAI ] = useState(false);
   const socket = useSocket();
+  const firebase = useFirebase();
+  const navigate = useNavigate();
+  const { roomId } = useParams();
   const handleResize = () => {
     if (myElementRef.current) {
       setElementWidth(myElementRef.current.offsetWidth);
@@ -32,6 +37,15 @@ function ChatPage() {
 
   }, []);
   
+  useEffect (() => {
+    firebase.onAuthStateChanged((user) => {
+      if (!user) {
+        navigate('/');
+      } 
+    });
+  }, [firebase, socket]);
+
+
 
   return (
     <div className='h-screen bg-black overflow-hidden'

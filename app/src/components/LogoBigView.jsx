@@ -4,17 +4,20 @@ import { logo } from "../assets/icons/index.js";
 function LogoBigView() {
   return (
       <div
-          className='flex text-white w-full h-full bg-gradient-to-r from-indigo-500 to-pink-500 justify-center items-center'
+          className='text-slate-100 p-5 w-full h-full flex justify-center bg-transperent'
       >
-          <div className='w-[50%] flex justify-center items-center'>
-              <img src={logo} width={300} alt="" />
-          </div>
-          <div className='flex-1'>
-              <h1 className='text-[5vh] w-full font-extrabold'>
-                  NexConnect
+          <div className='absolute tracking-wide top-20 flex justify-center'>
+              <h1 className='text-4xl w-[80%] font-extrabold'>
+                NexConnect offers a seamless and intuitive platform for sharing
+                &nbsp;
+                <span className='gr-text'> media files</span>,
+                <span className='gr-text'>chats</span> and
+                <span className='gr-text'>screen</span>
+                &nbsp;
+                sharing within virtual rooms.
               </h1>
-              <h1 className='font-normal text-sm w-full flex items-center justify-center'>- One platform to connect</h1>
           </div>
+
       </div>
   )
 }

@@ -6,6 +6,7 @@ import { useFirebase } from '../firebase/FirebaseContext.jsx'
 import ScreenShareSharpIcon from '@mui/icons-material/ScreenShareSharp';
 import StopScreenShareSharpIcon from '@mui/icons-material/StopScreenShareSharp';
 import DuoSharpIcon from '@mui/icons-material/DuoSharp';
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 import Peer from "peerjs";
 import { useTheme } from '../contexts/ThemeContext.jsx';
 // import { usePeer } from '../contexts/peerContext.jsx';
@@ -30,7 +31,6 @@ function ScreenShare() {
   });
 
   peer.on("open", id => {
-    console.log("New User:", id)
     socket.emit("join-screen", { id , roomId });
   })
 
@@ -48,16 +48,11 @@ function ScreenShare() {
   const handleCalling = (request) => {
     const video = Callhelper(request);
     video.then((stream) => {
-      console.log("Started")
       mediaStream = stream;
       setIsCasting(() => true);
-      console.log("Started -2");
       socket.on("new-user-connection", (newUser) => {
-        console.log("Started -3");
-        console.log("USER_ADDED", newUser);
         if (newUser) {
           peer.call(newUser, stream);
-          console.log("CALL FIRED!")
         };
       });
       socket.emit("calling", {roomId: roomId, username: username });
@@ -71,7 +66,6 @@ function ScreenShare() {
 
   peer.on('call', (call) => {
     call.answer(undefined);
-    console.log("Calling", call);
     setIsCasting(() => true);
     call.on("stream", (remoteStream) => {
       mediaStream = remoteStream;
@@ -102,12 +96,13 @@ function ScreenShare() {
     firebase.onAuthStateChanged((user) => {
       if (user) {
         
-        console.log("User Logged In!", user.uid);
+        console.log("User Logged In!");
       } else {
         console.log("User Looged Out!");
         pushTo('/');
       }
     });
+
   }, [])
 
   const startVideoStreaming = (stream) => {
@@ -143,9 +138,10 @@ function ScreenShare() {
           track.stop();
       });
       mediaStream = null;
-      
-    }
+      window.location.reload();
+    } 
     setIsCasting(() => false);
+    
   };
 
 
@@ -168,12 +164,19 @@ function ScreenShare() {
               <ScreenShareSharpIcon />
             </button>
             :
-          <button className='border rounded-full p-3 bg-red-600 text-white'
+            <button className='border rounded-full p-3 bg-red-600 text-white'
             onClick={handdleStopCalling}
             >
               <StopScreenShareSharpIcon />
             </button>
         }
+        
+        
+        <button className='border ml-2 rounded-full p-3 bg-red-600 text-white' onClick={() => window.location.reload()}>
+          <CancelPresentationIcon />
+        </button>
+        
+        
       </div>
     </div>
   )

@@ -137,7 +137,7 @@ const BottomBar = ({width, isChatWithAI}) => {
         <div className={`${width > 800 ? "w-fit" : "w-[40%]"} mr-2`}>
           <div className='flex items-center gap-2'>
             <div onClick={handleScreenShare} className='border hover:cursor-pointer p-1 flex items-center justify-center w-9 bg-gray-100 rounded-md h-9'>
-              <CoPresentIcon />
+              <CoPresentIcon  style={{color:"black"}}/>
             </div>
             
             <button
@@ -153,7 +153,7 @@ const BottomBar = ({width, isChatWithAI}) => {
         </div>
         <div className={`${width > 800 ? "w-[50%]" : "w-full"} flex justify-end`}>
           <form className='flex gap-2 w-full' onSubmit={e => handleSubmit(e)}>
-            <input className='p-1 rounded-md w-full' type="text" value={message} onChange={e => setMessage(e.target.value)} placeholder={`${socket  ? "Message" : "Socket is disconnected"}`}/>
+            <input className='p-1 rounded-md w-full text-black' type="text" value={message} onChange={e => setMessage(e.target.value)} placeholder={`${socket  ? "Message" : "Socket is disconnected"}`}/>
             <button type='submit' className='border bg-green-400 w-10 h-9 flex items-center justify-center rounded-md p-1'>
                 <SendIcon style={{ width: 25, rotate: "-25deg", padding: 1, position: "absolute", top: "26px", color: "rgb(10,10,50)"}} />
             </button>

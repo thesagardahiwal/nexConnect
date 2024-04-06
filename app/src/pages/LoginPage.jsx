@@ -83,9 +83,9 @@ function LoginPage() {
 
 
   return (
-    <div className=' h-[100vh]' ref={myElementRef}>
+    <div className="h-[100vh] bg-[url('../public/nexConnect4.png')] bg-center bg-cover" ref={myElementRef}>
       <div className='flex h-full w-full'>
-        <div className={`${elementWidth > 1023 && elementHeight < 1100 ? "w-[50%]" : 'w-full'} h-full flex items-center justify-center p-4 bg-gradient-to-r from-sky-500 to-indigo-500`}>
+        <div className={`${elementWidth > 1023 && elementHeight < 1100 ? "w-[50%]" : 'w-full'} h-full flex items-center justify-center p-4 bg-tranperent`}>
           <div className={`w-[400px] h-full sm:h-fit ${elementWidth < 700 ? "mt-[120px]" : ""}`}>
             {(elementWidth < 1023 || elementHeight > 1023) && <Logo />}
             {joinButtonActive ? 
@@ -111,7 +111,7 @@ function LoginPage() {
           </div>
         </div>
         {/* Right Ride */}
-        {elementWidth > 1023 && elementHeight < 1200 && <LogoBigView />}
+        {/* {elementWidth > 1023 && elementHeight < 1200 && <LogoBigView />} */}
       </div>
 
 

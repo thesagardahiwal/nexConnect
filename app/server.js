@@ -3,8 +3,6 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import fs from "fs";
 import cors from "cors";
-import OpenAI from 'openai';
-import axios from "axios";
 
 const app = express();
 const PORT = 3000;
@@ -21,38 +19,6 @@ const io = new Server(server, {
         credentials: true
       }
 });
-
-const openai = new OpenAI({
-    apiKey: "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", // This is the default and can be omitted
-  });
-
-function reqEndUser (req, res){
-    async function generateText () {
-        try {
-
-            const response = await openai.chat.completions.create({
-                model: "gpt-3.5-turbo",
-                messages: [
-                  {
-                    "role": "user",
-                    "content": "Where is India"
-                  }
-                ],
-                temperature: 1,
-                max_tokens: 256,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0,
-              });
-            
-            console.log(response.choices[0])
-
-        } catch (e) {
-            console.log("ERROR", e);
-        }
-    }
-    generateText()
-}
 
 
 
@@ -76,9 +42,9 @@ io.on("connection", (socket) => {
     });
 
     socket.on("call-members", (data) => {
-        const { roomId } = data;
+        const { roomId, username } = data;
         socket.join(roomId);
-        io.to(roomId).emit("recieve-member", "New Member Joined");
+        io.to(roomId).emit("recieve-member", username);
     })
 
     socket.on("get-username", (data) => {
@@ -140,10 +106,6 @@ app.use(cors({
     methods: ["GET", "POST"],
     credentials: true
   }));
-
-app.get("/", (req, res) => {
-    res.send("Welcome!");
-});
 
 
 server.listen(PORT, ()=> {

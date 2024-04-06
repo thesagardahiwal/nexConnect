@@ -1,88 +1,91 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import { useSocket } from '../contexts/SocketContext.jsx';
-import { useNavigate } from 'react-router-dom';
 import { loader } from "../assets/icons/index.js";
 import DisplayMsg from '../hooks/DisplayMsg.jsx';
 import JoinFullIcon from '@mui/icons-material/JoinFull';
 
 function JoinGroup() {
-    const socket = useSocket();
-    const [loading, setLoading] = useState(false);
-    const [ username, setUsername ] = useState('');
-    const [ roomID, setRoomID ] = useState('');
-    const [ message, setMessage ] = useState('');
-    const firebase = useFirebase();
+  const socket = useSocket();
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [roomID, setRoomID] = useState('');
+  const [message, setMessage] = useState('');
+  const firebase = useFirebase();
 
-    const loginMember = async () => {
+  const loginMember = async () => {
 
-      const isRoomExist = await firebase.checkRoomId(roomID);
-      if (!isRoomExist) return setMessage("Room Does not exist!");
+    const isRoomExist = await firebase.checkRoomId(roomID);
+    if (!isRoomExist) return setMessage("Room Does not exist!");
 
-      const isUsernameAvailable = await firebase.isUsernameAvailable(roomID, username);
-      if (!isUsernameAvailable) return setMessage("This username is already exist, try some other usenames");
-      
-      const responce = await firebase.login({room_id: roomID, username: username, isOwner: false})
-      responce && socket.emit("join-room", {roomId: roomID, username: username});
+    const isUsernameAvailable = await firebase.isUsernameAvailable(roomID, username);
+    if (!isUsernameAvailable) return setMessage("This username is already exist, try some other usenames");
 
+    const responce = await firebase.login({ room_id: roomID, username: username, isOwner: false })
+    responce && socket.emit("join-room", { roomId: roomID, username: username });
+    setLoading(() => false);
+
+  }
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(loading) return setMessage("Please wait for a moment!");
+    setLoading(() => true);
+    if (!socket) return setMessage("Internet Problem!, Please refresh it.");
+    if (roomID.length != 6) return setMessage("Room ID does not exist!");
+    if (username && username.length < 3) return setMessage("Name should be greather than 3 characters!");
+    loginMember();
+
+  }
+
+  useEffect(() => {
+    if (message.length > 2) {
+      setLoading(() => false);
     }
-    
-    
-    const handleSubmit = (e) => {
-      e.preventDefault();
-
-      if (!socket) return setMessage("Internet Problem!, Please refresh it.");
-      if (roomID.length != 6) return setMessage("Room ID does not exist!");
-      if (username && username.length < 3) return setMessage("Name should be greather than 3 characters!");
-      loginMember();
-
-    }
-
-    useEffect(() => {
-      if (message.length > 2) {
-        setLoading(() => false);
-      }
-    }, [message])
+  }, [message])
 
   return (
     <div className='w-full'>
-            <form onSubmit={e => handleSubmit(e)} className='flex flex-col items-center w-full justify-center'>
-              {/* Input Field */}
-              <div className='flex-col justify-center w-full'>
-                <input 
-                    type="text" 
-                    className='rounded-md border text-white w-full bg-gradient-to-r from-sky-800 to-indigo-800 p-3' 
-                    value={username}
-                    onChange={e => setUsername(e.target.value)} 
-                    placeholder='Enter your name'
-                     />
+      <form onSubmit={e => handleSubmit(e)} className='flex flex-col items-center w-full justify-center'>
+        {/* Input Field */}
+        <div className='flex-col justify-center w-full'>
+          <input
+            type="text"
+            className='rounded-md border  w-full p-3'
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder='Enter your name'
+          />
 
-                <input 
-                    type="text" 
-                    className='rounded-md my-1 text-white border w-full bg-gradient-to-r from-sky-800 to-indigo-800 p-3' 
-                    value={roomID} 
-                    onChange={e => setRoomID(e.target.value)} 
-                    placeholder='Enter Room ID'
-                     />
-              </div>
+          <input
+            type="text"
+            className='rounded-md my-1 border w-full p-3'
+            value={roomID}
+            onChange={e => setRoomID(e.target.value)}
+            placeholder='Enter Room ID'
+          />
+        </div>
 
-              {/* Submit Button Field */}
-              <div className='w-full'>
-                <button 
-                    type='submit' 
-                    onClick={() => setLoading(true)} 
-                    className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center bg-green-500 p-3 my-1'>
-                        <span>
-                          {loading ? <img src={loader} width={23} alt="loading" /> : <JoinFullIcon /> }
-                        </span>
-                </button>
-              </div>
+        {/* Submit Button Field */}
+        <div className='w-full'>
+          <button
+            type='submit'
+            className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center bg-green-500 p-3 my-1'>
+            <span>
+              {loading ? <div className='flex gap-2'>
+                <h1>Joining...</h1>
+                <img src={loader} width={23} alt="loading" />
+              </div> : <JoinFullIcon />}
+            </span>
+          </button>
+        </div>
 
-            </form>
-            
-            <div className='absolute w-[90vw] top-10 justify-center'>
-              {message.length > 2 && <DisplayMsg message={message} setMessage={setMessage}/>}
-            </div>
+      </form>
+
+      <div className='absolute w-[90vw] top-10 justify-center'>
+        {message.length > 2 && <DisplayMsg message={message} setMessage={setMessage} />}
+      </div>
 
     </div>
   )

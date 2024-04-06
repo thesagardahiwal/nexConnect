@@ -13,8 +13,8 @@ export default function TemporaryDrawer() {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 230, height: "100%", overflow: "hidden" }} role="presentation" >
-      < LeftBar width = {230} />
+    <Box sx={{ width: 300, height: "100%", overflow: "hidden" }} role="presentation" >
+      < LeftBar width = {300} />
     </Box>
   );
 
