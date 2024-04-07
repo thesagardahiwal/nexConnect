@@ -18,6 +18,9 @@ import screenoff from './screen-off.svg';
 import user_calling from './user-calling.svg'
 import picCall from './picCall.svg';
 import callReject from "./callReject.svg";
+import Sagar from "./Image.jpg";
+import Lucie from "./Lucie.jpg";
+import roomsPic from "./roomsPic.png";
 
 export {
     fileupload,
@@ -39,5 +42,8 @@ export {
     screenoff,
     user_calling,
     picCall,
-    callReject
+    callReject,
+    Sagar,
+    Lucie,
+    roomsPic
 }

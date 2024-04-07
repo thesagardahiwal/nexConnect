@@ -104,7 +104,7 @@ const ChatContainer = ({width}) => {
           firebase.isMeExist(roomId, user.uid)
         }, [10000])
         socket.emit("get-username", { id: socket.id });
-        const responce = firebase.getCurrentUserDetails(roomId)
+        const responce = firebase.getCurrentUserDetails(roomId);
         responce.then((user) => {
           (username != user) && setUsername((prev) => user);
         })
@@ -135,9 +135,9 @@ const ChatContainer = ({width}) => {
                 style={{minWidth: "40px"}}
               >{m.message}</h1>
               <div className={`flex w-full 
-               ${m.id === currentUser ? "justify-end" : "justify-start" } 
+               ${m.id === currentUser || m.username === username ? "justify-end" : "justify-start" } 
                text-[10px] items-center gap-1`}>
-                {m.id === currentUser && m.username === username ?
+                {m.id === currentUser || m.username === username ?
                   <>
                     {m.time}
                   </>

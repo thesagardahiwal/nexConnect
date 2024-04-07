@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { FirebaseProvider } from './firebase/FirebaseContext';
 import { SocketProvider } from "./contexts/SocketContext";
-import { PeerProvider } from "./contexts/peerContext"
 import LoginPage from './pages/LoginPage';
 import ChatPage from './pages/ChatPage';
 import ScreenShare from './pages/ScreenShare';
@@ -13,7 +12,6 @@ function App() {
   return (
     <FirebaseProvider>
       <SocketProvider>
-        <PeerProvider>
           <ThemeProvider>
             <Router>
               <Routes>
@@ -24,7 +22,6 @@ function App() {
               </Routes>
             </Router>
           </ThemeProvider>
-        </PeerProvider>
       </SocketProvider>
     </FirebaseProvider>
   );
