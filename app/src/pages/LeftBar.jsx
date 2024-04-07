@@ -92,7 +92,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
   return (
     <div className={`${ width ? `w-[${width}]`: "w-1/3"} ${theme == 'light' ? "light": "dark"} h-full p-4`}>
       {/* Small session */}
-      <div className={` ${width && "hidden"} w-full gap-2 h-[100px] flex justify-center items-center text-2xl font-semibold`}>
+      <div className={` ${width && "hidden"} w-full gap-2 h-fit mb-5 flex justify-center items-center text-2xl font-semibold`}>
         <img src={logo} width={50} alt="logo" />
         <p>NexConnect</p>
       </div>
@@ -100,7 +100,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
       <div className={`mb-4 w-full ${theme == 'light' ? "extralight": "darklight"}  rounded-md p-2`}>
           {/* Show Join ID and Leave Group Button */}
           <div className={`flex ${theme == 'light' ? "light": "dark"} items-center justify-between rounded-md p-2 gap-2`}>
-            <div className='font-semibold flex items-center gap-1'><HomeMaxIcon />Room ID:</div>
+            <div className='font-medium flex items-center gap-1'><HomeMaxIcon />Room ID:</div>
             <div className='font-semibold'>{roomId}</div>
           </div>
 
@@ -108,7 +108,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
             <BackgroundLetterAvatars username={roomOwner} size='30px'/>
             <h1 className='font-semibold text-center'>
               {roomOwner ?
-              <span className='font-semibold'>Host: @{roomOwner}</span>
+              <span className='font-medium'>Host: <span className='tracking-wider font-semibold'>{roomOwner}</span></span>
               :
               <CircularProgress disableShrink size={20} />
               }
@@ -117,15 +117,21 @@ const LeftBar = ({width, setIsChatWithAI}) => {
         {isOwner &&
           <div className={`flex font-medium justify-between ${theme == 'light' ? "light-item-4" : "dark-item-4"} rounded-md p-1 items-center mt-2 w-full`}>
             Joining {checked ? "Allowed" : "Denied"}
-            <Switch checked={checked}
-              onChange={handleParticipants}
-              inputProps={{ 'aria-label': 'controlled' }} />
+            <div className='flex items-center'>
+              <span className="relative flex h-3 right-3 w-3">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${checked ? "bg-red-400" : "bg-blue-400"} opacity-75`}></span>
+                <span className={`relative inline-flex rounded-full h-3 w-3 ${checked ? "bg-red-400" : "bg-blue-400"}`}></span>
+              </span>
+              <Switch checked={checked}
+                onChange={handleParticipants}
+                inputProps={{ 'aria-label': 'controlled' }} />
+            </div>
           </div>
         }
           
           <div className='text-white mt-2 w-full flex items-center gap-1 justify-end '>
             <ThemeToggleButton />
-              <button onClick={handleLogout} className='flex gap-1 w-fit rounded-md borde bg-red-500 hover:cursor-pointer font-semibold transition-all p-1'>
+              <button onClick={handleLogout} className='flex gap-1 w-fit rounded-md borde bg-red-500 hover:cursor-pointer font-medium tracking-wider transition-all p-1'>
                 {isLoading ? 
                   <>
                   {isOwner ? "Destroying..." : "Logging out..."}
@@ -133,7 +139,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
                   </>
                   : 
                   <>
-                    {isOwner ? "Destroy Room" : "Logout"}
+                    {isOwner ? "Destroy" : "Logout"}
                     <LogoutIcon />
                   </>}
                 

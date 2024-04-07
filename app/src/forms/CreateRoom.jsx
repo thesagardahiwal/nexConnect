@@ -40,12 +40,12 @@ function CreateGroup() {
   return (
     <div>
 
-      <form onSubmit={e => handleGenerateRoom(e)} className='flex flex-col items-center w-full justify-center'>
+      <form onSubmit={e => handleGenerateRoom(e)} className='flex flex-col gap-3 items-center w-full justify-center mb-5'>
         {/* Input Field */}
         <div className='flex-col justify-center w-full'>
           <input
             type="text"
-            className='rounded-md border w-full p-3'
+            className='rounded-md border bg-transparent text-slate-100 w-full p-3'
             value={username}
             onChange={e => setUsername(e.target.value)}
             placeholder='Enter your name'
@@ -57,7 +57,7 @@ function CreateGroup() {
         <div className='w-full'>
           <button
             type='submit'
-            className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center bg-green-500 p-3 my-1'>
+            className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center hover:bg-violet-500 transition-all p-3 my-1'>
             <span>
               {loading ?
                 <div className='flex gap-2'>

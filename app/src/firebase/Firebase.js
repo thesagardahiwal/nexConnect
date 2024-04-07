@@ -21,6 +21,7 @@ const firebaseConfig = {
 };
 
 class Firebase {
+  
   constructor() {
     const app = initializeApp(firebaseConfig);
     this.auth = getAuth(app);
@@ -46,6 +47,7 @@ class Firebase {
         id: this.auth.currentUser.uid,
         
       });
+      this.auth.currentUser.displayName = username;
       return true;
     }
     if (snapDoc.exists() && snapDoc.data().isOpen) {
@@ -54,7 +56,9 @@ class Firebase {
         username: username,
         id: this.auth.currentUser.uid
       });
+      this.auth.currentUser.displayName = username;
       console.log(`User ${room_id} logged in successfully.`);
+      
       return true;
     }
     return false;
@@ -73,10 +77,12 @@ class Firebase {
         if (isOwner) {
           await deleteDoc(doc(this.db, "rooms", room_id));
           await remove(ref(this.database, `${room_id}`));
+          await this.deleteFiles(room_id);
+          await deleteUser(this.auth.currentUser);
+          return;
         }
         await remove(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid));
         await deleteUser(this.auth.currentUser);
-
       } catch (error) {
         console.error('Logout error:', error);
       }
@@ -124,6 +130,9 @@ class Firebase {
       snapshot.forEach((user) => {
         if (username === user.val().username) {
           result = false;
+          if (user.val().id === this.auth.currentUser?.uid) {
+            result = true;
+          }
         }
       })
       return result
@@ -270,6 +279,14 @@ class Firebase {
       console.log(e);
     }
   }
+
+  deleteFiles = async (room_id) => {
+    const res = await listAll(Ref(this.storage, `${room_id}`));
+    if (res.items.length <= 0 ) return;
+    res.items.forEach(async(item) => {
+      await deleteObject(Ref(this.storage, item.fullPath));
+    })
+  } 
 
 }
 

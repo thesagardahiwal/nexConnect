@@ -47,12 +47,12 @@ function JoinGroup() {
 
   return (
     <div className='w-full'>
-      <form onSubmit={e => handleSubmit(e)} className='flex flex-col items-center w-full justify-center'>
+      <form onSubmit={e => handleSubmit(e)} className='flex flex-col gap-3 items-center w-full justify-center mb-5'>
         {/* Input Field */}
         <div className='flex-col justify-center w-full'>
           <input
             type="text"
-            className='rounded-md border  w-full p-3'
+            className='rounded-md border bg-transparent text-slate-100 w-full p-3'
             value={username}
             onChange={e => setUsername(e.target.value)}
             placeholder='Enter your name'
@@ -60,7 +60,7 @@ function JoinGroup() {
 
           <input
             type="text"
-            className='rounded-md my-1 border w-full p-3'
+            className='rounded-md border my-1 bg-transparent text-slate-100 w-full p-3'
             value={roomID}
             onChange={e => setRoomID(e.target.value)}
             placeholder='Enter Room ID'
@@ -71,7 +71,7 @@ function JoinGroup() {
         <div className='w-full'>
           <button
             type='submit'
-            className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center bg-green-500 p-3 my-1'>
+            className='rounded-md w-full border h-[50px] overflow-hidden text-white flex justify-center items-center hover:bg-blue-400 transition-all p-3 my-1'>
             <span>
               {loading ? <div className='flex gap-2'>
                 <h1>Joining...</h1>

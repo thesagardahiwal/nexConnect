@@ -11,7 +11,7 @@ function BackHandle({active}) {
       className='z-50'
     >
       <button
-        className='border bg-slate-200 hover:bg-slate-300 text-white rounded-md m-1 p-1'
+        className='border bg-slate-100 hover:bg-slate-200 text-white rounded-md m-1 p-1'
 
       >
         <img src={back} width={25} alt="" />

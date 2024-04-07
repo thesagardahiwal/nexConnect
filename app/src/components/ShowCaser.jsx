@@ -156,11 +156,13 @@ function SharedFiles({ showFiles, roomOwner, setIsChatWithAI, isOwner }) {
                         <li className={`w-full items-center justify-between flex px-2 text-white ${theme == 'light' ? "light-item-3" : "dark-item-3"} m-1 rounded-md p-1`} key={i + 3}>
                             <div className='flex gap-1 items-center'>
                                 <BackgroundLetterAvatars username={data.username} size='30px' />
-                                <p className='font-semibold p-1'>{data.username}</p>
+                                <p className='font-semibold tracking-wider p-1'>{data.username}</p>
                                 
                             </div>
                             {!isOwner || (roomOwner === data.username) ?
-                            <span className='w-2 h-2 bg-green-500 rounded-xl relative right-3'>
+                            <span className="relative flex h-3 right-3 w-3">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                             </span>
                             : 
                             <button className='w-fit p-1 bg-slate-200 flex rounded-xl'
