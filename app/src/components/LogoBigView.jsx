@@ -38,27 +38,27 @@ function LogoBigView() {
             </div>
           </div>
           <div className='w-1/2 grid'>
-            <div className='backdrop-blur-sm bg-white/50 -skew-y-2 hover:skew-y-0 drop-shadow-md font-normal items-end gap-2 h-fit flex w-fit text-black rounded-r-2xl rounded-tl-2xl p-2'>
-              <h1 className=''>Hello students, have you all joined this room?</h1>
+            <div className='dummy'>
+              <h1>Hello students, have you all joined this room?</h1>
               <p className='text-black text-xs'>{getTime()}</p>
             </div>
-            <div className='backdrop-blur-sm bg-white/50 hover:skew-y-0 -skew-y-2 transition-all drop-shadow-md items-center gap-2 h-fit flex w-fit text-black rounded-r-2xl rounded-tl-2xl p-2'>
+            <div className='dummy'>
               <h1>
                 <img src={roomsPic} className='contain rounded-md overflow-hidden h-[200px]' alt="" />
                 <p className='text-black text-xs'>{getTime()}</p>
               </h1>
             </div>
 
-            <div className='backdrop-blur-sm bg-white/30 skew-y-1 hover:skew-y-0 drop-shadow-md justify-self-end h-fit items-end gap-2 flex w-fit text-white rounded-l-2xl rounded-tr-2xl p-2'>
-              <h1 className=''>Can anyone please send the code for today's practical?</h1>
+            <div className='dummy-v2'>
+              <h1 >Can anyone please send the code for today's practical?</h1>
               <div className='text-white w-[5.5rem] text-left text-xs'>{getTime()}</div>
             </div>
-            <div className='backdrop-blur-sm bg-white/30 skew-y-1 hover:skew-y-0 drop-shadow-md justify-self-end h-fit items-end gap-2 flex w-fit text-white rounded-l-2xl rounded-tr-2xl p-2'>
-              <h1 className=''>By the way, what practical is today? 😃</h1>
+            <div className='dummy-v2'>
+              <h1>By the way, what practical is today? 😃</h1>
               <p className='text-white text-xs'>{getTime()}</p>
             </div>
-            <div className='backdrop-blur-sm bg-white/50 -skew-y-1 hover:skew-y-0 drop-shadow-md font-normal items-end gap-2 h-fit flex w-fit text-black rounded-r-2xl rounded-tl-2xl p-2'>
-              <h1 className=''>Who is this gossiping?</h1>
+            <div className='dummy'>
+              <h1>Who is this gossiping?</h1>
               <p className='text-black text-xs'>{getTime()}</p>
             </div>
 

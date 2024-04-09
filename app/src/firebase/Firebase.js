@@ -152,11 +152,14 @@ class Firebase {
     return id;
   }
 
-  onValueChange = async (room_id) => {
+  onValueChange = async (room_id, callback) => {
     const id = this.auth.currentUser?.uid;
     if (!id) return;
     onValue(ref(this.database, `${room_id}/users/`+id), (snapShot) => {
-      const username = (snapShot.val() && snapShot.val().username) || "Avatar";
+      const username = (snapShot.val() && snapShot.val().username);
+      if (!username) {
+        callback()
+      }
     }, {
       onlyOnce: true
     })

@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
-import Alerts from '../hooks/Alerts.jsx';
 import BackgroundLetterAvatars from "../components/Avatar.jsx";
 import { useTheme } from '../contexts/ThemeContext.jsx';
+import { Alert } from '@mui/material'
 
 const ChatContainer = ({width}) => {
   const socket = useSocket();
@@ -18,6 +18,7 @@ const ChatContainer = ({width}) => {
   const currentUser = firebase.getCurrentUser();
   const [ username, setUsername ] = useState('');
   const { theme, toggleTheme } = useTheme();
+  const [ kickoutMember, setkickoutMember ] = useState('');
 
 
   const groupMessageListner = useCallback(
@@ -40,17 +41,16 @@ const ChatContainer = ({width}) => {
       setNewMember(username);
       firebase.onAuthStateChanged((user) => {
         if (user) {
-          setTimeout(async () => {
+          setTimeout( async () => {
             await firebase.isMeExist(roomId, user.uid);
-            
-          }, [7000])
+          }, [5000])
           socket.emit("call-members", { roomId: roomId});
           socket.emit("get-username", { id: socket.id });
         } else {
           navigate('/');
         }
       });
-      setTimeout(()=> setNewMember(''), 3000);
+      setTimeout(()=> setNewMember(''), 4000);
     }, [socket]
   );
 
@@ -71,6 +71,28 @@ const ChatContainer = ({width}) => {
     [socket, firebase],
   );
 
+  const kickoutListner = useCallback(async (data) => {
+    const { username } = data;
+    setkickoutMember(() => username || '');
+    setTimeout(() => setkickoutMember(() => ''), 4000);
+    await firebase.onAuthStateChanged((user) => {
+      if (user) {
+          firebase.isMeExist(roomId, user.uid);
+      }
+    });
+    const callback = () => {
+      navigate('/');
+    }
+    await firebase.onValueChange(roomId, callback);
+  }, [messages, newMember]);
+
+  useEffect (() => {
+    const callback = () => {
+      navigate('/');
+    }
+    firebase.onValueChange(roomId, callback);
+  }, [])
+
 
   useEffect(() => {
     if(socket) {
@@ -78,13 +100,15 @@ const ChatContainer = ({width}) => {
       socket.on("media-file", mediaFileListner);
       socket.on("member-joined", newMemberListener);
       socket.on("owner-logout", leaveGroupListener);
+      socket.on("kickout", kickoutListner);
     }
-
-
+    
+    
     return () => {
       socket.off("group-mess", groupMessageListner);
       socket.off("media-file", mediaFileListner);
       socket.off("member-joined", newMemberListener);
+      socket.off("kickout", kickoutListner);
     }
 
   }, [ firebase, socket, mediaFileListner, groupMessageListner, newMemberListener, leaveGroupListener]);
@@ -119,25 +143,34 @@ const ChatContainer = ({width}) => {
 
 
   return (
-    <div className={`${theme == 'light' ? "light-rev": "dark"} h-[90vh] p-4 sm:px-5 pb-[80px] w-full`}>
-
-      {newMember && <Alerts message={`${newMember} is joined`} type={"success"} /> }
+    <div className={`${theme == 'light' ? "light-rev": "dark"} h-[90vh] pb-[80px] sm:pb-0 w-full`}>
+      <div className={`${newMember || kickoutMember ? "flex" : "hidden"} z-30 sm:justify-center mt-2 sm:w-fit absolute sm:left-1/2`}>
+        {newMember ? 
+        <>
+          {newMember && <Alert severity="success">New Member: <span className='username'>{newMember}</span> is Joined successfully!</Alert>}
+        </>
+        : kickoutMember &&
+        <>
+          {kickoutMember && <Alert severity="info">Member Left: <span className='username'>{kickoutMember}</span> is Left from room successfully!</Alert>}
+        </>}
+        
+      </div>
 
       <div 
-        className="main-container hide-scrool-bar"
+        className="main-container px-4 hide-scrool-bar"
         ref={chatting} style={{overflowY:"auto", height: "100%"} }>
         {/* Show chats */}
         
         {/*  MESSAGE UI */}
         {messages.map((m, i) => (
-          <div key={`index${i+1}`} className={`flex my-2 ${m.username === username || m.id === currentUser ? "justify-end" : "justify-start"}`}>
+          <div key={`index${i+1}`} className={`${m.username === username || m.id === currentUser ? "user" : "member"}`}>
             <div className='max-w-[80%]'>
-              <h1 className={`flex p-2 w-fit text-white my-1 ${m.username === username || m.id === currentUser? "rounded-l-2xl rounded-tr-2xl bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl bg-gradient-to-r mx-2 from-pink-400 to-pink-400"} justify-center  texl-xl`}
+              <h1 className={`msg ${m.username === username || m.id === currentUser? "user-msg" : "member-msg"}`}
                 style={{minWidth: "40px"}}
-              >{m.message}</h1>
-              <div className={`flex w-full 
-               ${m.username === username || m.id === currentUser  ? "justify-end" : "justify-start" } 
-               text-[10px] items-center gap-1`}>
+                >
+                {m.message}
+              </h1>
+              <div className={`time ${m.username === username || m.id === currentUser  ? "justify-end" : "justify-start" }`}>
                 {m.username === username || m.id === currentUser ?
                   <>
                     {m.time}
