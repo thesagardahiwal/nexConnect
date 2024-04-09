@@ -98,6 +98,14 @@ const BottomBar = ({width, isChatWithAI}) => {
     }, [socket, username, firebase]
   )
 
+  const kickoutListner = useCallback(async () => {
+    await firebase.onAuthStateChanged((user) => {
+      if (user) {
+          firebase.isMeExist(roomId, user.uid);
+      }
+    })
+  }, [message, firebase, socket])
+
   useEffect(() => {
     firebase.onAuthStateChanged((user) => {
       if (user) {
@@ -114,7 +122,9 @@ const BottomBar = ({width, isChatWithAI}) => {
 
   useEffect(() => {
     socket.on("recieve-username", recieveUsernameListener);
+    socket.on("kickout", kickoutListner);
     return () => {
+      socket.off("kickout", kickoutListner);
       socket.off("recieve-username", recieveUsernameListener);
     }
   }, []);
@@ -125,7 +135,6 @@ const BottomBar = ({width, isChatWithAI}) => {
       return;
     }
     handleInput();
-
   }
 
 

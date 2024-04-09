@@ -76,7 +76,6 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
     }, [members, socket, firebase])
 
     const kickoutListner = useCallback(async() => {
-        console.log("KickoutListner")
         recieveMemberListener(true);
         await firebase.onAuthStateChanged((user) => {
             if (user) {

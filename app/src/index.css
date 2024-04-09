@@ -74,3 +74,42 @@ body {
 .gr-text {
     @apply bg-gradient-to-r from-violet-700 to-pink-600 inline-block text-transparent bg-clip-text
 }
+
+
+
+
+/* Alerts - Name style */
+.username {
+    @apply font-semibold text-black tracking-wider
+}
+
+/* CHAT CSS */
+.msg {
+    @apply flex p-2 w-fit text-white my-0.5 justify-center text-lg drop-shadow-md
+}
+
+.member {
+    @apply flex my-4 justify-start
+}
+.member-msg {
+    @apply rounded-r-2xl rounded-tl-2xl bg-gradient-to-r mx-2 from-pink-400 to-pink-400
+}
+.user {
+    @apply flex my-2 justify-end
+}
+.user-msg {
+    @apply rounded-l-2xl rounded-tr-2xl bg-gradient-to-r from-cyan-500 to-blue-500
+}
+
+.time{
+    @apply text-[10px] items-center gap-1 flex w-full
+}
+
+
+/* HOME_CHAT */
+.dummy {
+    @apply backdrop-blur-sm bg-white/50 -skew-y-2 hover:skew-y-0 drop-shadow-md font-normal items-end gap-2 h-fit flex w-fit text-black rounded-r-2xl rounded-tl-2xl p-2
+}
+.dummy-v2 {
+    @apply backdrop-blur-sm bg-white/30 skew-y-1 hover:skew-y-0 drop-shadow-md justify-self-end h-fit items-end gap-2 flex w-fit text-white rounded-l-2xl rounded-tr-2xl p-2
+}

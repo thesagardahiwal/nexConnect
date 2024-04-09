@@ -13,7 +13,7 @@ function JoinRoomButton({Active, IDE}) {
           onClick={handleJoinButton}>
         {/* `${IDE === "Join" ?}` */}
           <div className='w-full tracking-widest font-medium flex justify-start'>{IDE === "Join" ? "Join Room" : "Create Room"}</div>
-          <div className={`backdrop-blur-sm bg-white/30 p-1 hover:skew-y-3 rounded-sm ${IDE === "Join" ? "rounded-tr-xl rounded-bl-xl rotate-6" : "rounded-tl-xl rounded-br-xl -rotate-6"} hover:rotate-0`}>
+          <div className={`p-1 hover:skew-y-3 rounded-sm ${IDE === "Join" ? "rounded-tr-xl rounded-bl-xl rotate-6" : "rounded-tl-xl rounded-br-xl -rotate-6"} hover:rotate-0`}>
             {IDE === "Join" ? (<JoinInnerIcon />) : (<Diversity3Icon />)}
           </div>
         </button> 
