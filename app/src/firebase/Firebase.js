@@ -57,8 +57,6 @@ class Firebase {
         id: this.auth.currentUser.uid
       });
       this.auth.currentUser.displayName = username;
-      console.log(`User ${room_id} logged in successfully.`);
-      
       return true;
     }
     return false;
@@ -71,16 +69,19 @@ class Firebase {
         const docSnap = await getDoc(doc(this.db, "rooms", room_id));
         const responce = await get(child(ref(this.database), `${room_id}/users/`+this.auth.currentUser.uid))
         if (!docSnap.exists() && !responce.exists()) {
+          if(!this.auth.currentUser) return;
           deleteUser(this.auth.currentUser);
           return;
         }
         if (isOwner) {
+          if (!this.auth.currentUser) return;
           await deleteDoc(doc(this.db, "rooms", room_id));
           await remove(ref(this.database, `${room_id}`));
           await this.deleteFiles(room_id);
           await deleteUser(this.auth.currentUser);
           return;
         }
+        if (this.auth.currentUser) return;
         await remove(ref(this.database, `${room_id}/users/`+this.auth.currentUser.uid));
         await deleteUser(this.auth.currentUser);
       } catch (error) {
@@ -121,6 +122,7 @@ class Firebase {
     } else {
       await deleteUser(this.auth.currentUser);
     }
+    return true;
   }
 
   isUsernameAvailable = async (room_id, username) => {
@@ -150,6 +152,16 @@ class Firebase {
     return id;
   }
 
+  onValueChange = async (room_id) => {
+    const id = this.auth.currentUser?.uid;
+    if (!id) return;
+    onValue(ref(this.database, `${room_id}/users/`+id), (snapShot) => {
+      const username = (snapShot.val() && snapShot.val().username) || "Avatar";
+    }, {
+      onlyOnce: true
+    })
+  }
+
   removeParticipant = async (room_id, id) => {
       if (!room_id && !id) return;
       const docSnap = await getDoc(doc(this.db, "rooms", room_id));
@@ -177,6 +189,7 @@ class Firebase {
     if (!room_id) return;
     const docSnap = await get(ref(this.database, `${room_id}/users/${id}`));
     if (!docSnap.exists()) {
+      if (!this.auth.currentUser) return;
       await deleteUser(this.auth.currentUser);
     } 
     
@@ -245,7 +258,6 @@ class Firebase {
     // Broadcast the file to all connected clients
     const storageRef = Ref(this.storage, `${room_id}/${filename}`+` time:${time}`);
     uploadBytes(storageRef, file.content).then((url) => {
-      console.log("Uploaded Successfully!");
       callback()
     }).catch((e) => {
       console.log(e);
