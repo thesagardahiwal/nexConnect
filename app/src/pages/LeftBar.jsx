@@ -13,6 +13,8 @@ import ThemeToggleButton from '../components/ThemeToggleButton';
 import { useTheme } from '../contexts/ThemeContext';
 import Switch from '@mui/material/Switch';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 const LeftBar = ({width, setIsChatWithAI}) => {
   const { roomId } = useParams();
@@ -31,8 +33,10 @@ const LeftBar = ({width, setIsChatWithAI}) => {
   const handleLogout = async () => {
     if (isLoading) return;
     setIsloading(true);
-    await firebase.isOwnerLogout(roomId);
-    setIsloading(false);
+    const res = await firebase.isOwnerLogout(roomId);
+    if (res) {
+      navigator('/')
+    }
   };
 
   const recieveUsernameListener = useCallback(
@@ -57,9 +61,6 @@ const LeftBar = ({width, setIsChatWithAI}) => {
   useEffect(() => {
     firebase.onAuthStateChanged( async (user) => {
       if (user) {
-        setTimeout(() => {
-          firebase.isMeExist(roomId, user.uid)
-        }, [10000]);
         const snapDoc = await firebase.getRoomOwner(roomId);
         const snapShot = await firebase.getCurrentUserDetails(roomId);
         if (snapDoc || snapShot) {
@@ -92,8 +93,8 @@ const LeftBar = ({width, setIsChatWithAI}) => {
   return (
     <div className={`${ width ? `w-[${width}]`: "w-1/3"} ${theme == 'light' ? "light": "dark"} h-full p-4`}>
       {/* Small session */}
-      <div className={` ${width && "hidden"} w-full gap-2 h-fit mb-5 flex justify-center items-center text-2xl font-semibold`}>
-        <img src={logo} width={50} alt="logo" />
+      <div className={` ${width && "hidden"} bg-transparent w-full gap-2 h-fit mb-5 flex justify-center items-center text-2xl font-semibold`}>
+        <img className='bg-transparent' src={logo} width={50} alt="logo" />
         <p>NexConnect</p>
       </div>
 
@@ -115,8 +116,8 @@ const LeftBar = ({width, setIsChatWithAI}) => {
               </h1>
           </div>
         {isOwner &&
-          <div className={`flex font-medium justify-between ${theme == 'light' ? "light-item-4" : "dark-item-4"} rounded-md p-1 items-center mt-2 w-full`}>
-            Joining {checked ? "Allowed" : "Denied"}
+          <div className={`flex font-bold justify-between ${theme == 'light' ? "light-item-4" : "dark-item-4"} rounded-md p-1 items-center mt-2 w-full`}>
+            {checked ? <LockOpenIcon/> : <LockIcon />} Room {checked ? "opened" : "closed"}
             <div className='flex items-center'>
               <span className="relative flex h-3 right-3 w-3">
                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${checked ? "bg-red-400" : "bg-blue-400"} opacity-75`}></span>
@@ -152,13 +153,13 @@ const LeftBar = ({width, setIsChatWithAI}) => {
         <button className={`rounded-md px-2 py-1 flex w-full justify-between items-center ${theme == 'light' ? "light-item-2": "dark-item-2"}`}
           onClick={() => setShowFiles(!showFiles)}
           >
-          <p className={`${!showFiles ? "text-white" : "gr-text"}`}><PermMediaIcon style={{color:"purple"}}/> Files</p>
-          <p className={`${!showFiles ? "gr-text" : "text-white"}`}><Groups3Icon style={{color:"purple"}}/> Members</p>
+          <p className={`${!showFiles ? "text-white" : "gr-text"}`}><PermMediaIcon style={{color:`${theme == 'light' ? "black": "white"}`}}/> Files</p>
+          <p className={`${!showFiles ? "gr-text" : "text-white"}`}><Groups3Icon style={{color:`${theme == 'light' ? "black": "white"}`}}/> Members</p>
         </button>
       </div>
 
       <div className='h-1/2'>
-        < SharedFiles showFiles={showFiles} isOwner={isOwner} roomOwner={roomOwner} setIsChatWithAI={setIsChatWithAI}/>
+        < SharedFiles showFiles={showFiles} pushTo = {navigator} isOwner={isOwner} roomOwner={roomOwner} setIsChatWithAI={setIsChatWithAI}/>
       </div>
     </div>
   );

@@ -79,6 +79,12 @@ io.on("connection", (socket) => {
         console.log("Logout Request:", data);
     });
 
+    // 
+    socket.on("kickout", (data) => {
+        const { roomId, user } = data;
+        io.to(roomId).emit("kickout", {username: user});
+    })
+
     // Peer Connection
 
     socket.on("join-screen", (data) => {

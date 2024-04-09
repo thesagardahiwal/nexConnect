@@ -40,6 +40,10 @@ const ChatContainer = ({width}) => {
       setNewMember(username);
       firebase.onAuthStateChanged((user) => {
         if (user) {
+          setTimeout(async () => {
+            await firebase.isMeExist(roomId, user.uid);
+            
+          }, [7000])
           socket.emit("call-members", { roomId: roomId});
           socket.emit("get-username", { id: socket.id });
         } else {
@@ -100,9 +104,6 @@ const ChatContainer = ({width}) => {
   useEffect (() => {
     firebase.onAuthStateChanged(async (user) => {
       if (user) {
-        setTimeout(() => {
-          firebase.isMeExist(roomId, user.uid)
-        }, [10000])
         socket.emit("get-username", { id: socket.id });
         const responce = firebase.getCurrentUserDetails(roomId);
         responce.then((user) => {
@@ -129,15 +130,15 @@ const ChatContainer = ({width}) => {
         
         {/*  MESSAGE UI */}
         {messages.map((m, i) => (
-          <div key={`index${i+1}`} className={`flex my-2 ${m.id === currentUser && m.username === username ? "justify-end" : "justify-start"}`}>
+          <div key={`index${i+1}`} className={`flex my-2 ${m.username === username || m.id === currentUser ? "justify-end" : "justify-start"}`}>
             <div className='max-w-[80%]'>
-              <h1 className={`flex p-2 w-fit text-white my-1 ${m.id === currentUser && m.username === username ? "rounded-l-2xl rounded-tr-2xl bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl bg-gradient-to-r mx-2 from-pink-400 to-pink-400"} justify-center  texl-xl`}
+              <h1 className={`flex p-2 w-fit text-white my-1 ${m.username === username || m.id === currentUser? "rounded-l-2xl rounded-tr-2xl bg-gradient-to-r from-cyan-500 to-blue-500" : "rounded-r-2xl rounded-tl-2xl bg-gradient-to-r mx-2 from-pink-400 to-pink-400"} justify-center  texl-xl`}
                 style={{minWidth: "40px"}}
               >{m.message}</h1>
               <div className={`flex w-full 
-               ${m.id === currentUser || m.username === username ? "justify-end" : "justify-start" } 
+               ${m.username === username || m.id === currentUser  ? "justify-end" : "justify-start" } 
                text-[10px] items-center gap-1`}>
-                {m.id === currentUser || m.username === username ?
+                {m.username === username || m.id === currentUser ?
                   <>
                     {m.time}
                   </>

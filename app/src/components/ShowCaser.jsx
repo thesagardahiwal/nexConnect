@@ -6,11 +6,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import {CircularProgress } from '@mui/material';
 import BackgroundLetterAvatars from "./Avatar";
 import { useTheme } from '../contexts/ThemeContext';
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import { loader } from '../assets/icons';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-function SharedFiles({ showFiles, roomOwner, setIsChatWithAI, isOwner }) {
+function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner }) {
     const socket = useSocket();
     const { roomId } = useParams();
     const [mediaFiles, setMediaFiles] = useState([]);
@@ -42,7 +40,6 @@ function SharedFiles({ showFiles, roomOwner, setIsChatWithAI, isOwner }) {
 
     const mediaFileListner = useCallback(
         (data) => {
-            console.log(data);
             data && firebase.getMediaFiles(roomId, callback, setIsMediaLoading);
         }, [mediaFiles, firebase, roomId, showFiles]
     );
@@ -61,15 +58,16 @@ function SharedFiles({ showFiles, roomOwner, setIsChatWithAI, isOwner }) {
     };
 
     const handleAI = () => {
-        console.log("Clicked! AI CHAT");
         setIsChatWithAI((prev) => !prev);
     }
 
     const handleKick = async (data) => {
-        if(iskickLoading) return;
-        setIsKickLoading(() => true)
-        await firebase.removeParticipant(roomId, data.id);
-        setIsKickLoading(() => false)
+        if(socket) {
+            if(iskickLoading) return;
+            setIsKickLoading(() => true);
+            await firebase.removeParticipant(roomId, data.id);
+            socket.emit("kickout", {roomId: roomId, user: data.username});
+        }
     }
 
     const newMemberListener = useCallback((data) => {
@@ -77,14 +75,27 @@ function SharedFiles({ showFiles, roomOwner, setIsChatWithAI, isOwner }) {
         setMembers((prev) =>[...prev, {username: username}]);
     }, [members, socket, firebase])
 
+    const kickoutListner = useCallback(async() => {
+        console.log("KickoutListner")
+        recieveMemberListener(true);
+        await firebase.onAuthStateChanged((user) => {
+            if (user) {
+                firebase.isMeExist(roomId, user.uid);
+            }
+        })
+        setIsKickLoading(() => false);
+    }, [])
+
     useEffect(() => {
         socket.on("media-file", mediaFileListner);
         socket.on("recieve-member", recieveMemberListener);
         socket.on("member-joined", newMemberListener);
+        socket.on("kickout", kickoutListner);
 
         return () => {
             socket.off("recieve-member", recieveMemberListener);
             socket.off("media-file", mediaFileListner);
+            socket.off("kickout", kickoutListner);
         }
 
     }, [mediaFiles, showFiles]);

@@ -57,7 +57,7 @@ function CreateGroup() {
         <div className='w-full'>
           <button
             type='submit'
-            className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center hover:bg-violet-500 transition-all p-3 my-1'>
+            className='rounded-md border w-full h-[50px] overflow-hidden text-white flex justify-center items-center backdrop-blur-sm hover:bg-white/20 transition-all p-3 my-1'>
             <span>
               {loading ?
                 <div className='flex gap-2'>
