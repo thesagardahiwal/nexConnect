@@ -98,8 +98,9 @@ io.on("connection", (socket) => {
 });
 
 
-module.exports = async function (req , res) {
+module.exports = async function (event , context) {
   server.listen(PORT);
+  return context.res.empty()
 };
 
 
