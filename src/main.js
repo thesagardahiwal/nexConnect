@@ -99,17 +99,25 @@ io.on("connection", (socket) => {
 
 
 module.exports = async function (req, res) {
-  server.listen(PORT, ()=> {
-    console.log(`Server is listning at port ${PORT}`);
-  });
+  return new Promise ((resolve, reject) => {
+    server.listen(PORT, ()=> {
+      console.log(`Server is listning at port ${PORT}`);
+      resolve();
+    });
 
-  return res.empty();
+    server.on("error", (err) => {
+      console.log("Server error: ", err);
+      reject(err);
+    });
+  })
+  .then(() => {
+    res.status(200).send("Function execution completed");
+  })
+  .catch((err) => {
+    console.log("Function error: ", err);
+    res.status(500).send("Function execution failed");
+  })
 };
-
-// server.listen(PORT, ()=> {
-//   console.log(`Server is listning at port ${PORT}`);
-
-// });
 
 
 
