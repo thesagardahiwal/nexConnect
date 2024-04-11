@@ -5,6 +5,8 @@ const http = require("http");
 const {Server} = require("socket.io");
 const cors = require("cors");
 const app = express();
+app.use(express.json());
+
 const PORT = 3000;
 const server = http.createServer(app);
 const io = new Server(server, 
@@ -88,10 +90,21 @@ io.on("connection", (socket) => {
 app.use(cors(
     {origin: "http://localhost:5173", methods: ["GET", "POST"], credentials: true},
 ));
-server.listen(PORT, ()=> {
-  console.log(`Server is listning at port ${PORT}`);
-});
+
+module.exports.main = async function (event, context) {
+  return new Promise((resolve, rejects) => {
+    server.listen(PORT, ()=> {
+      console.log(`Server is listning at port ${PORT}`);
+      resolve();
+    });
+
+    server.on("error", () => {
+      rejects();
+    })
+
+  })
+}
 
 
 
-exports.server = server
+
