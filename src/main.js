@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
 });
 
 
-module.exports = async function (req, res) {
+module.exports = async function (event, context) {
   return new Promise ((resolve, reject) => {
     server.listen(PORT, ()=> {
       console.log(`Server is listning at port ${PORT}`);
@@ -111,11 +111,17 @@ module.exports = async function (req, res) {
     });
   })
   .then(() => {
-    res.status(200).send("Function execution completed");
+    return {
+      statusCode: 200,
+      body: "Function execution completed successfully",
+    };
   })
   .catch((err) => {
     console.log("Function error: ", err);
-    res.status(500).send("Function execution failed");
+    return {
+      statusCode: 500,
+      body: "Function execution failed",
+    };
   })
 };
 
