@@ -98,8 +98,9 @@ module.exports.main = async function (event, context) {
       resolve();
     });
 
-    server.on("error", () => {
-      rejects();
+    server.on("error", (e) => {
+      console.log("Error", e)
+      rejects(e);
     })
 
   })
