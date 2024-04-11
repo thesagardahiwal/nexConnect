@@ -102,6 +102,8 @@ module.exports = async function (req, res) {
   server.listen(PORT, ()=> {
     console.log(`Server is listning at port ${PORT}`);
   });
+
+  return res.empty();
 };
 
 // server.listen(PORT, ()=> {
