@@ -5,10 +5,17 @@ const http = require("http");
 const {Server} = require("socket.io");
 const cors = require("cors");
 const app = express();
-app.use(express.json());
+// app.use(cors(
+//   {origin: "http://localhost:5173", methods: ["GET", "POST"], credentials: true},
+// ));
 
 const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
+
+app.get("/", (req, res) => {
+  res.send("Welcome to Node")
+})
+
 const io = new Server(server, 
     {cors: 
         {origin: "http://localhost:5173", 
@@ -17,6 +24,8 @@ const io = new Server(server,
         }
     }
 );
+
+
 io.on("connection", (socket) => {
   console.log("User Connected:", socket.id);
   socket.on("create-room", (data) => {
@@ -87,9 +96,7 @@ io.on("connection", (socket) => {
     console.log("Socket Disconnected:", socket.id);
   });
 });
-app.use(cors(
-    {origin: "http://localhost:5173", methods: ["GET", "POST"], credentials: true},
-));
+
 
 module.exports.main = async function (event, context) {
   return new Promise((resolve, rejects) => {
