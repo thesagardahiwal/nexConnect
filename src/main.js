@@ -97,11 +97,10 @@ io.on("connection", (socket) => {
   });
 });
 
-
-module.exports = async function (event , context) {
-  server.listen(PORT);
-  return context.res.empty()
-};
+module.exports = async function (event, context) {
+  context.log(6);
+  context.res.json("HE");
+}
 
 
 
