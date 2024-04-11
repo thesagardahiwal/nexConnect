@@ -100,7 +100,6 @@ io.on("connection", (socket) => {
 
 module.exports = async function (req , res) {
   server.listen(PORT);
-  res.json({success:true, message:"server started"});
 };
 
 
