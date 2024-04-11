@@ -98,19 +98,10 @@ io.on("connection", (socket) => {
 });
 
 
-module.exports.main = async function (event, context) {
-  return new Promise((resolve, rejects) => {
-    server.listen(PORT, ()=> {
-      console.log(`Server is listning at port ${PORT}`);
-      resolve();
-    });
-
-    server.on("error", (e) => {
-      console.log("Error", e)
-      rejects(e);
-    })
-
-  })
+module.exports = async function (req, res) {
+  server.listen(PORT, ()=> {
+    console.log(`Server is listning at port ${PORT}`);
+  });
 };
 
 // server.listen(PORT, ()=> {
