@@ -1,5 +1,5 @@
 // import { Client } from 'node-appwrite';
-
+require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const {Server} = require("socket.io");
@@ -7,7 +7,7 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 const io = new Server(server, 
     {cors: 
@@ -104,7 +104,12 @@ module.exports.main = async function (event, context) {
     })
 
   })
-}
+};
+
+// server.listen(PORT, ()=> {
+//   console.log(`Server is listning at port ${PORT}`);
+
+// });
 
 
 
