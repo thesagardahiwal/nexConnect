@@ -8,6 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { CircularProgress } from '@mui/material';
 import { useTheme } from '../contexts/ThemeContext.jsx';
+import { download } from '../assets/icons/index.js';
 
 const BottomBar = ({width, isChatWithAI}) => {
   const [ message, setMessage ] = useState("");
@@ -67,9 +68,11 @@ const BottomBar = ({width, isChatWithAI}) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         const fileContent = e.target.result;
-        firebase.sendFile(username, file.name, fileContent, roomId, getTime() , () => { 
+        firebase.sendFile(username, file.name, fileContent, roomId, getTime() , (url) => {
           setIsLoading(() => false);
-          socket.emit("share-file", {filename: file.name, roomId: roomId})
+          socket.emit("share-file", {filename: file.name, roomId: roomId});
+          socket.emit("group-message", {message: file.name, id:currentUser, username: username, roomId: roomId, time: getTime(), download: url});
+          firebase.sendMessage({message: file.name, id: currentUser, username: username, roomId: roomId, time: getTime(), download: url});
           setFile(null);
          });
       }

@@ -85,7 +85,7 @@ body {
 
 /* CHAT CSS */
 .msg {
-    @apply flex p-2 w-fit text-white my-0.5 justify-center text-lg drop-shadow-md
+    @apply flex p-2 w-fit text-white my-0.5 justify-center text-sm sm:text-lg drop-shadow-md
 }
 
 .member {
