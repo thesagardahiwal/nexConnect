@@ -16,9 +16,9 @@ function CreateGroup() {
     setLoading(() => true);
     const generatedRoomID = Math.floor(100000 + Math.random() * 900000).toString();
     if (socket && (username.length > 2)) {
-      if (isRoomAvailable(generatedRoomID)) {
+      const res = isRoomAvailable(generatedRoomID);
+      if (res) {
         socket.emit("create-room", { id: generatedRoomID, username: username, userId: firebase.getCurrentUser });
-        
       }
     }
   };

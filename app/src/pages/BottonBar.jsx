@@ -137,7 +137,6 @@ const BottomBar = ({width, isChatWithAI}) => {
     handleInput();
   }
 
-
   return (
     <div className={`p-4 w-full ${theme == 'light' ? "light-rev": "dark"} sticky bottom-0 h-[80px]`}>
       {/* Input, Media send button, Send message button */}

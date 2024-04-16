@@ -83,6 +83,10 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
             }
         })
         setIsKickLoading(() => false);
+        const callback = () => {
+            navigate('/');
+        }
+        await firebase.onValueChange(roomId, callback);
     }, [])
 
     useEffect(() => {

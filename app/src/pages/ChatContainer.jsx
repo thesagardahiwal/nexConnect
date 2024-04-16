@@ -86,12 +86,6 @@ const ChatContainer = ({width}) => {
     await firebase.onValueChange(roomId, callback);
   }, [messages, newMember]);
 
-  useEffect (() => {
-    const callback = () => {
-      navigate('/');
-    }
-    firebase.onValueChange(roomId, callback);
-  }, [])
 
 
   useEffect(() => {
