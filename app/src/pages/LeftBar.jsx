@@ -84,6 +84,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
       socket.on("recieve-username", recieveUsernameListener);
       socket.emit("get-username", { id: socket.id });
     }
+    handleParticipants();
 
     return () => {
       socket.off("recieve-username", recieveUsernameListener);

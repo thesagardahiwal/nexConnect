@@ -210,14 +210,16 @@ class Firebase {
   }
 
 
-  sendMessage = async ({message, id, username, roomId, time}) => {
+  sendMessage = async ({message, id, username, roomId, time, download}) => {
         if (!username || !message || !id || !roomId || !time) return;
         if (this.auth.currentUser?.uid != id ) return;
+        download = download ? download : null;
         const messages = {
           message,
           id,
           username,
-          time
+          time,
+          download
         };
         // Broadcast the message to all connected clients
         await push(child(ref(this.database), `${roomId}/messages`), messages);
@@ -259,9 +261,10 @@ class Firebase {
       content: new Uint8Array(content),
     };
     // Broadcast the file to all connected clients
-    const storageRef = Ref(this.storage, `${room_id}/${filename}`+` time:${time}`);
-    uploadBytes(storageRef, file.content).then((url) => {
-      callback()
+    const storageRef = Ref(this.storage, `${room_id}/${time} time:`+`${filename}`);
+    uploadBytes(storageRef, file.content).then(async (data) => {
+      const url = await getDownloadURL(Ref(this.storage, data.metadata.fullPath));
+      callback(url)
     }).catch((e) => {
       console.log(e);
     })

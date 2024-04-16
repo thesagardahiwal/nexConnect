@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSocket } from '../contexts/SocketContext.jsx';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { logo } from "../assets/icons/index.js";
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import TemporaryDrawer from '../components/Drawer.jsx';
@@ -37,10 +37,10 @@ const TopBar = ({width}) => {
 
   
   return (
-    <div className={`w-full h-[70px] flex items-center sticky top-0 ${theme == 'light' ? "extralight": "darklight"} `}>
+    <div className={`w-full h-[70px] flex items-center sticky top-0 ${theme == 'light' ? "extralight text-black": "darklight text-white"} drop-shadow-xl`}>
       {/* Show room ID */}
       <div className='flex p-4 w-full gap-2 items-center justify-between'>
-        <div className='text-2xl flex font-semibold items-center mr-2 gap-2 w-[30%] text-white'>
+        <div className='text-2xl flex font-semibold items-center mr-2 gap-2 w-[30%]'>
           <img src={logo} width={50} alt="" />
           <span>NexConnect</span>
         </div>

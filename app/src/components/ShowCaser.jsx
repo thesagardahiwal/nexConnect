@@ -28,7 +28,7 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
     const callback = (list) => {
         let newArr = [];
         list.map((e) => {
-            newArr.push({filename: e.filename.split("time:")[0], time: e.filename.split("time:")[1], downloadUrl: e.downloadUrl})
+            newArr.push({filename: e.filename.split("time:")[1], time: e.filename.split("time:")[0], downloadUrl: e.downloadUrl})
         });
         setMediaFiles((prev) => newArr);
     }

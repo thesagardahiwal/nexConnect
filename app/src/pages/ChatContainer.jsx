@@ -4,7 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import BackgroundLetterAvatars from "../components/Avatar.jsx";
 import { useTheme } from '../contexts/ThemeContext.jsx';
-import { Alert } from '@mui/material'
+import { Alert } from '@mui/material';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import { download } from '../assets/icons/index.js';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const ChatContainer = ({width}) => {
   const socket = useSocket();
@@ -20,6 +23,12 @@ const ChatContainer = ({width}) => {
   const { theme, toggleTheme } = useTheme();
   const [ kickoutMember, setkickoutMember ] = useState('');
 
+  const handleDownload = (data, filename) => {
+    const downloadLink = document.createElement('a');
+    downloadLink.href = data;
+    downloadLink.download = filename;
+    downloadLink.click();
+  }
 
   const groupMessageListner = useCallback(
     (data) => {
@@ -78,12 +87,13 @@ const ChatContainer = ({width}) => {
     await firebase.onAuthStateChanged((user) => {
       if (user) {
           firebase.isMeExist(roomId, user.uid);
+      } else {
+        const callback = () => {
+          navigate('/');
+        }
+        firebase.onValueChange(roomId, callback);
       }
     });
-    const callback = () => {
-      navigate('/');
-    }
-    await firebase.onValueChange(roomId, callback);
   }, [messages, newMember]);
 
 
@@ -151,7 +161,7 @@ const ChatContainer = ({width}) => {
       </div>
 
       <div 
-        className="main-container px-4 hide-scrool-bar"
+        className="main-container px-4 hide-scrool-bar scroll-smooth"
         ref={chatting} style={{overflowY:"auto", height: "100%"} }>
         {/* Show chats */}
         
@@ -159,11 +169,29 @@ const ChatContainer = ({width}) => {
         {messages.map((m, i) => (
           <div key={`index${i+1}`} className={`${m.username === username || m.id === currentUser ? "user" : "member"}`}>
             <div className='max-w-[80%]'>
+              
+              {m.download ?
+              <div className={`msg ${m.username === username || m.id === currentUser? "user-msg" : "member-msg"} overflow-hidden`}>
+                <div>
+                  <div className={`flex ${m.download.includes("pdf") ? "justify-start" : "justify-center"} items-center`} onClick={() => handleDownload(m.download, m.message)}>
+                    {m.download.includes("pdf") ?
+                      <PictureAsPdfIcon />
+                      :
+                      <img src={m.download} className='rounded-md' alt="png" width={300} height={30} />
+                    }
+                  </div>
+                  <h1 className='text-white font-medium'>
+                    {m.message}
+                  </h1>
+                </div>
+              </div>
+              :
               <h1 className={`msg ${m.username === username || m.id === currentUser? "user-msg" : "member-msg"}`}
                 style={{minWidth: "40px"}}
                 >
                 {m.message}
               </h1>
+              }
               <div className={`time ${m.username === username || m.id === currentUser  ? "justify-end" : "justify-start" }`}>
                 {m.username === username || m.id === currentUser ?
                   <>
