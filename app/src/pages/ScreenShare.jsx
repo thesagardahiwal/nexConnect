@@ -1,15 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useParams, useNavigate } from "react-router-dom";
 import BackHandle from '../hooks/BackHandle';
 import { useFirebase } from '../firebase/FirebaseContext.jsx'
 import ScreenShareSharpIcon from '@mui/icons-material/ScreenShareSharp';
 import StopScreenShareSharpIcon from '@mui/icons-material/StopScreenShareSharp';
-import DuoSharpIcon from '@mui/icons-material/DuoSharp';
 import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 import Peer from "peerjs";
 import { useTheme } from '../contexts/ThemeContext.jsx';
-// import { usePeer } from '../contexts/peerContext.jsx';
 
 function ScreenShare() {
   const screenRecieve = useRef(null);
@@ -94,11 +92,7 @@ function ScreenShare() {
 
   useEffect(() => {
     firebase.onAuthStateChanged((user) => {
-      if (user) {
-        
-        console.log("User Logged In!");
-      } else {
-        console.log("User Looged Out!");
+      if (!user) {
         pushTo('/');
       }
     });

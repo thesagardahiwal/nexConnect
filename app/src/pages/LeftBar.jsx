@@ -35,7 +35,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
     setIsloading(true);
     const res = await firebase.isOwnerLogout(roomId);
     if (res) {
-      navigator('/')
+      navigator('/');
     }
   };
 
@@ -47,6 +47,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
       });
       firebase.isOwner(roomId).then((res) => {
         setIsOwner(() => res);
+        
       })
     }, [socket, username, firebase]
   );
@@ -82,7 +83,6 @@ const LeftBar = ({width, setIsChatWithAI}) => {
     if (socket) {
       socket.on("recieve-username", recieveUsernameListener);
       socket.emit("get-username", { id: socket.id });
-        
     }
 
     return () => {

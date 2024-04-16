@@ -8,9 +8,7 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": " concurrently 'nodemon server.js' 'peerjs --port 3001' 'vite' ",
-    "server" : "nodemon server.js",
-    "peerjs": "peerjs --port 3001"
+    "start": " concurrently 'nodemon server.js' 'peerjs --port 3001' 'vite'"
 
   },
   "dependencies": {
