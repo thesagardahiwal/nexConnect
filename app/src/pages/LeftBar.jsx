@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSocket } from '../contexts/SocketContext';
-import { logout, logo, loader } from '../assets/icons';
+import { logo, loader } from '../assets/icons';
 import SharedFiles from '../components/ShowCaser';
 import { useFirebase } from '../firebase/FirebaseContext';
 import HomeMaxIcon from '@mui/icons-material/HomeMax';
@@ -15,6 +15,7 @@ import Switch from '@mui/material/Switch';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const LeftBar = ({width, setIsChatWithAI}) => {
   const { roomId } = useParams();
@@ -35,6 +36,9 @@ const LeftBar = ({width, setIsChatWithAI}) => {
     setIsloading(true);
     const res = await firebase.isOwnerLogout(roomId);
     if (res) {
+      socket.emit("owner-logout", {roomId: roomId});
+    } else {
+      socket.emit("logout", {username: username, roomId: roomId})
       navigator('/');
     }
   };
@@ -58,6 +62,15 @@ const LeftBar = ({width, setIsChatWithAI}) => {
     }
     await firebase.allowParticipants(roomId, callback, checked);
   }
+
+  const ownerLogoutListner = useCallback(async (data) => {
+    if (!data) return;
+    const callback = async (id) => {
+      await firebase.isMeExist(roomId, id);
+    }
+    await firebase.onValueChange(roomId, callback)
+  }, []);
+
 
   useEffect(() => {
     firebase.onAuthStateChanged( async (user) => {
@@ -83,11 +96,15 @@ const LeftBar = ({width, setIsChatWithAI}) => {
     if (socket) {
       socket.on("recieve-username", recieveUsernameListener);
       socket.emit("get-username", { id: socket.id });
+      socket.on("owner-logout", ownerLogoutListner);
+      
     }
     handleParticipants();
-
+    
     return () => {
       socket.off("recieve-username", recieveUsernameListener);
+      socket.off("owner-logout", ownerLogoutListner);
+      
     }
 
   }, [])
@@ -106,19 +123,21 @@ const LeftBar = ({width, setIsChatWithAI}) => {
             <div className='font-semibold'>{roomId}</div>
           </div>
 
-          <div className={`flex gap-2 ${theme == 'light' ? "light-item": "dark-item "} rounded-md p-1 items-center mt-2 w-full`}>
-            <BackgroundLetterAvatars username={roomOwner} size='30px'/>
+          <div className={`flex gap-2 ${theme == 'light' ? "light-item": "dark-item "} rounded-md p-2 items-center mt-2 w-full`}>
+            {/* <BackgroundLetterAvatars username={roomOwner} size='30px'/> */}
             <h1 className='font-semibold text-center'>
               {roomOwner ?
-              <span className='font-medium'>Host: <span className='tracking-wider font-semibold'>{roomOwner}</span></span>
+              <span className='font-medium'><AdminPanelSettingsIcon /> <span className='tracking-wider font-semibold'>{roomOwner}</span></span>
               :
               <CircularProgress disableShrink size={20} />
               }
               </h1>
           </div>
         {isOwner &&
-          <div className={`flex font-bold justify-between ${theme == 'light' ? "light-item-4" : "dark-item-4"} rounded-md p-1 items-center mt-2 w-full`}>
-            {checked ? <LockOpenIcon/> : <LockIcon />} Room {checked ? "opened" : "closed"}
+          <div className={`flex font-medium justify-between ${theme == 'light' ? "light-item-4" : "dark-item-4"} rounded-md p-1 items-center mt-2 w-full`}>
+            <div className='flex items-center gap-1'>
+              {checked ? <LockOpenIcon/> : <LockIcon />}Room {checked ? "opened" : "closed"}
+            </div>
             <div className='flex items-center'>
               <span className="relative flex h-3 right-3 w-3">
                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${checked ? "bg-red-400" : "bg-blue-400"} opacity-75`}></span>
