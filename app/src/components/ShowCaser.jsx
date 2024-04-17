@@ -75,18 +75,20 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
         setMembers((prev) =>[...prev, {username: username}]);
     }, [members, socket, firebase])
 
-    const kickoutListner = useCallback(async() => {
+    const kickoutListner = useCallback(async(data) => {
         recieveMemberListener(true);
-        await firebase.onAuthStateChanged((user) => {
-            if (user) {
-                firebase.isMeExist(roomId, user.uid);
-            }
-        })
+        if (!data) return;
         setIsKickLoading(() => false);
-        const callback = () => {
-            navigate('/');
+        const callback = async (id) => {
+            const res = await firebase.isMeExist(roomId, id);
+            res && pushTo('/');
         }
         await firebase.onValueChange(roomId, callback);
+    }, []);
+
+    const memberLogoutListner = useCallback((user) => {
+        if (!user) return;
+        recieveMemberListener(true);
     }, [])
 
     useEffect(() => {
@@ -94,11 +96,13 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
         socket.on("recieve-member", recieveMemberListener);
         socket.on("member-joined", newMemberListener);
         socket.on("kickout", kickoutListner);
+        socket.on("member-logout", memberLogoutListner);
 
         return () => {
             socket.off("recieve-member", recieveMemberListener);
             socket.off("media-file", mediaFileListner);
             socket.off("kickout", kickoutListner);
+            socket.off("member-logout", memberLogoutListner);
         }
 
     }, [mediaFiles, showFiles]);

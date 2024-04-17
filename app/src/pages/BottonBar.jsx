@@ -8,7 +8,6 @@ import SendIcon from '@mui/icons-material/Send';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { CircularProgress } from '@mui/material';
 import { useTheme } from '../contexts/ThemeContext.jsx';
-import { download } from '../assets/icons/index.js';
 
 const BottomBar = ({width, isChatWithAI}) => {
   const [ message, setMessage ] = useState("");

@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import BackgroundLetterAvatars from "../components/Avatar.jsx";
 import { useTheme } from '../contexts/ThemeContext.jsx';
 import { Alert } from '@mui/material';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { download } from '../assets/icons/index.js';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const ChatContainer = ({width}) => {
@@ -22,6 +20,7 @@ const ChatContainer = ({width}) => {
   const [ username, setUsername ] = useState('');
   const { theme, toggleTheme } = useTheme();
   const [ kickoutMember, setkickoutMember ] = useState('');
+  const [ logoutMember, setLogoutMember ] = useState('');
 
   const handleDownload = (data, filename) => {
     const downloadLink = document.createElement('a');
@@ -50,9 +49,6 @@ const ChatContainer = ({width}) => {
       setNewMember(username);
       firebase.onAuthStateChanged((user) => {
         if (user) {
-          setTimeout( async () => {
-            await firebase.isMeExist(roomId, user.uid);
-          }, [5000])
           socket.emit("call-members", { roomId: roomId});
           socket.emit("get-username", { id: socket.id });
         } else {
@@ -65,38 +61,33 @@ const ChatContainer = ({width}) => {
 
   const leaveGroupListener = useCallback(
     async (data) => {
-      const { online } = data;
+      if (!data) return;
       const isExist = await firebase.checkRoomId(roomId);
-      if (!online) {
-        if (isExist) {
-          await firebase.logout(roomId);
-        }
-        navigate('/');
-      } else {
-        firebase.participantLogout();
-        navigate('/');
+      if (!isExist) {
+        const res = await firebase.isMeExist(roomId);
+        if (res) navigate('/');
       }
     },
     [socket, firebase],
   );
 
   const kickoutListner = useCallback(async (data) => {
+    if (!data) return;
     const { username } = data;
     setkickoutMember(() => username || '');
     setTimeout(() => setkickoutMember(() => ''), 4000);
-    await firebase.onAuthStateChanged((user) => {
-      if (user) {
-          firebase.isMeExist(roomId, user.uid);
-      } else {
-        const callback = () => {
-          navigate('/');
-        }
-        firebase.onValueChange(roomId, callback);
-      }
-    });
+    const callback = async (id) => {
+      const res = await firebase.isMeExist(roomId, id);
+      res && navigate('/');
+    }
+    firebase.onValueChange(roomId, callback);
   }, [messages, newMember]);
 
-
+  const memberLogoutListner = useCallback((user) => {
+    if (!user) return;
+    setLogoutMember(() => user);
+    setTimeout(() => setLogoutMember(() => ''), 4000);
+}, [])
 
   useEffect(() => {
     if(socket) {
@@ -105,6 +96,7 @@ const ChatContainer = ({width}) => {
       socket.on("member-joined", newMemberListener);
       socket.on("owner-logout", leaveGroupListener);
       socket.on("kickout", kickoutListner);
+      socket.on("member-logout", memberLogoutListner);
     }
     
     
@@ -113,6 +105,7 @@ const ChatContainer = ({width}) => {
       socket.off("media-file", mediaFileListner);
       socket.off("member-joined", newMemberListener);
       socket.off("kickout", kickoutListner);
+      socket.off("member-logout", memberLogoutListner);
     }
 
   }, [ firebase, socket, mediaFileListner, groupMessageListner, newMemberListener, leaveGroupListener]);
@@ -148,14 +141,18 @@ const ChatContainer = ({width}) => {
 
   return (
     <div className={`${theme == 'light' ? "light-rev": "dark"} h-[90vh] pb-[80px] sm:pb-0 w-full`}>
-      <div className={`${newMember || kickoutMember ? "flex" : "hidden"} z-30 sm:justify-center mt-2 sm:w-fit absolute sm:left-1/2`}>
+      <div className={`${newMember || kickoutMember || logoutMember ? "flex" : "hidden"} z-30 sm:justify-center mt-2 sm:w-fit absolute sm:left-1/2`}>
         {newMember ? 
         <>
           {newMember && <Alert severity="success">New Member: <span className='username'>{newMember}</span> is Joined successfully!</Alert>}
         </>
-        : kickoutMember &&
+        : kickoutMember ?
         <>
-          {kickoutMember && <Alert severity="info">Member Left: <span className='username'>{kickoutMember}</span> is Left from room successfully!</Alert>}
+          {kickoutMember && <Alert severity="info">Member Left: <span className='username'>{kickoutMember}</span> is kicked out from room successfully!</Alert>}
+        </>
+        : logoutMember && 
+        <>
+          {logoutMember && <Alert severity="info">Member Left: <span className='username'>{logoutMember}</span> is Left from room successfully!</Alert>}
         </>}
         
       </div>
@@ -173,14 +170,14 @@ const ChatContainer = ({width}) => {
               {m.download ?
               <div className={`msg ${m.username === username || m.id === currentUser? "user-msg" : "member-msg"} overflow-hidden`}>
                 <div>
-                  <div className={`flex ${m.download.includes("pdf") ? "justify-start" : "justify-center"} items-center`} onClick={() => handleDownload(m.download, m.message)}>
+                  <div className={`flex ${m.download.includes("pdf") ? "justify-start" : "justify-center"} items-center max-h-60`} onClick={() => handleDownload(m.download, m.message)}>
                     {m.download.includes("pdf") ?
                       <PictureAsPdfIcon />
                       :
-                      <img src={m.download} className='rounded-md' alt="png" width={300} height={30} />
+                      <img src={m.download} className='rounded-md' alt="png" width={300} />
                     }
                   </div>
-                  <h1 className='text-white font-medium'>
+                  <h1 className='text-white drop-shadow-2xl font-medium'>
                     {m.message}
                   </h1>
                 </div>

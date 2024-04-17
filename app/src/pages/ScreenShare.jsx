@@ -23,10 +23,7 @@ function ScreenShare() {
   let mediaStream;
 
   // const Peer = usePeer();
-  const peer = new Peer ( undefined, {
-    host: '/',
-    port:'3001'
-  });
+  const peer = new Peer ( undefined );
 
   peer.on("open", id => {
     socket.emit("join-screen", { id , roomId });
