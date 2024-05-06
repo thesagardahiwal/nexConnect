@@ -4,6 +4,7 @@ import io from "socket.io-client";
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
+  // {transports: ['websocket']}
   const socket = useMemo(() => io(import.meta.env.VITE_LOCAL_URL), []);
 
   useEffect(()=> {

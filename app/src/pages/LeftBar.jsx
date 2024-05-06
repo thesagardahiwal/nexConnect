@@ -7,8 +7,7 @@ import { useFirebase } from '../firebase/FirebaseContext';
 import HomeMaxIcon from '@mui/icons-material/HomeMax';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Groups3Icon from '@mui/icons-material/Groups3';
-import { CircularProgress } from '@mui/material';
-import BackgroundLetterAvatars from "../components/Avatar";
+import { Skeleton } from '@mui/material';
 import ThemeToggleButton from '../components/ThemeToggleButton';
 import { useTheme } from '../contexts/ThemeContext';
 import Switch from '@mui/material/Switch';
@@ -92,6 +91,7 @@ const LeftBar = ({width, setIsChatWithAI}) => {
     });
   }, []);
 
+
   useEffect(() => {
     if (socket) {
       socket.on("recieve-username", recieveUsernameListener);
@@ -125,11 +125,14 @@ const LeftBar = ({width, setIsChatWithAI}) => {
 
           <div className={`flex gap-2 ${theme == 'light' ? "light-item": "dark-item "} rounded-md p-2 items-center mt-2 w-full`}>
             {/* <BackgroundLetterAvatars username={roomOwner} size='30px'/> */}
-            <h1 className='font-semibold text-center'>
+            <h1 className='font-semibold w-full '>
               {roomOwner ?
               <span className='font-medium'><AdminPanelSettingsIcon /> <span className='tracking-wider font-semibold'>{roomOwner}</span></span>
               :
-              <CircularProgress disableShrink size={20} />
+              <div className='flex w-[100%] items-center px-1 gap-1'>
+                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton animation="wave" style={{width: "100%"}} height={40}/>
+              </div>
               }
               </h1>
           </div>
@@ -173,8 +176,8 @@ const LeftBar = ({width, setIsChatWithAI}) => {
         <button className={`rounded-md px-2 py-1 flex w-full justify-between items-center ${theme == 'light' ? "light-item-2": "dark-item-2"}`}
           onClick={() => setShowFiles(!showFiles)}
           >
-          <p className={`${!showFiles ? "text-white" : "gr-text"}`}><PermMediaIcon style={{color:`${theme == 'light' ? "black": "white"}`}}/> Files</p>
-          <p className={`${!showFiles ? "gr-text" : "text-white"}`}><Groups3Icon style={{color:`${theme == 'light' ? "black": "white"}`}}/> Members</p>
+          <p className={`${!showFiles ? "text-slate-400" : "gr-text"}`}><PermMediaIcon style={{color:`${theme == 'light' ? "black": "white"}`}}/> Files</p>
+          <p className={`${!showFiles ? "gr-text" : "text-slate-400"}`}><Groups3Icon style={{color:`${theme == 'light' ? "black": "white"}`}}/> Members</p>
         </button>
       </div>
 

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSocket } from '../contexts/SocketContext.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFirebase } from '../firebase/FirebaseContext.jsx';
-import CoPresentIcon from '@mui/icons-material/CoPresent';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import SendIcon from '@mui/icons-material/Send';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -87,10 +86,6 @@ const BottomBar = ({width, isChatWithAI}) => {
     inputElement.click();
   }
 
-  const handleScreenShare = () => {
-    navigate(`/screen/${roomId}`);
-  }
-
   const recieveUsernameListener = useCallback(
     (data) => {
       firebase.getCurrentUserDetails(roomId)
@@ -140,18 +135,14 @@ const BottomBar = ({width, isChatWithAI}) => {
   }
 
   return (
-    <div className={`p-4 w-full ${theme == 'light' ? "light-rev": "dark"} sticky bottom-0 h-[80px]`}>
+    <div className={`p-4 lg:px-20 w-full ${theme == 'light' ? "light-rev": "dark"} sticky bottom-0 h-[80px]`}>
       {/* Input, Media send button, Send message button */}
 
       <div className='w-full flex justify-between items-center h-full'>
         <div className={`${width > 800 ? "w-fit" : "w-[40%]"} mr-2`}>
-          <div className='flex items-center gap-2'>
-            <div onClick={handleScreenShare} className='border hover:cursor-pointer p-1 flex items-center justify-center w-9 bg-gray-100 rounded-md h-9'>
-              <CoPresentIcon  style={{color:"black"}}/>
-            </div>
-            
+          <div className='flex items-center gap-2'>            
             <button
-                className={`border p-1 bg-gray-100 flex items-center justify-center w-9 rounded-md text-white h-9`}
+                className={`border backdrop-blur-sm bg-white/30 hover:bg-gray-200 p-1 bg-gray-100 flex shadow-2xl items-center justify-center w-9 rounded-md text-white h-9`}
                 onClick={() => handleShareButton()}>
                   {!file ? <AttachFileIcon style={{ color: "black", rotate: ("45deg") }} /> :
                   (isLoading? <CircularProgress disableShrink size={20} color='success' /> :
@@ -163,8 +154,8 @@ const BottomBar = ({width, isChatWithAI}) => {
         </div>
         <div className={`${width > 800 ? "w-[50%]" : "w-full"} flex justify-end`}>
           <form className='flex gap-2 w-full' onSubmit={e => handleSubmit(e)}>
-            <input className='p-1 rounded-md w-full text-black' type="text" value={message} onChange={e => setMessage(e.target.value)} placeholder={`${socket  ? "Message" : "Socket is disconnected"}`}/>
-            <button type='submit' className='border bg-green-400 w-10 h-9 flex items-center justify-center rounded-md p-1'>
+            <input className='p-1 shadow-2xl rounded-md w-full text-black' type="text" value={message} onChange={e => setMessage(e.target.value)} placeholder={`${socket  ? "Message" : "Socket is disconnected"}`}/>
+            <button type='submit' className='border shadow-2xl bg-green-400 w-10 h-9 flex items-center justify-center rounded-md p-1'>
                 <SendIcon style={{ width: 25, rotate: "-25deg", padding: 1, position: "absolute", top: "26px", color: "rgb(10,10,50)"}} />
             </button>
           </form>

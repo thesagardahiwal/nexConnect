@@ -83,7 +83,7 @@ function LoginPage() {
 
 
   return (
-    <div className="h-[100vh] overflow-hidden bg-[url('/nexConnect.png')] bg-center bg-cover" ref={myElementRef}>
+    <div className="h-[100vh] overflow-hidden bg-[url('/nexConnect05.svg')] bg-center bg-cover" ref={myElementRef}>
       <div className='flex h-full w-full'>
         <div className={`${elementWidth > 1023 && elementHeight < 1100 ? "w-[50%]" : 'w-full'} h-full flex items-center justify-center p-4 bg-tranperent`}>
           <div className={`w-[400px] transition-all h-full sm:h-fit ${elementWidth < 700 ? "mt-[120px]" : ""}`}>

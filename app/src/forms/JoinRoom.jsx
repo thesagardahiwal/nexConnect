@@ -22,6 +22,7 @@ function JoinGroup() {
     if (!isUsernameAvailable) return setMessage("This username is already exist, try some other usenames");
 
     const responce = await firebase.login({ room_id: roomID, username: username, isOwner: false })
+    !responce && setMessage("Room is not open!");
     responce && socket.emit("join-room", { roomId: roomID, username: username });
     setLoading(() => false);
 

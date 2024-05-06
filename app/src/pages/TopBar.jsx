@@ -6,7 +6,6 @@ import { useFirebase } from '../firebase/FirebaseContext.jsx';
 import TemporaryDrawer from '../components/Drawer.jsx';
 import { useTheme } from '../contexts/ThemeContext.jsx';
 
-
 const TopBar = ({width}) => {
   const socket = useSocket();
   const { roomId } = useParams();
