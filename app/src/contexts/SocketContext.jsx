@@ -5,7 +5,7 @@ const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   // {transports: ['websocket']}
-  const socket = useMemo(() => io(import.meta.env.VITE_LOCAL_URL), []);
+  const socket = useMemo(() => io(import.meta.env.VITE_SOCKET_URL, {transports: ['websocket']}), []);
 
   useEffect(()=> {
     return () => {
