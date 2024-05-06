@@ -33,6 +33,7 @@ function ChatPage() {
       window.removeEventListener('resize', handleResize);
     };
 
+
     
 
   }, []);
@@ -46,13 +47,12 @@ function ChatPage() {
   }, [firebase, socket]);
 
 
-
   return (
     <div className='h-screen bg-black overflow-hidden'
       ref={myElementRef}
     >
-      <div className={`${elementWidth > 800 ? "flex h-full w-full" : 'h-screen'}`}>
-          {elementWidth > 800 ? <LeftBar setIsChatWithAI={setIsChatWithAI}/> : <TopBar width={elementWidth}/>} 
+      <div className={`${elementWidth > 910 ? "flex h-full w-full" : 'h-screen'}`}>
+          {elementWidth > 910 ? <LeftBar setIsChatWithAI={setIsChatWithAI}/> : <TopBar width={elementWidth}/>} 
           <div className='w-full h-full'>
             { isChatWithAI ? <AIChatContainer /> : <ChatContainer width={elementWidth}  /> }
             <BottomBar width={elementWidth} isChatWithAI={isChatWithAI} />

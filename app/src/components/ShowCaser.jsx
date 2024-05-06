@@ -3,7 +3,7 @@ import { useSocket } from '../contexts/SocketContext';
 import { useParams } from "react-router-dom"
 import { useFirebase } from '../firebase/FirebaseContext';
 import DownloadIcon from '@mui/icons-material/Download';
-import {CircularProgress } from '@mui/material';
+import {CircularProgress, IconButton } from '@mui/material';
 import BackgroundLetterAvatars from "./Avatar";
 import { useTheme } from '../contexts/ThemeContext';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -61,7 +61,7 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
         setIsChatWithAI((prev) => !prev);
     }
 
-    const handleKick = async (data) => {
+    const handleKick = async (data, e) => {
         if(socket) {
             if(iskickLoading) return;
             setIsKickLoading(() => true);
@@ -183,14 +183,11 @@ function SharedFiles({ showFiles, pushTo, roomOwner, setIsChatWithAI, isOwner })
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                             </span>
                             : 
-                            <button className='w-fit p-1 bg-slate-200 flex rounded-xl'
-                                onClick={() => handleKick(data)}    
+                            <IconButton className='w-fit p-1 bg-slate-200 flex rounded-xl'
+                                onClick={(e) => handleKick(data, e)}    
                             >
-                                {iskickLoading ? <CircularProgress disableShrink size={20}/>
-                                :    
-                                    <RemoveCircleOutlineIcon style={{color:"red"}} />
-                                }
-                            </button>
+                                <RemoveCircleOutlineIcon style={{color:"red"}} />
+                            </IconButton>
                             }
                         </li>
                     ))}

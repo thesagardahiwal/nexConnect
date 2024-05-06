@@ -6,7 +6,7 @@ function BackHandle({active}) {
   return (
     <div
       onClick={() => {
-        active((prev) => false)
+        active((prev) => !prev)
       }}
       className='z-50'
     >

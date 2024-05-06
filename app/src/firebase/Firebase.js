@@ -233,14 +233,19 @@ class Firebase {
         await push(child(ref(this.database), `${roomId}/messages`), messages);
   };
   
-  getMessages = (room_id, setMessages) => {
-    get(child(ref(this.database), `${room_id}/messages`)).then((snap) => {
-      if(snap.exists()) {
-        snap.forEach((doc) => {
-          setMessages((prev) => [...prev, doc.val()])
-        })
-      }
+  getMessages = async (room_id, setMessages, messages) => {
+    let list = [];
+    const snap = await get(child(ref(this.database), `${room_id}/messages`))
+    if (!snap.exists()) return;
+    snap.forEach((doc) => {
+      list.push(doc.val());
     })
+    if (snap.size == list.length && messages.length != list.length) {
+      setMessages(list);
+    }
+
+
+    
   };
 
   

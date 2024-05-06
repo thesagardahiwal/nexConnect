@@ -6,6 +6,8 @@ import BackgroundLetterAvatars from "../components/Avatar.jsx";
 import { useTheme } from '../contexts/ThemeContext.jsx';
 import { Alert } from '@mui/material';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DescriptionIcon from '@mui/icons-material/Description';
+import { file } from '../assets/icons/index.js';
 
 const ChatContainer = ({width}) => {
   const socket = useSocket();
@@ -115,12 +117,11 @@ const ChatContainer = ({width}) => {
     if(container) {
       container.scrollTop = container.scrollHeight;
     }
-
-    if (!messages.length) {
-      firebase.getMessages(roomId, setMessages);
-    }
+    firebase.getMessages(roomId, setMessages, messages);
 
   }, [messages]);
+
+
 
   useEffect (() => {
     firebase.onAuthStateChanged(async (user) => {
@@ -138,9 +139,18 @@ const ChatContainer = ({width}) => {
 
   }, [messages, leaveGroupListener, firebase, socket])
 
+  const handleError = (id) => {
+    const image = document.getElementById(id);
+    if (!image) return;
+    image.src = file
+    image.style = "height: 100px; width:100px"
+  }
+  
+  
+
 
   return (
-    <div className={`${theme == 'light' ? "light-rev": "dark"} h-[90vh] pb-[80px] sm:pb-0 w-full`}>
+    <div className={`${theme == 'light' ? "light-rev": "dark"} h-[90vh] pb-[80px] sm:pb-0 lg:pt-10 w-full`}>
       <div className={`${newMember || kickoutMember || logoutMember ? "flex" : "hidden"} z-30 sm:justify-center mt-2 sm:w-fit absolute sm:left-1/2`}>
         {newMember ? 
         <>
@@ -165,16 +175,19 @@ const ChatContainer = ({width}) => {
         {/*  MESSAGE UI */}
         {messages.map((m, i) => (
           <div key={`index${i+1}`} className={`${m.username === username || m.id === currentUser ? "user" : "member"}`}>
-            <div className='max-w-[80%]'>
-              
+            <div className=''>
               {m.download ?
-              <div className={`msg ${m.username === username || m.id === currentUser? "user-msg" : "member-msg"} overflow-hidden`}>
-                <div>
-                  <div className={`flex ${m.download.includes("pdf") ? "justify-start" : "justify-center"} items-center max-h-60`} onClick={() => handleDownload(m.download, m.message)}>
+              <div className={`overflow-hidden msg ${m.username === username || m.id === currentUser? "user-msg" : "member-msg"}`}>
+                <div className=''>
+                  <div className={`flex overflow-hidden rounded-md ${m.download.includes("pdf") ? "justify-start" : "justify-center"} items-center max-h-60`} onClick={() => handleDownload(m.download, m.message)}>
                     {m.download.includes("pdf") ?
                       <PictureAsPdfIcon />
+                      : m.download.includes("txt") || m.download.includes("csv") ?
+                      <DescriptionIcon/>
+                      : m.download.includes("mp4") ?
+                      <video src={m.download} playsInline muted height={200} width={200} autoPlay loop id={`id-${i}`} onError={() => handleError(`id-${i}`)}></video>
                       :
-                      <img src={m.download} className='rounded-md' alt="png" width={300} />
+                      <img id={`id-${i}`} onError={() => handleError(`id-${i}`)} src={m.download} className='rounded-md' alt="media-file" width={300} />
                     }
                   </div>
                   <h1 className='text-white drop-shadow-2xl font-medium'>
