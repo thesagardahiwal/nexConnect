@@ -29,7 +29,7 @@ NexConnect is a file and chat sharing platform built with a room-based concept. 
 ## Installation
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/nexconnect.git
+    git clone https://github.com/thesagardahiwal/nexConnect.git
     ```
 2. Navigate to the project directory:
     ```bash
