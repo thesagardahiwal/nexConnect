@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate} from 'react-router-dom';
 import TopBar from './TopBar';
 import ChatContainer from './ChatContainer';
 import BottomBar from './BottonBar';

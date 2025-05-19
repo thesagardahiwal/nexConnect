@@ -26,7 +26,7 @@ function SharedFiles({
   const [isMembersLoading, setIsMembersLoading] = useState(true);
   const [isKickLoading, setIsKickLoading] = useState(false);
   const [mediaCount, setMediaCount] = useState(0);
-
+  const [kickingMemberId, setKickingMemberId] = useState(null);
   const mediaListRef = useRef(null);
 
   // Fetch media count on mount or when roomId changes
@@ -81,12 +81,13 @@ function SharedFiles({
 
   // Handle kicking a member
   const handleKick = async (member) => {
-    if (isKickLoading) return;
-    setIsKickLoading(true);
+    if (kickingMemberId) return;
+    setKickingMemberId(member.id);
     await firebase.removeParticipant(roomId, member.id);
     socket.emit("kickout", { roomId, user: member.username });
-    setIsKickLoading(false);
+    setKickingMemberId(null);
   };
+
 
   // New member joined socket listener
   const newMemberListener = useCallback(({ username }) => {
@@ -179,7 +180,8 @@ function SharedFiles({
       } h-full mt-2 p-1 rounded-md`}
     >
       {showFiles ? (
-        <ul className="w-[95%] max-h-[400px] mx-auto p-2"
+        <ul
+          className="w-[95%] max-h-[400px] mx-auto p-2"
           ref={mediaListRef}
           style={{ maxHeight: "400px", overflowX: "hidden" }}
         >
@@ -201,7 +203,9 @@ function SharedFiles({
               title={`Download ${file.filename}`}
               style={{ cursor: "pointer" }}
             >
-              <div className="text-lg break-words line-clamp-2 font-semibold">{file.filename}</div>
+              <div className="text-lg break-words line-clamp-2 font-semibold">
+                {file.filename}
+              </div>
               <div className="flex w-full gap-2 rounded-md p-1 justify-end items-center">
                 <p className="w-full text-sm text-right opacity-80">
                   {file.time}
@@ -275,7 +279,7 @@ function SharedFiles({
                       aria-label={`Kick ${member.username}`}
                       size="small"
                     >
-                      {isKickLoading ? (
+                      {kickingMemberId === member.id ? (
                         <CircularProgress size={20} />
                       ) : (
                         <RemoveCircleOutlineIcon style={{ color: "red" }} />
