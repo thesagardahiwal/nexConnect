@@ -1,4 +1,3 @@
-import React from 'react'
 import JoinInnerIcon from '@mui/icons-material/JoinInner';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
 
