@@ -180,11 +180,11 @@ const BottomBar = ({ width, isChatWithAI }) => {
 
   return (
     <div
-      className={`sticky bottom-0 w-full px-4 sm:px-6 lg:px-20 py-3 backdrop-blur-sm 
+      className={`fixed sm:sticky bottom-0 rounded-xl w-full px-4 sm:px-6 lg:px-20 py-3 backdrop-blur-sm 
     ${
       theme === "light"
         ? "bg-white border-gray-200"
-        : "bg-blue-950 border-gray-700"
+        : "dark border-gray-700"
     }
     flex items-center gap-3 shadow-md border-t`}
       style={{ minHeight: 70 }}
@@ -201,7 +201,7 @@ const BottomBar = ({ width, isChatWithAI }) => {
         onClick={handleShareButtonClick}
         disabled={isUploading}
         aria-label={file ? "Upload file" : "Attach file"}
-        className={`flex items-center justify-center w-12 h-12 rounded-full shadow-md border 
+        className={`flex items-center justify-center w-12 h-12 rounded-xl shrink-0 shadow-md border 
       ${
         theme === "light"
           ? "border-gray-300 hover:bg-gray-100"
@@ -231,7 +231,7 @@ const BottomBar = ({ width, isChatWithAI }) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           disabled={!socket?.id || isUploading}
-          className={`flex-grow rounded-full px-5 py-3 shadow-inner border 
+          className={`flex-grow rounded-xl px-5 py-3 shadow-inner border 
         ${
           theme === "light"
             ? "border-gray-300 bg-white text-black placeholder-gray-500 focus:ring-blue-400"

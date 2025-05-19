@@ -231,7 +231,7 @@ const ChatContainer = () => {
   };
 
   return (
-    <div className={`${theme === 'light' ? 'light-rev' : 'dark'} h-[90vh] pb-[80px] sm:pb-0 lg:pt-10 w-full`}>
+    <div className={`${theme === 'light' ? 'light-rev' : 'dark'} h-[100vh] pb-[80px] sm:pb-0 lg:pt-10 w-full`}>
       <div
         className={`${
           newMember || kickoutMember || logoutMember ? 'flex' : 'hidden'
