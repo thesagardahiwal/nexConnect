@@ -32,9 +32,15 @@ function SharedFiles({
   // Fetch media count on mount or when roomId changes
   useEffect(() => {
     let mounted = true;
-    firebase.getFileCount(roomId).then((count) => {
-      if (mounted) setMediaCount(count);
-    });
+    const fetchCount = async () => {
+      try {
+        const count = await firebase.getFileCount(roomId);
+        if (mounted) setMediaCount(count);
+      } catch (err) {
+        console.error("Error fetching file count:", err);
+      }
+    };
+    fetchCount();
     return () => {
       mounted = false;
     };
@@ -70,10 +76,15 @@ function SharedFiles({
 
   // Handle file download
   const handleDownload = (file) => {
-    const downloadLink = document.createElement("a");
-    downloadLink.href = file.downloadUrl;
-    downloadLink.download = file.filename;
-    downloadLink.click();
+    try {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = file.downloadUrl;
+      downloadLink.download = file.filename;
+      downloadLink.click();
+    } catch (err) {
+      console.error("Download failed:", err);
+      alert("Download failed. Please try again!");
+    }
   };
 
   // Toggle Chat With AI (functionality commented out in your snippet)
@@ -88,7 +99,6 @@ function SharedFiles({
     setKickingMemberId(null);
   };
 
-
   // New member joined socket listener
   const newMemberListener = useCallback(({ username }) => {
     setMembers((prev) => [...prev, { username }]);
@@ -97,14 +107,21 @@ function SharedFiles({
   // Kickout socket listener
   const kickoutListener = useCallback(
     async (data) => {
-      receiveMemberListener();
-      if (!data) return;
-
-      const callback = async (id) => {
-        const exists = await firebase.isMeExist(roomId, id);
-        if (exists) pushTo("/");
-      };
-      await firebase.onValueChange(roomId, callback);
+      try {
+        receiveMemberListener();
+        if (!data) return;
+        const callback = async (id) => {
+          try {
+            const exists = await firebase.isMeExist(roomId, id);
+            if (exists) pushTo("/");
+          } catch (err) {
+            console.error("Error checking user existence:", err);
+          }
+        };
+        await firebase.onValueChange(roomId, callback);
+      } catch (err) {
+        console.error("Error in kickout listener:", err);
+      }
     },
     [firebase, pushTo, receiveMemberListener, roomId]
   );
@@ -172,7 +189,6 @@ function SharedFiles({
       container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
     }
   }, [mediaFiles]);
-
   return (
     <div
       className={`w-full lg:w-[350px] overflow-scroll ${
@@ -222,7 +238,6 @@ function SharedFiles({
               </div>
             </li>
           ))}
-
           {/* Skeleton loader if loading and no files yet */}
           {isMediaLoading && !mediaFiles.length && (
             <div className="w-full p-4">
@@ -234,7 +249,6 @@ function SharedFiles({
               ))}
             </div>
           )}
-
           {/* Spinner if loading and files already loaded */}
           {isMediaLoading && mediaFiles.length > 0 && (
             <div className="w-full flex items-center justify-center relative py-2">
