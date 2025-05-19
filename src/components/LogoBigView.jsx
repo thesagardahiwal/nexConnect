@@ -15,12 +15,12 @@ function LogoBigView() {
     {
       text: "Hello students, have you all joined this room?",
       variant: "dummy",
-      color: "text-black",
+      color: "text-white",
     },
     {
       image: roomsPic,
       variant: "dummy",
-      color: "text-black",
+      color: "text-white",
     },
     {
       text: "Can anyone please send the code for today's practical?",
@@ -35,7 +35,7 @@ function LogoBigView() {
     {
       text: "Who is this gossiping?",
       variant: "dummy",
-      color: "text-black",
+      color: "text-white",
     },
   ];
 
