@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useSocket } from "../contexts/SocketContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFirebase } from "../firebase/FirebaseContext.jsx";
@@ -8,7 +8,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { CircularProgress, LinearProgress } from "@mui/material";
 import { useTheme } from "../contexts/ThemeContext.jsx";
 
-const BottomBar = ({ width, isChatWithAI }) => {
+const BottomBar = ({ isChatWithAI }) => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);

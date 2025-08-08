@@ -195,12 +195,12 @@ const LeftBar = ({ width, setIsChatWithAI }) => {
           >
             {isLoading ? (
               <>
-                {isOwner ? 'Destroying...' : 'Logging out...'}
+                {isOwner ? 'Destroying...' : 'Leaving...'}
                 <img src={loader} alt="loading" height={25} width={25} />
               </>
             ) : (
               <>
-                {isOwner ? 'Destroy' : 'Logout'}
+                {isOwner ? 'Destroy' : 'Leave'}
                 <LogoutIcon />
               </>
             )}

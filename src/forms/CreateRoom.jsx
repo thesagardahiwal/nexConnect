@@ -41,8 +41,6 @@ function CreateGroup() {
       }
     } catch (error) {
       alert("Something went wrong. Try again later.");
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -31,7 +31,6 @@ function JoinGroup() {
       if (!response) return showMessage("Room is not open or expired!");
 
       socket.emit("join-room", { roomId: roomID, username });
-      setLoading(false);
     } catch (error) {
       showMessage("Something went wrong. Please try again.");
     }
