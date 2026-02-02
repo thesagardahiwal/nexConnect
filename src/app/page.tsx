@@ -6,6 +6,7 @@ import RiskSection from "@/components/landing/RiskSection";
 import StepsSection from "@/components/landing/StepsSection";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
+import FadeIn from "@/components/animations/FadeIn";
 
 export default function HomePage() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,63 +94,73 @@ export default function HomePage() {
             <section id="hero" className="relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 pt-12 pb-12 sm:pt-24 sm:pb-16 text-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-muted dark:bg-brand-mutedDark text-brand-primary dark:text-brand-primaryDark text-xs font-semibold tracking-wide">
-                        PRIVACY-FIRST COMMUNICATION
-                    </div>
+                    <FadeIn delay={0.1}>
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-muted dark:bg-brand-mutedDark text-brand-primary dark:text-brand-primaryDark text-xs font-semibold tracking-wide">
+                            PRIVACY-FIRST COMMUNICATION
+                        </div>
+                    </FadeIn>
 
                     {/* Heading */}
-                    <h1 className="mt-8 text-3xl sm:text-5xl md:text-6xl font-extrabold text-text-primary dark:text-text-darkPrimary leading-tight">
-                        Chat securely on{" "}
-                        <span className="text-brand-primary dark:text-brand-primaryDark">any device.</span>
-                    </h1>
+                    <FadeIn delay={0.2}>
+                        <h1 className="mt-8 text-3xl sm:text-5xl md:text-6xl font-extrabold text-text-primary dark:text-text-darkPrimary leading-tight">
+                            Chat securely on{" "}
+                            <span className="text-brand-primary dark:text-brand-primaryDark">any device.</span>
+                        </h1>
+                    </FadeIn>
 
                     {/* Subtitle */}
-                    <p className="mt-6 max-w-2xl mx-auto text-text-secondary dark:text-text-darkMuted text-base sm:text-lg leading-relaxed">
-                        NexConnect allows you to create temporary private rooms instantly.
-                        No logins, no tracking, and no digital footprints left behind.
-                    </p>
+                    <FadeIn delay={0.3}>
+                        <p className="mt-6 max-w-2xl mx-auto text-text-secondary dark:text-text-darkMuted text-base sm:text-lg leading-relaxed">
+                            NexConnect allows you to create temporary private rooms instantly.
+                            No logins, no tracking, and no digital footprints left behind.
+                        </p>
+                    </FadeIn>
 
                     {/* Buttons */}
-                    <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link
-                            href="/session"
-                            className="inline-flex items-center gap-2 bg-text-primary dark:bg-text-inverse text-text-inverse dark:text-text-primary px-8 py-4 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
-                        >
-                            Start Secure Session
-                            <Icons.ChevronRight className="w-5 h-5" />
-                        </Link>
+                    <FadeIn delay={0.4}>
+                        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <Link
+                                href="/session"
+                                className="inline-flex items-center gap-2 bg-text-primary dark:bg-text-inverse text-text-inverse dark:text-text-primary px-8 py-4 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
+                            >
+                                Start Secure Session
+                                <Icons.ChevronRight className="w-5 h-5" />
+                            </Link>
 
-                        <Link
-                            href="#how"
-                            className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border-default dark:border-border-darkDefault text-text-primary dark:text-text-darkPrimary font-medium hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle transition"
-                        >
-                            How it Works
-                        </Link>
-                    </div>
+                            <Link
+                                href="#how"
+                                className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border-default dark:border-border-darkDefault text-text-primary dark:text-text-darkPrimary font-medium hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle transition"
+                            >
+                                How it Works
+                            </Link>
+                        </div>
+                    </FadeIn>
                 </div>
 
                 {/* ================= Mock UI Card ================= */}
-                <div className="max-w-6xl mx-auto px-6 pb-24">
-                    <div className="relative rounded-3xl bg-surface-subtle dark:bg-surface-darkSubtle border border-border-default dark:border-border-darkDefault shadow-xl overflow-hidden">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 md:p-10">
-                            {/* Left Chat Skeleton */}
-                            <div className="md:col-span-2 space-y-4">
-                                <div className="h-10 w-40 rounded-lg bg-border-default dark:bg-surface-darkElevated" />
-                                <div className="h-28 rounded-xl bg-surface-base dark:bg-surface-darkElevated border border-border-default dark:border-border-darkDefault" />
-                                <div className="h-24 rounded-xl bg-surface-base dark:bg-surface-darkElevated border border-border-default dark:border-border-darkDefault" />
-                            </div>
-
-                            {/* Right Secure Panel */}
-                            <div className="rounded-2xl bg-brand-muted dark:bg-brand-mutedDark border border-brand-muted dark:border-brand-mutedDark flex flex-col items-center justify-center p-6">
-                                <div className="w-14 h-14 rounded-full bg-brand-primary/20 flex items-center justify-center mb-4">
-                                    <Icons.Lock className="w-6 h-6 text-brand-primary dark:text-brand-primaryDark" />
+                <FadeIn delay={0.6} direction="up" duration={0.8}>
+                    <div className="max-w-6xl mx-auto px-6 pb-24">
+                        <div className="relative rounded-3xl bg-surface-subtle dark:bg-surface-darkSubtle border border-border-default dark:border-border-darkDefault shadow-xl overflow-hidden">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 md:p-10">
+                                {/* Left Chat Skeleton */}
+                                <div className="md:col-span-2 space-y-4">
+                                    <div className="h-10 w-40 rounded-lg bg-border-default dark:bg-surface-darkElevated" />
+                                    <div className="h-28 rounded-xl bg-surface-base dark:bg-surface-darkElevated border border-border-default dark:border-border-darkDefault" />
+                                    <div className="h-24 rounded-xl bg-surface-base dark:bg-surface-darkElevated border border-border-default dark:border-border-darkDefault" />
                                 </div>
-                                <div className="h-2 w-32 bg-brand-primary/20 rounded mb-2" />
-                                <div className="h-2 w-24 bg-brand-primary/20 rounded" />
+
+                                {/* Right Secure Panel */}
+                                <div className="rounded-2xl bg-brand-muted dark:bg-brand-mutedDark border border-brand-muted dark:border-brand-mutedDark flex flex-col items-center justify-center p-6">
+                                    <div className="w-14 h-14 rounded-full bg-brand-primary/20 flex items-center justify-center mb-4">
+                                        <Icons.Lock className="w-6 h-6 text-brand-primary dark:text-brand-primaryDark" />
+                                    </div>
+                                    <div className="h-2 w-32 bg-brand-primary/20 rounded mb-2" />
+                                    <div className="h-2 w-24 bg-brand-primary/20 rounded" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </FadeIn>
             </section>
             <RiskSection />
             <StepsSection />

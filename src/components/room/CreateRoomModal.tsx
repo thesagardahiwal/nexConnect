@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { useRooms } from '@/hooks/useRooms';
+import { useSession } from '@/hooks/useSession';
 
 interface CreateRoomModalProps {
     isOpen: boolean;
@@ -15,6 +16,7 @@ export default function CreateRoomModal({ isOpen, onClose }: CreateRoomModalProp
     const [isPublic, setIsPublic] = useState(true);
     const [loading, setLoading] = useState(false);
     const { createRoom } = useRooms();
+    const { user } = useSession();
     const router = useRouter();
 
     if (!isOpen) return null;
@@ -24,10 +26,11 @@ export default function CreateRoomModal({ isOpen, onClose }: CreateRoomModalProp
         setLoading(true);
 
         try {
+            if (!user) throw new Error("User not found");
             const newRoom = await createRoom({
                 name,
                 isPublic,
-                creator: '' // Handled by useRooms hook logic (using session)
+                creator: user.$id // Handled by useRooms hook logic (using session)
             });
 
             router.push(`/room/${newRoom.$id}`);

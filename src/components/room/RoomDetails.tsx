@@ -25,13 +25,14 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
     const [isUploading, setIsUploading] = useState(false);
     const { media, loading, uploadMedia, error, refresh } = useMedia(room?.$id || '');
     const fileInputRef = useRef<HTMLInputElement>(null);
-    if (!room) return null;
-
-    const isCreator = room.creator.$id === currentUserId;
-    console.log("isCreator", isCreator);
 
     // Filter media items
-    const mediaItems = useMemo(() => media.filter(m => ['IMAGE', 'PDF', 'VIDEO'].includes(m.fileType)), [media]);
+    const mediaItems = useMemo(() => media?.filter(m => ['IMAGE', 'PDF', 'VIDEO'].includes(m.fileType)) || [], [media]);
+
+    if (!room) return null;
+
+    const isCreator = room.creator?.$id === currentUserId;
+    console.log("isCreator", isCreator);
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file || !onSendMessage || !room || !currentUserId) return;

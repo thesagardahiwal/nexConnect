@@ -101,14 +101,16 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                 </div>
 
                 <div className="flex items-center gap-4 text-text-secondary dark:text-text-darkSecondary">
-                    <button className="hover:text-text-primary dark:hover:text-text-darkPrimary transition"><Icons.Copy className="w-5 h-5" /></button>
+                    <button onClick={() => {
+                        navigator.clipboard.writeText(room.$id)
+                    }} className="hover:text-text-primary dark:hover:text-text-darkPrimary transition"><Icons.Copy className="w-5 h-5" /></button>
                     <button
                         onClick={onToggleDetails}
                         className={`transition ${detailsOpen ? 'text-brand-primary dark:text-brand-primaryDark' : 'hover:text-text-primary dark:hover:text-text-darkPrimary'}`}
                     >
                         <Icons.Info className="w-5 h-5" />
                     </button>
-                    <button className="dark:hover:text-text-darkPrimary transition text-status-danger dark:text-status-dangerDark hover:text-red-600"><Icons.LogOut className="w-5 h-5" /></button>
+                    {/* <button  className="dark:hover:text-text-darkPrimary transition text-status-danger dark:text-status-dangerDark hover:text-red-600"><Icons.LogOut className="w-5 h-5" /></button> */}
                 </div>
             </div>
 

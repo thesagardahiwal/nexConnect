@@ -3,6 +3,7 @@
 import { use, useEffect } from "react";
 import ChatArea from "@/components/room/ChatArea";
 import RoomDetails from "@/components/room/RoomDetails";
+import JoinRoomModal from "@/components/room/JoinRoomModal";
 import { useRouter } from "next/navigation";
 import { RoomService } from "@/services/room.service";
 
@@ -23,11 +24,13 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
 
     // UI State
     const [showDetails, setShowDetails] = useState(true);
+    const [showJoinModal, setShowJoinModal] = useState(false);
 
+    // Hooks
     // Hooks
     const { session, user, loading: authLoading } = useSession();
     const { room, loading: roomLoading } = useRoom(roomId);
-    const { members, kickMember } = useRoomMembers(roomId);
+    const { members, loading: membersLoading, kickMember } = useRoomMembers(roomId);
     const { messages, loading: messagesLoading, sendMessage } = useMessages(roomId);
     // useMedia is no longer needed for RoomDetails media source, but maybe for upload? 
     // ChatArea handles upload via StorageService directly now.
@@ -65,9 +68,11 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
 
     // Check for kicked status
     useEffect(() => {
-        if (!roomLoading && !authLoading && roomId && user) {
+        // Wait for all data to load
+        if (!roomLoading && !authLoading && !membersLoading && roomId && user) {
             // Find current user in members list
             // Use $id for comparison as both are Documents
+            console.log(members, user)
             const membership = members.find(m => m.user.$id === user.$id);
 
             // STRICT ACCESS CONTROL
@@ -77,14 +82,27 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
                 return;
             }
 
-            // 2. If room is PRIVATE (not public) and we have NO membership record (kicked and removed from list) -> Redirect
-            // We wait for members to be loaded (length > 0) to avoid premature redirect on initial fetch
-            // Exception: The creator might not be in the list initially if something is weird, but they should be.
-            if (room && !room.isPublic && members.length > 0 && !membership) {
-                router.push('/rooms');
+            // 2. If NO membership record, show Join Modal for both Public and Private
+            // We wait for members to be loaded (length > 0 check removed because we want to join even if empty? No, members includes creator)
+            // Wait, if members not loaded yet, members.length might be 0. useRoomMembers returns loading state? 
+            // It uses useAppSelector. It has loading state?
+            // Let's assume !roomLoading implies members are somewhat ready or we rely on component re-render.
+            // Actually `members` comes from `useRoomMembers`. Let's assume valid data flow.
+
+            // If room exists and user is not in members list -> Prompt Join
+            // EXCEPTION: Creator automatically owns the room, so if they are strangely missing from members list (due to latency), allow them.
+
+            const isCreator = room?.creator?.$id === user.$id;
+
+            if (room && !membership && !isCreator) {
+                // Was: router.push('/rooms');
+                setShowJoinModal(true);
+            } else {
+                // User is a member OR is Creator, ensure modal is closed
+                setShowJoinModal(false);
             }
         }
-    }, [members, roomLoading, authLoading, roomId, user, router, room]);
+    }, [members, roomLoading, authLoading, membersLoading, roomId, user, router, room]);
 
     if (!session) {
         return null; // Should redirect
@@ -113,6 +131,12 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
                     onKickMember={kickMember}
                 />
             )}
+
+            <JoinRoomModal
+                isOpen={showJoinModal}
+                onClose={() => router.push('/rooms')} // If they close modal without joining, back to list
+                initialRoomId={roomId}
+            />
         </>
     );
 }
