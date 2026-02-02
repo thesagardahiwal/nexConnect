@@ -2,7 +2,7 @@ import { Icons } from "@/components/icons";
 
 export default function PrivacyFoundationSection() {
     return (
-        <section className="relative overflow-hidden bg-brand-primary dark:bg-surface-darkBase">
+        <section id="privacy" className="relative overflow-hidden bg-brand-primary dark:bg-surface-darkBase">
             {/* Subtle dotted background */}
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff_0.5px,transparent_0.5px)] [background-size:24px_24px]" />
 

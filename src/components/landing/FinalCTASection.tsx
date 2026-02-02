@@ -34,7 +34,7 @@ export default function FinalCTASection() {
                             </Link>
 
                             <Link
-                                href="#"
+                                href="/docs"
                                 className="px-8 py-4 rounded-xl bg-white/10 text-white font-semibold hover:bg-white/20 transition"
                             >
                                 Documentation

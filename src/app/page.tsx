@@ -16,14 +16,14 @@ export default function HomePage() {
             <header className="sticky top-0 z-50 bg-surface-base/80 dark:bg-surface-darkBase/80 backdrop-blur border-b border-border-default dark:border-border-darkDefault">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                     {/* Logo */}
-                    <div className="flex items-center gap-2">
+                    <Link href="#hero" className="flex items-center gap-2">
                         <div className="w-9 h-9 rounded-xl bg-brand-primary dark:bg-brand-primaryDark flex items-center justify-center">
                             <Icons.Lock className="w-4 h-4 text-white" />
                         </div>
                         <span className="font-semibold text-lg text-text-primary dark:text-text-darkPrimary">
                             NexConnect
                         </span>
-                    </div>
+                    </Link>
 
                     {/* Desktop Nav Links */}
                     <nav className="hidden md:flex items-center gap-8 text-sm text-text-secondary dark:text-text-darkSecondary">
@@ -90,7 +90,7 @@ export default function HomePage() {
             </header>
 
             {/* ================= Hero Section ================= */}
-            <section className="relative overflow-hidden">
+            <section id="hero" className="relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 pt-12 pb-12 sm:pt-24 sm:pb-16 text-center">
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-muted dark:bg-brand-mutedDark text-brand-primary dark:text-brand-primaryDark text-xs font-semibold tracking-wide">

@@ -2,7 +2,7 @@ import { Icons } from "@/components/icons";
 
 export default function StepsSection() {
     return (
-        <section className="relative bg-surface-subtle dark:bg-surface-darkSubtle text-text-primary dark:text-text-darkPrimary">
+        <section id="how" className="relative bg-surface-subtle dark:bg-surface-darkSubtle text-text-primary dark:text-text-darkPrimary">
             <div className="max-w-7xl mx-auto px-6 py-28">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                     {/* ================= Left Content ================= */}

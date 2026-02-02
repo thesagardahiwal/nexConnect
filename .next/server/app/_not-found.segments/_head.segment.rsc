@@ -1,5 +1,0 @@
-1:"$Sreact.fragment"
-2:I[97367,["/_next/static/chunks/eb305a3913fa09d7.js","/_next/static/chunks/d2be314c3ece3fbe.js","/_next/static/chunks/3b063b8e5e073446.js","/_next/static/chunks/2f564711da7489d1.js"],"ViewportBoundary"]
-3:I[97367,["/_next/static/chunks/eb305a3913fa09d7.js","/_next/static/chunks/d2be314c3ece3fbe.js","/_next/static/chunks/3b063b8e5e073446.js","/_next/static/chunks/2f564711da7489d1.js"],"MetadataBoundary"]
-4:"$Sreact.suspense"
-0:{"buildId":"JgPtAW6d7OHaz5eY3FRC4","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"NexConnect"}],["$","meta","1",{"name":"description","content":"Connect with your team"}]]}]}]}],null]}],"loading":null,"isPartial":false}

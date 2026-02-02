@@ -1,9 +1,0 @@
-{
-  "projects": {
-    "default": "nexconnect-7361a",
-    "prod": "nexconnect-7361a"
-  },
-  "targets": {},
-  "etags": {},
-  "dataconnectEmulatorConfig": {}
-}

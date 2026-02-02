@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scroll-behavior: smooth;
+}
+
 .hide-scroll-bar {
     scrollbar-width: none;
     -ms-overflow-style: none;

@@ -33,6 +33,8 @@ import {
     FileText,
     Sun,
     Moon,
+    Settings,
+    Play,
 } from 'lucide-react';
 
 export const Icons = {
@@ -70,4 +72,6 @@ export const Icons = {
     RotateCcw,
     Sun,
     Moon,
+    Settings,
+    Play,
 };
