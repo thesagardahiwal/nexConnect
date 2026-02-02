@@ -31,6 +31,7 @@ export function useMessages(roomId: string) {
 
         let mounted = true;
         let unsubscribe: (() => void) | undefined;
+        let timeoutId: NodeJS.Timeout;
 
         const subscribe = async () => {
             if (!roomId) return;
@@ -63,22 +64,26 @@ export function useMessages(roomId: string) {
             }
         };
 
-        subscribe();
+        // Debounce subscription to avoid strict mode double-mount issues
+        timeoutId = setTimeout(() => {
+            if (mounted) subscribe();
+        }, 500);
 
         return () => {
             mounted = false;
+            clearTimeout(timeoutId);
             if (unsubscribe) {
                 unsubscribe();
             }
         };
     }, [dispatch, refresh, roomId]);
 
-    const sendMessage = async (payload: MessagePayload) => {
+    const sendMessage = useCallback(async (payload: MessagePayload) => {
         if (!isAuthenticated || !session || !user) {
             throw new Error("Active session required to send message");
         }
         await dispatch(sendMessageAction(payload)).unwrap();
-    };
+    }, [dispatch, isAuthenticated, session, user]);
 
     return {
         messages,

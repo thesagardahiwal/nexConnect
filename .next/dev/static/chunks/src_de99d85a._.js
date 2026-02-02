@@ -4,7 +4,7 @@
 
 __turbopack_context__.s([
     "default",
-    ()=>ChatArea
+    ()=>__TURBOPACK__default__export__
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
@@ -336,7 +336,9 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
 }
 _s(ChatArea, "Yt1obMEIqMYRTzdae9P5PL+etxU=");
 _c = ChatArea;
-function MessageItem({ user, time, message, isMe }) {
+;
+const __TURBOPACK__default__export__ = /*#__PURE__*/ _c1 = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(ChatArea);
+const MessageItem = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(function MessageItem({ user, time, message, isMe }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `flex gap-4 ${isMe ? "flex-row-reverse" : ""}`,
         children: [
@@ -345,7 +347,7 @@ function MessageItem({ user, time, message, isMe }) {
                 children: user.substring(0, 2).toUpperCase()
             }, void 0, false, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 191,
+                lineNumber: 197,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -361,13 +363,13 @@ function MessageItem({ user, time, message, isMe }) {
                                 children: time
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 196,
+                                lineNumber: 202,
                                 columnNumber: 43
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 195,
+                        lineNumber: 201,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -377,31 +379,32 @@ function MessageItem({ user, time, message, isMe }) {
                             children: message.content
                         }, void 0, false, {
                             fileName: "[project]/src/components/room/ChatArea.tsx",
-                            lineNumber: 201,
+                            lineNumber: 207,
                             columnNumber: 25
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 198,
+                        lineNumber: 204,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 194,
+                lineNumber: 200,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/room/ChatArea.tsx",
-        lineNumber: 190,
+        lineNumber: 196,
         columnNumber: 9
     }, this);
-}
-_c1 = MessageItem;
-var _c, _c1;
+});
+_c2 = MessageItem;
+var _c, _c1, _c2;
 __turbopack_context__.k.register(_c, "ChatArea");
-__turbopack_context__.k.register(_c1, "MessageItem");
+__turbopack_context__.k.register(_c1, "%default%");
+__turbopack_context__.k.register(_c2, "MessageItem");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -843,13 +846,39 @@ function useMedia(roomId) {
         roomId,
         dispatch
     ]);
-    const handleUpload = async (file, uploaderId)=>{
-        await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$mediaSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["uploadMedia"])({
-            file,
-            roomId,
-            uploaderId
-        })).unwrap();
-    };
+    const handleUpload = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useMedia.useCallback[handleUpload]": async (file, userId)=>{
+            try {
+                // 1. Upload happens in action dispatched below
+                // const fileId = await StorageService.uploadFile(file);
+                // 2. Create media document
+                // dispatch(uploadMedia) expects { file, roomId, uploaderId } based on slice definition, 
+                // OR if it expects the payload object directly, we need to check the slice.
+                // Based on previous error: "Argument of type 'MediaPayload' is not assignable... missing ... file, roomId, uploaderId"
+                // This means the action `uploadMedia` in `mediaSlice` likely expects the raw file + IDs to do the upload ITSELF.
+                // BUT here we are doing `StorageService.uploadFile(file)` manually first.
+                // If the slice handles the upload, we should just pass the file.
+                // Let's check `mediaSlice` content if we could, but assuming the error is correct,
+                // the `uploadMedia` action is likely an async thunk that does the upload.
+                // Reverting to what `handleUpload` was doing before my changes: 
+                // await dispatch(uploadMedia({ file, roomId, uploaderId: userId })).unwrap();
+                // So we don't need to manually upload here if the thunk does it.
+                // Let's trust the Redux action signature.
+                const response = await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$mediaSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["uploadMedia"])({
+                    file,
+                    roomId,
+                    uploaderId: userId
+                })).unwrap();
+                return response;
+            } catch (error) {
+                console.error("Failed to upload media:", error);
+                throw error;
+            }
+        }
+    }["useMedia.useCallback[handleUpload]"], [
+        dispatch,
+        roomId
+    ]);
     return {
         media,
         loading,
@@ -858,7 +887,7 @@ function useMedia(roomId) {
         uploadMedia: handleUpload
     };
 }
-_s(useMedia, "V7mrkh1acXxv4fdsVZR8Pi42CJs=", false, function() {
+_s(useMedia, "ZGQuTqy0jKAbynwDSibV5xwWLj0=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppDispatch"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppSelector"]
@@ -873,7 +902,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 __turbopack_context__.s([
     "default",
-    ()=>RoomDetails
+    ()=>__TURBOPACK__default__export__
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$icons$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/icons.tsx [app-client] (ecmascript)");
@@ -902,11 +931,17 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
     const isCreator = room.creator.$id === currentUserId;
     console.log("isCreator", isCreator);
     // Filter media items
-    const mediaItems = media.filter((m)=>[
-            'IMAGE',
-            'PDF',
-            'VIDEO'
-        ].includes(m.fileType));
+    const mediaItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "RoomDetails.useMemo[mediaItems]": ()=>media.filter({
+                "RoomDetails.useMemo[mediaItems]": (m)=>[
+                        'IMAGE',
+                        'PDF',
+                        'VIDEO'
+                    ].includes(m.fileType)
+            }["RoomDetails.useMemo[mediaItems]"])
+    }["RoomDetails.useMemo[mediaItems]"], [
+        media
+    ]);
     const handleFileUpload = async (e)=>{
         const file = e.target.files?.[0];
         if (!file || !onSendMessage || !room || !currentUserId) return;
@@ -1098,16 +1133,21 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                 lineNumber: 111,
                                 columnNumber: 21
                             }, this),
-                            members.slice(0, 5).map((member)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Member, {
-                                    name: member.user.$id === currentUserId ? "You" : member.user.username || `User ${member.user.$id.substring(0, 4)}`,
+                            members.slice(0, 5).map((member)=>{
+                                const userId = member.user?.$id || 'unknown';
+                                const username = member.user?.username || (userId !== 'unknown' ? `User ${userId.substring(0, 4)}` : 'Unknown User');
+                                const displayName = userId === currentUserId ? "You" : username;
+                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Member, {
+                                    name: displayName,
                                     online: member.isActive,
-                                    canKick: isCreator && !room.isPublic && member.user.$id !== currentUserId,
+                                    canKick: isCreator && !room.isPublic && userId !== 'unknown' && userId !== currentUserId,
                                     onKick: ()=>onKickMember?.(member.$id)
                                 }, member.$id, false, {
                                     fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                    lineNumber: 116,
-                                    columnNumber: 25
-                                }, this))
+                                    lineNumber: 121,
+                                    columnNumber: 29
+                                }, this);
+                            })
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/RoomDetails.tsx",
@@ -1124,7 +1164,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                         children: "SHARED MEDIA"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                        lineNumber: 129,
+                                        lineNumber: 135,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1140,7 +1180,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                                         disabled: isUploading
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                        lineNumber: 133,
+                                                        lineNumber: 139,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1152,20 +1192,20 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                                                 className: "w-3 h-3 animate-spin"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                                lineNumber: 145,
+                                                                lineNumber: 151,
                                                                 columnNumber: 56
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$icons$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icons"].Plus, {
                                                                 className: "w-3 h-3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                                lineNumber: 145,
+                                                                lineNumber: 151,
                                                                 columnNumber: 108
                                                             }, this),
                                                             "Upload"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                        lineNumber: 140,
+                                                        lineNumber: 146,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
@@ -1176,19 +1216,19 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                                 children: "View All"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                lineNumber: 150,
+                                                lineNumber: 156,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                        lineNumber: 130,
+                                        lineNumber: 136,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                lineNumber: 128,
+                                lineNumber: 134,
                                 columnNumber: 21
                             }, this),
                             loading && mediaItems.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1197,12 +1237,12 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                     className: "w-5 h-5 text-brand-primary dark:text-brand-primaryDark animate-spin"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                    lineNumber: 156,
+                                    lineNumber: 162,
                                     columnNumber: 29
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                lineNumber: 155,
+                                lineNumber: 161,
                                 columnNumber: 25
                             }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "h-28 rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle flex flex-col items-center justify-center text-xs text-status-danger dark:text-status-dangerDark border border-border-default dark:border-border-darkDefault border-dashed p-4 text-center",
@@ -1212,7 +1252,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                         children: "Failed to load media"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                        lineNumber: 160,
+                                        lineNumber: 166,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1221,20 +1261,20 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                         children: "Retry"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                        lineNumber: 161,
+                                        lineNumber: 167,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                lineNumber: 159,
+                                lineNumber: 165,
                                 columnNumber: 25
                             }, this) : mediaItems.length === 0 && !isUploading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "h-28 rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle flex items-center justify-center text-xs text-text-muted dark:text-text-darkMuted border border-border-default dark:border-border-darkDefault border-dashed",
                                 children: "No Media"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                lineNumber: 169,
+                                lineNumber: 175,
                                 columnNumber: 25
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "grid grid-cols-2 gap-3",
@@ -1246,7 +1286,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                                 className: "w-5 h-5 text-brand-primary dark:text-brand-primaryDark animate-spin"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                lineNumber: 176,
+                                                lineNumber: 182,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1254,13 +1294,13 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                                 children: "Uploading..."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                                lineNumber: 177,
+                                                lineNumber: 183,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                        lineNumber: 175,
+                                        lineNumber: 181,
                                         columnNumber: 33
                                     }, this),
                                     mediaItems.slice(0, 6).map((m)=>{
@@ -1273,20 +1313,20 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                             children: renderMediaPreview(m)
                                         }, m.$id, false, {
                                             fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                            lineNumber: 184,
+                                            lineNumber: 190,
                                             columnNumber: 37
                                         }, this);
                                     })
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                                lineNumber: 173,
+                                lineNumber: 179,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                        lineNumber: 127,
+                        lineNumber: 133,
                         columnNumber: 17
                     }, this)
                 ]
@@ -1302,7 +1342,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                 currentUserId: currentUserId
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                lineNumber: 202,
+                lineNumber: 208,
                 columnNumber: 17
             }, this),
             activeModal === 'media' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$room$2f$MediaModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1311,19 +1351,21 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                 mediaMessages: mediaItems
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                lineNumber: 210,
+                lineNumber: 216,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true);
 }
-_s(RoomDetails, "6bnlArjtG6adVNMkOfmqsTLWzVU=", false, function() {
+_s(RoomDetails, "JqTRByRVVIKFZdfxoxig8ns9Dww=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useMedia$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMedia"]
     ];
 });
 _c = RoomDetails;
-function Member({ name, online, canKick, onKick }) {
+;
+const __TURBOPACK__default__export__ = /*#__PURE__*/ _c1 = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(RoomDetails);
+const Member = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(function Member({ name, online, canKick, onKick }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex items-center gap-3 mb-3",
         children: [
@@ -1332,7 +1374,7 @@ function Member({ name, online, canKick, onKick }) {
                 children: name.charAt(0)
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                lineNumber: 223,
+                lineNumber: 235,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1342,7 +1384,7 @@ function Member({ name, online, canKick, onKick }) {
                         children: name
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                        lineNumber: 227,
+                        lineNumber: 239,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1350,13 +1392,13 @@ function Member({ name, online, canKick, onKick }) {
                         children: online ? "active" : "inactive"
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/RoomDetails.tsx",
-                        lineNumber: 228,
+                        lineNumber: 240,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                lineNumber: 226,
+                lineNumber: 238,
                 columnNumber: 13
             }, this),
             canKick && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1366,20 +1408,21 @@ function Member({ name, online, canKick, onKick }) {
                 children: "Kick"
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomDetails.tsx",
-                lineNumber: 233,
+                lineNumber: 245,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/room/RoomDetails.tsx",
-        lineNumber: 222,
+        lineNumber: 234,
         columnNumber: 9
     }, this);
-}
-_c1 = Member;
-var _c, _c1;
+});
+_c2 = Member;
+var _c, _c1, _c2;
 __turbopack_context__.k.register(_c, "RoomDetails");
-__turbopack_context__.k.register(_c1, "Member");
+__turbopack_context__.k.register(_c1, "%default%");
+__turbopack_context__.k.register(_c2, "Member");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -1468,9 +1511,11 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/appwrite.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/useSession.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$room$2d$member$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/room-member.service.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/hooks.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/store/slices/roomSlice.ts [app-client] (ecmascript)");
 var _s = __turbopack_context__.k.signature();
+;
 ;
 ;
 ;
@@ -1496,41 +1541,64 @@ function useRoomMembers(roomId) {
             // Fetch if needed or just rely on parent. 
             // We'll call it to ensure data consistency if this hook is mounted.
             fetchMembers();
-            const unsubscribe = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["client"].subscribe(`databases.${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DB_ID"]}.collections.${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["COLLECTIONS"].ROOM_MEMBERS}.documents`, {
-                "useRoomMembers.useEffect.unsubscribe": async (response)=>{
-                    const payload = response.payload;
-                    // Check if this event belongs to current room
-                    // payload.room might be object or string depending on expansion
-                    const payloadRoomId = typeof payload.room === 'object' ? payload.room.$id : payload.room;
-                    if (payloadRoomId !== roomId) return;
-                    if (response.events.includes('databases.*.collections.*.documents.*.create')) {
-                        // Fetch full member details to get expanded user
-                        try {
-                            const fullMember = await RoomMemberService.get(payload.$id); // Assuming get method exists or use list with ID
-                            if (fullMember && fullMember.isActive) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addMember"])(fullMember));
-                        } catch (e) {
-                            console.error("Failed to fetch new member details", e);
-                        }
-                    } else if (response.events.includes('databases.*.collections.*.documents.*.update')) {
-                        if (payload.isActive) {
-                            try {
-                                // Fetch full member to ensure we have user details if they were missing or updated
-                                const fullMember = await RoomMemberService.get(payload.$id);
-                                if (fullMember) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateMember"])(fullMember));
-                            } catch (e) {
-                                dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateMember"])(payload)); // Fallback
+            let mounted = true;
+            let unsubscribe;
+            let timeoutId;
+            const subscribe = {
+                "useRoomMembers.useEffect.subscribe": async ()=>{
+                    if (!roomId) return;
+                    try {
+                        unsubscribe = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["client"].subscribe(`databases.${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DB_ID"]}.collections.${__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$appwrite$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["COLLECTIONS"].ROOM_MEMBERS}.documents`, {
+                            "useRoomMembers.useEffect.subscribe": async (response)=>{
+                                if (!mounted) return;
+                                const payload = response.payload;
+                                // Check if this event belongs to current room
+                                // payload.room might be object or string depending on expansion
+                                const payloadRoomId = typeof payload.room === 'object' ? payload.room.$id : payload.room;
+                                if (payloadRoomId !== roomId) return;
+                                if (response.events.includes('databases.*.collections.*.documents.*.create')) {
+                                    // Fetch full member details to get expanded user
+                                    try {
+                                        const fullMember = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$room$2d$member$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RoomMemberService"].get(payload.$id); // Assuming get method exists or use list with ID
+                                        if (fullMember && fullMember.isActive && mounted) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["addMember"])(fullMember));
+                                    } catch (e) {
+                                        console.error("Failed to fetch new member details", e);
+                                    }
+                                } else if (response.events.includes('databases.*.collections.*.documents.*.update')) {
+                                    if (payload.isActive) {
+                                        try {
+                                            // Fetch full member to ensure we have user details if they were missing or updated
+                                            const fullMember = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$room$2d$member$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RoomMemberService"].get(payload.$id);
+                                            if (fullMember && mounted) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateMember"])(fullMember));
+                                        } catch (e) {
+                                            if (mounted) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["updateMember"])(payload)); // Fallback
+                                        }
+                                    } else {
+                                        if (mounted) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeMember"])(payload));
+                                    }
+                                } else if (response.events.includes('databases.*.collections.*.documents.*.delete')) {
+                                    if (mounted) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeMember"])(payload));
+                                }
                             }
-                        } else {
-                            dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeMember"])(payload));
-                        }
-                    } else if (response.events.includes('databases.*.collections.*.documents.*.delete')) {
-                        dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["removeMember"])(payload));
+                        }["useRoomMembers.useEffect.subscribe"]);
+                    } catch (err) {
+                        console.error("Failed to subscribe to members:", err);
                     }
                 }
-            }["useRoomMembers.useEffect.unsubscribe"]);
+            }["useRoomMembers.useEffect.subscribe"];
+            // Debounce to allow strict mode double-invocation to clear safely before starting connection
+            timeoutId = setTimeout({
+                "useRoomMembers.useEffect": ()=>{
+                    if (mounted) subscribe();
+                }
+            }["useRoomMembers.useEffect"], 500);
             return ({
                 "useRoomMembers.useEffect": ()=>{
-                    unsubscribe();
+                    mounted = false;
+                    clearTimeout(timeoutId);
+                    if (unsubscribe) {
+                        unsubscribe();
+                    }
                 }
             })["useRoomMembers.useEffect"];
         }
@@ -1539,13 +1607,23 @@ function useRoomMembers(roomId) {
         fetchMembers,
         roomId
     ]);
-    const addMember = async (payload)=>{
-        if (!isAuthenticated || !session) throw new Error("Active session required");
-        await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["joinRoom"])(payload)).unwrap();
-    };
-    const kickMember = async (memberId)=>{
-        await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["leaveRoom"])(memberId)).unwrap();
-    };
+    const addMember = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useRoomMembers.useCallback[addMember]": async (payload)=>{
+            if (!isAuthenticated || !session) throw new Error("Active session required");
+            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["joinRoom"])(payload)).unwrap();
+        }
+    }["useRoomMembers.useCallback[addMember]"], [
+        dispatch,
+        isAuthenticated,
+        session
+    ]);
+    const kickMember = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useRoomMembers.useCallback[kickMember]": async (memberId)=>{
+            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["leaveRoom"])(memberId)).unwrap();
+        }
+    }["useRoomMembers.useCallback[kickMember]"], [
+        dispatch
+    ]);
     return {
         members,
         loading,
@@ -1554,7 +1632,7 @@ function useRoomMembers(roomId) {
         kickMember
     };
 }
-_s(useRoomMembers, "ljFJj2f76E/UrGYqSMdZZQCeepM=", false, function() {
+_s(useRoomMembers, "61H9SytbJbuD/dgr8Th9N1TX/Vs=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppDispatch"],
@@ -1610,6 +1688,7 @@ function useMessages(roomId) {
             refresh();
             let mounted = true;
             let unsubscribe;
+            let timeoutId;
             const subscribe = {
                 "useMessages.useEffect.subscribe": async ()=>{
                     if (!roomId) return;
@@ -1639,10 +1718,16 @@ function useMessages(roomId) {
                     }
                 }
             }["useMessages.useEffect.subscribe"];
-            subscribe();
+            // Debounce subscription to avoid strict mode double-mount issues
+            timeoutId = setTimeout({
+                "useMessages.useEffect": ()=>{
+                    if (mounted) subscribe();
+                }
+            }["useMessages.useEffect"], 500);
             return ({
                 "useMessages.useEffect": ()=>{
                     mounted = false;
+                    clearTimeout(timeoutId);
                     if (unsubscribe) {
                         unsubscribe();
                     }
@@ -1654,12 +1739,19 @@ function useMessages(roomId) {
         refresh,
         roomId
     ]);
-    const sendMessage = async (payload)=>{
-        if (!isAuthenticated || !session || !user) {
-            throw new Error("Active session required to send message");
+    const sendMessage = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useMessages.useCallback[sendMessage]": async (payload)=>{
+            if (!isAuthenticated || !session || !user) {
+                throw new Error("Active session required to send message");
+            }
+            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$messageSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sendMessage"])(payload)).unwrap();
         }
-        await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$messageSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sendMessage"])(payload)).unwrap();
-    };
+    }["useMessages.useCallback[sendMessage]"], [
+        dispatch,
+        isAuthenticated,
+        session,
+        user
+    ]);
     return {
         messages,
         loading,
@@ -1668,7 +1760,7 @@ function useMessages(roomId) {
         refresh
     };
 }
-_s(useMessages, "1DZD9iyywSIXXJnV5robF+NQdx8=", false, function() {
+_s(useMessages, "oK1aQS+kTKdr/pg66P1TqvBy6JM=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppDispatch"],
@@ -1717,7 +1809,7 @@ function RoomPage({ params }) {
     // UI State
     const [showDetails, setShowDetails] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     // Hooks
-    const { session, user, loading: authLoading, isAuthenticated } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"])();
+    const { session, user, loading: authLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"])();
     const { room, loading: roomLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useRoom$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRoom"])(roomId);
     const { members, kickMember } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useRoomMembers$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRoomMembers"])(roomId);
     const { messages, loading: messagesLoading, sendMessage } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useMessages$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMessages"])(roomId);
@@ -1726,28 +1818,44 @@ function RoomPage({ params }) {
     // We can keep it or remove it if unused. Keeping for safety if used elsewhere.
     // ... Auth Protection & Cleanup ...
     // ... Join Room Logic ...
-    const handleCloseRoom = async ()=>{
-        if (!room) return;
-        try {
-            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$room$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RoomService"].close(room.$id);
-        } catch (error) {
-            console.error("Failed to close room:", error);
-        }
-    };
-    // ... Loading & Session checks ...
-    const handleExitRoom = async ()=>{
-        if (!user || !room) return;
-        const member = members.find((m)=>m.user.$id === user.$id);
-        if (member) {
+    // ... Auth Protection & Cleanup ...
+    // ... Join Room Logic ...
+    const handleCloseRoom = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "RoomPage.useCallback[handleCloseRoom]": async ()=>{
+            if (!room) return;
             try {
-                // Leaving is essentially kicking oneself
-                await kickMember(member.$id);
-                router.push('/rooms');
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$room$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RoomService"].close(room.$id);
             } catch (error) {
-                console.error("Failed to exit room:", error);
+                console.error("Failed to close room:", error);
             }
         }
-    };
+    }["RoomPage.useCallback[handleCloseRoom]"], [
+        room
+    ]);
+    // ... Loading & Session checks ...
+    const handleExitRoom = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "RoomPage.useCallback[handleExitRoom]": async ()=>{
+            if (!user || !room) return;
+            const member = members.find({
+                "RoomPage.useCallback[handleExitRoom].member": (m)=>m.user.$id === user.$id
+            }["RoomPage.useCallback[handleExitRoom].member"]);
+            if (member) {
+                try {
+                    // Leaving is essentially kicking oneself
+                    await kickMember(member.$id);
+                    router.push('/rooms');
+                } catch (error) {
+                    console.error("Failed to exit room:", error);
+                }
+            }
+        }
+    }["RoomPage.useCallback[handleExitRoom]"], [
+        user,
+        room,
+        members,
+        kickMember,
+        router
+    ]);
     // Check for kicked status
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "RoomPage.useEffect": ()=>{
@@ -1795,7 +1903,7 @@ function RoomPage({ params }) {
                 detailsOpen: showDetails
             }, void 0, false, {
                 fileName: "[project]/src/app/(rooms)/room/[roomId]/page.tsx",
-                lineNumber: 93,
+                lineNumber: 95,
                 columnNumber: 13
             }, this),
             showDetails && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$room$2f$RoomDetails$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1806,18 +1914,16 @@ function RoomPage({ params }) {
                 onToggleUI: ()=>setShowDetails(false),
                 onExitRoomAction: handleExitRoom,
                 onSendMessage: sendMessage,
-                onKickMember: async (memberId)=>{
-                    await kickMember(memberId);
-                }
+                onKickMember: kickMember
             }, void 0, false, {
                 fileName: "[project]/src/app/(rooms)/room/[roomId]/page.tsx",
-                lineNumber: 103,
+                lineNumber: 105,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true);
 }
-_s(RoomPage, "3KCdSgdNuRG22ugCAAf7/GrQTw0=", false, function() {
+_s(RoomPage, "ZqKB6NFUBeVzfncjyUNZdVc4xDY=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"],

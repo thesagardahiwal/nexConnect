@@ -2,7 +2,7 @@ import { RoomMember } from "@/types/room-member";
 import { Room } from "@/types/room";
 import { Icons } from "@/components/icons";
 import { StorageService } from "@/services/storage.service";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import MembersModal from "./MembersModal";
 import MediaModal from "./MediaModal";
 import { useMedia } from "@/hooks/useMedia";
@@ -20,7 +20,7 @@ interface RoomDetailsProps {
     onExitRoomAction?: () => void;
 }
 
-export default function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggleUI, onSendMessage, onKickMember, onExitRoomAction }: RoomDetailsProps) {
+function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggleUI, onSendMessage, onKickMember, onExitRoomAction }: RoomDetailsProps) {
     const [activeModal, setActiveModal] = useState<'members' | 'media' | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const { media, loading, uploadMedia, error, refresh } = useMedia(room?.$id || '');
@@ -31,7 +31,7 @@ export default function RoomDetails({ room, members, currentUserId, onCloseRoomA
     console.log("isCreator", isCreator);
 
     // Filter media items
-    const mediaItems = media.filter(m => ['IMAGE', 'PDF', 'VIDEO'].includes(m.fileType));
+    const mediaItems = useMemo(() => media.filter(m => ['IMAGE', 'PDF', 'VIDEO'].includes(m.fileType)), [media]);
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file || !onSendMessage || !room || !currentUserId) return;
@@ -112,15 +112,21 @@ export default function RoomDetails({ room, members, currentUserId, onCloseRoomA
                         <p className="text-xs text-text-secondary dark:text-text-darkSecondary font-medium">MEMBERS ({members.length})</p>
                         <button onClick={() => setActiveModal('members')} className="text-xs text-brand-primary dark:text-brand-primaryDark cursor-pointer hover:underline">View All</button>
                     </div>
-                    {members.slice(0, 5).map(member => (
-                        <Member
-                            key={member.$id}
-                            name={member.user.$id === currentUserId ? "You" : (member.user.username || `User ${member.user.$id.substring(0, 4)}`)}
-                            online={member.isActive}
-                            canKick={isCreator && !room.isPublic && member.user.$id !== currentUserId}
-                            onKick={() => onKickMember?.(member.$id)}
-                        />
-                    ))}
+                    {members.slice(0, 5).map(member => {
+                        const userId = member.user?.$id || 'unknown';
+                        const username = member.user?.username || (userId !== 'unknown' ? `User ${userId.substring(0, 4)}` : 'Unknown User');
+                        const displayName = userId === currentUserId ? "You" : username;
+
+                        return (
+                            <Member
+                                key={member.$id}
+                                name={displayName}
+                                online={member.isActive}
+                                canKick={isCreator && !room.isPublic && userId !== 'unknown' && userId !== currentUserId}
+                                onKick={() => onKickMember?.(member.$id)}
+                            />
+                        );
+                    })}
                 </section>
 
                 {/* Media */}
@@ -217,7 +223,13 @@ export default function RoomDetails({ room, members, currentUserId, onCloseRoomA
     );
 }
 
-function Member({ name, online, canKick, onKick }: { name: string; online?: boolean; canKick?: boolean; onKick?: () => void }) {
+import React from "react";
+
+// ... existing RoomDetails ...
+
+export default React.memo(RoomDetails);
+
+const Member = React.memo(function Member({ name, online, canKick, onKick }: { name: string; online?: boolean; canKick?: boolean; onKick?: () => void }) {
     return (
         <div className="flex items-center gap-3 mb-3">
             <div className="w-9 h-9 rounded-full bg-brand-muted dark:bg-brand-mutedDark flex items-center justify-center text-xs text-brand-primary dark:text-brand-primaryDark font-bold">
@@ -240,4 +252,4 @@ function Member({ name, online, canKick, onKick }: { name: string; online?: bool
             )}
         </div>
     );
-}
+});

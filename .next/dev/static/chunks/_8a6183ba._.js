@@ -193,25 +193,43 @@ function useRooms() {
         dispatch,
         refresh
     ]);
-    const createRoom = async (payload)=>{
-        if (!isAuthenticated || !session?.userId) {
-            throw new Error("Active session required to create room");
+    const createRoom = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useRooms.useCallback[createRoom]": async (payload)=>{
+            if (!isAuthenticated || !session?.userId) {
+                throw new Error("Active session required to create room");
+            }
+            const result = await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createRoom"])(payload)).unwrap();
+            return result;
         }
-        // Dispatch returns the action object. We want the result.
-        // unwrap() gives us the payload or throws error.
-        const result = await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createRoom"])(payload)).unwrap();
-        // The thunk already adds it to the list via extraReducers, so we just return it.
-        return result;
-    };
+    }["useRooms.useCallback[createRoom]"], [
+        dispatch,
+        isAuthenticated,
+        session?.userId
+    ]);
+    const deleteRoomExec = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useRooms.useCallback[deleteRoomExec]": async (roomId)=>{
+            // Assuming deleteRoomThunk exists or using simple action if available, 
+            // but based on imports 'deleteRoom' is an action.
+            // However, previously it was dispatch(deleteRoomAction(roomId)).
+            // Let's check imports: import { deleteRoom } from slice. 
+            // If `deleteRoom` is a reducer action for *local* update, we might need a Thunk for API.
+            // But the previous code used `deleteRoom` from slice.
+            // Let's assume `deleteRoom` imported is the correct action to dispatch.
+            await dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$roomSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["deleteRoom"])(roomId));
+        }
+    }["useRooms.useCallback[deleteRoomExec]"], [
+        dispatch
+    ]);
     return {
         rooms,
         loading,
         error,
         createRoom,
+        deleteRoom: deleteRoomExec,
         refresh
     };
 }
-_s(useRooms, "08gjg9+ub4DzyoVS3qNIEoNpUOg=", false, function() {
+_s(useRooms, "hqjwybuiSwCDjbOUgy5xXgLZBno=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppDispatch"],
@@ -788,7 +806,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 __turbopack_context__.s([
     "default",
-    ()=>RoomSidebar
+    ()=>__TURBOPACK__default__export__
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
@@ -827,6 +845,17 @@ function RoomSidebar() {
             setMounted(true);
         }
     }["RoomSidebar.useEffect"], []);
+    // Memoize filtered rooms
+    const filteredRooms = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useMemo({
+        "RoomSidebar.useMemo[filteredRooms]": ()=>{
+            return rooms.filter({
+                "RoomSidebar.useMemo[filteredRooms]": (room)=>room.name.toLowerCase().includes(search.toLowerCase())
+            }["RoomSidebar.useMemo[filteredRooms]"]);
+        }
+    }["RoomSidebar.useMemo[filteredRooms]"], [
+        rooms,
+        search
+    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -845,14 +874,14 @@ function RoomSidebar() {
                                                 className: "w-4 h-4 text-brand-primary dark:text-brand-primaryDark"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                lineNumber: 36,
+                                                lineNumber: 41,
                                                 columnNumber: 29
                                             }, this),
                                             " Rooms"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                        lineNumber: 35,
+                                        lineNumber: 40,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -866,12 +895,12 @@ function RoomSidebar() {
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                    lineNumber: 44,
+                                                    lineNumber: 49,
                                                     columnNumber: 33
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                lineNumber: 39,
+                                                lineNumber: 44,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -882,24 +911,24 @@ function RoomSidebar() {
                                                     className: "w-5 h-5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                    lineNumber: 51,
+                                                    lineNumber: 56,
                                                     columnNumber: 33
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                lineNumber: 46,
+                                                lineNumber: 51,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                        lineNumber: 38,
+                                        lineNumber: 43,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 34,
+                                lineNumber: 39,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -909,7 +938,7 @@ function RoomSidebar() {
                                         className: "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted dark:text-text-darkMuted"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                        lineNumber: 58,
+                                        lineNumber: 63,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -920,33 +949,32 @@ function RoomSidebar() {
                                         className: "w-full pl-9 pr-4 py-2 rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle text-sm text-text-primary dark:text-text-darkPrimary placeholder-text-muted dark:placeholder-text-text-darkMuted focus:outline-none focus:ring-1 focus:ring-brand-primary"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                        lineNumber: 59,
+                                        lineNumber: 64,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 57,
+                                lineNumber: 62,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                        lineNumber: 33,
+                        lineNumber: 38,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex-1 px-3 space-y-2 overflow-y-auto",
                         children: [
-                            rooms.filter((room)=>room.name.toLowerCase().includes(search.toLowerCase())).map((room)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RoomItem, {
-                                    name: room.name,
-                                    status: room.status,
-                                    active: room.$id === currentRoomId,
-                                    onClick: ()=>router.push(`/room/${room.$id}`)
+                            filteredRooms.map((room)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RoomItem, {
+                                    room: room,
+                                    onClick: ()=>router.push(`/room/${room.$id}`),
+                                    isActive: room.$id === currentRoomId
                                 }, room.$id, false, {
                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                    lineNumber: 74,
-                                    columnNumber: 29
+                                    lineNumber: 77,
+                                    columnNumber: 25
                                 }, this)),
                             !roomsLoading && rooms.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "text-center py-8",
@@ -955,12 +983,12 @@ function RoomSidebar() {
                                     children: "No public rooms found."
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                    lineNumber: 85,
+                                    lineNumber: 87,
                                     columnNumber: 29
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 84,
+                                lineNumber: 86,
                                 columnNumber: 25
                             }, this),
                             roomsLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -969,12 +997,12 @@ function RoomSidebar() {
                                     className: "h-full bg-brand-primary dark:bg-brand-primaryDark animate-pulse"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                    lineNumber: 90,
+                                    lineNumber: 92,
                                     columnNumber: 29
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 89,
+                                lineNumber: 91,
                                 columnNumber: 25
                             }, this),
                             error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -982,13 +1010,13 @@ function RoomSidebar() {
                                 children: "Error loading rooms"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 93,
+                                lineNumber: 95,
                                 columnNumber: 31
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                        lineNumber: 70,
+                        lineNumber: 75,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1002,7 +1030,7 @@ function RoomSidebar() {
                                         children: user?.username ? user.username.charAt(0).toUpperCase() : '?'
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                        lineNumber: 99,
+                                        lineNumber: 101,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1013,7 +1041,7 @@ function RoomSidebar() {
                                                 children: user?.username || 'Guest'
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                lineNumber: 103,
+                                                lineNumber: 105,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1023,26 +1051,26 @@ function RoomSidebar() {
                                                         className: "w-1.5 h-1.5 rounded-full bg-status-success dark:bg-status-successDark"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                        lineNumber: 105,
+                                                        lineNumber: 107,
                                                         columnNumber: 33
                                                     }, this),
                                                     "Online"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                                lineNumber: 104,
+                                                lineNumber: 106,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 104,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 98,
+                                lineNumber: 100,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1053,36 +1081,36 @@ function RoomSidebar() {
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                    lineNumber: 116,
+                                    lineNumber: 118,
                                     columnNumber: 57
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$icons$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icons"].Sun, {
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                    lineNumber: 116,
+                                    lineNumber: 118,
                                     columnNumber: 94
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                    lineNumber: 116,
+                                    lineNumber: 118,
                                     columnNumber: 131
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                                lineNumber: 111,
+                                lineNumber: 113,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                        lineNumber: 97,
+                        lineNumber: 99,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                lineNumber: 31,
+                lineNumber: 36,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$room$2f$JoinRoomModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1090,7 +1118,7 @@ function RoomSidebar() {
                 onClose: ()=>setIsJoinModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                lineNumber: 121,
+                lineNumber: 123,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$room$2f$CreateRoomModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1098,13 +1126,13 @@ function RoomSidebar() {
                 onClose: ()=>setIsCreateModalOpen(false)
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                lineNumber: 122,
+                lineNumber: 124,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true);
 }
-_s(RoomSidebar, "j657NTGd87jMvYVCjS/lTig/KME=", false, function() {
+_s(RoomSidebar, "gdB41pn/HXTD9K2rkGE4KAkU7L4=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useRooms$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRooms"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useSession$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSession"],
@@ -1114,16 +1142,17 @@ _s(RoomSidebar, "j657NTGd87jMvYVCjS/lTig/KME=", false, function() {
     ];
 });
 _c = RoomSidebar;
-function RoomItem({ name, status, active, onClick }) {
+const __TURBOPACK__default__export__ = /*#__PURE__*/ _c1 = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(RoomSidebar);
+function RoomItem({ room, isActive, onClick }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         onClick: onClick,
-        className: `px-4 py-3 rounded-xl cursor-pointer transition flex items-center gap-3 ${active ? "bg-brand-primary dark:bg-brand-primaryDark text-text-inverse shadow-md" : "hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle text-text-secondary dark:text-text-darkSecondary"}`,
+        className: `px-4 py-3 rounded-xl cursor-pointer transition flex items-center gap-3 ${isActive ? "bg-brand-primary dark:bg-brand-primaryDark text-text-inverse shadow-md" : "hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle text-text-secondary dark:text-text-darkSecondary"}`,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$icons$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icons"].Hash, {
-                className: `w-4 h-4 shrink-0 ${active ? "text-white" : "text-gray-400 dark:text-gray-500"}`
+                className: `w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-gray-400 dark:text-gray-500"}`
             }, void 0, false, {
                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                lineNumber: 146,
+                lineNumber: 152,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1131,37 +1160,38 @@ function RoomItem({ name, status, active, onClick }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "font-medium truncate",
-                        children: name
+                        children: room.name
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                        lineNumber: 148,
+                        lineNumber: 154,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: `text-xs ${active ? "opacity-90" : "opacity-60"}`,
-                        children: status
+                        className: `text-xs ${isActive ? "opacity-90" : "opacity-60"}`,
+                        children: room.status
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                        lineNumber: 149,
+                        lineNumber: 155,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/RoomSidebar.tsx",
-                lineNumber: 147,
+                lineNumber: 153,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/room/RoomSidebar.tsx",
-        lineNumber: 139,
+        lineNumber: 145,
         columnNumber: 9
     }, this);
 }
-_c1 = RoomItem;
-var _c, _c1;
+_c2 = RoomItem;
+var _c, _c1, _c2;
 __turbopack_context__.k.register(_c, "RoomSidebar");
-__turbopack_context__.k.register(_c1, "RoomItem");
+__turbopack_context__.k.register(_c1, "%default%");
+__turbopack_context__.k.register(_c2, "RoomItem");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

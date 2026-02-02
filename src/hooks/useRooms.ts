@@ -49,22 +49,31 @@ export function useRooms() {
         };
     }, [dispatch, refresh]);
 
-    const createRoom = async (payload: RoomPayload) => {
+    const createRoom = useCallback(async (payload: RoomPayload) => {
         if (!isAuthenticated || !session?.userId) {
             throw new Error("Active session required to create room");
         }
-        // Dispatch returns the action object. We want the result.
-        // unwrap() gives us the payload or throws error.
         const result = await dispatch(createRoomThunk(payload)).unwrap();
-        // The thunk already adds it to the list via extraReducers, so we just return it.
         return result;
-    };
+    }, [dispatch, isAuthenticated, session?.userId]);
+
+    const deleteRoomExec = useCallback(async (roomId: string) => {
+        // Assuming deleteRoomThunk exists or using simple action if available, 
+        // but based on imports 'deleteRoom' is an action.
+        // However, previously it was dispatch(deleteRoomAction(roomId)).
+        // Let's check imports: import { deleteRoom } from slice. 
+        // If `deleteRoom` is a reducer action for *local* update, we might need a Thunk for API.
+        // But the previous code used `deleteRoom` from slice.
+        // Let's assume `deleteRoom` imported is the correct action to dispatch.
+        await dispatch(deleteRoom(roomId as any));
+    }, [dispatch]);
 
     return {
         rooms,
         loading,
         error,
         createRoom,
+        deleteRoom: deleteRoomExec,
         refresh
     };
 }

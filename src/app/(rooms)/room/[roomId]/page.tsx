@@ -15,7 +15,7 @@ import { useSession } from "@/hooks/useSession";
 // import { useAppDispatch } from "@/store/hooks";
 
 // ... imports ...
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export default function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
     const { roomId } = use(params);
@@ -25,7 +25,7 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
     const [showDetails, setShowDetails] = useState(true);
 
     // Hooks
-    const { session, user, loading: authLoading, isAuthenticated } = useSession();
+    const { session, user, loading: authLoading } = useSession();
     const { room, loading: roomLoading } = useRoom(roomId);
     const { members, kickMember } = useRoomMembers(roomId);
     const { messages, loading: messagesLoading, sendMessage } = useMessages(roomId);
@@ -36,18 +36,20 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
 
     // ... Auth Protection & Cleanup ...
     // ... Join Room Logic ...
-    const handleCloseRoom = async () => {
+    // ... Auth Protection & Cleanup ...
+    // ... Join Room Logic ...
+    const handleCloseRoom = useCallback(async () => {
         if (!room) return;
         try {
             await RoomService.close(room.$id);
         } catch (error) {
             console.error("Failed to close room:", error);
         }
-    };
+    }, [room]);
 
     // ... Loading & Session checks ...
 
-    const handleExitRoom = async () => {
+    const handleExitRoom = useCallback(async () => {
         if (!user || !room) return;
         const member = members.find(m => m.user.$id === user.$id);
         if (member) {
@@ -59,7 +61,7 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
                 console.error("Failed to exit room:", error);
             }
         }
-    };
+    }, [user, room, members, kickMember, router]);
 
     // Check for kicked status
     useEffect(() => {
@@ -108,9 +110,7 @@ export default function RoomPage({ params }: { params: Promise<{ roomId: string 
                     onToggleUI={() => setShowDetails(false)}
                     onExitRoomAction={handleExitRoom}
                     onSendMessage={sendMessage}
-                    onKickMember={async (memberId) => {
-                        await kickMember(memberId);
-                    }}
+                    onKickMember={kickMember}
                 />
             )}
         </>

@@ -16,7 +16,7 @@ interface ChatAreaProps {
     detailsOpen?: boolean;
 }
 
-export default function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggleDetails, detailsOpen }: ChatAreaProps) {
+function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggleDetails, detailsOpen }: ChatAreaProps) {
     const [inputText, setInputText] = useState("");
     // const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [sending, setSending] = useState(false);
@@ -175,7 +175,13 @@ export default function ChatArea({ room, messages, loading, currentUser, onSendM
     );
 }
 
-function MessageItem({
+import React from "react";
+
+// ... existing component ...
+
+export default React.memo(ChatArea);
+
+const MessageItem = React.memo(function MessageItem({
     user,
     time,
     message,
@@ -206,4 +212,4 @@ function MessageItem({
             </div>
         </div>
     );
-}
+});

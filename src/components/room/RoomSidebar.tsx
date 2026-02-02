@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRooms } from '@/hooks/useRooms';
 import { useSession } from '@/hooks/useSession';
 import { useTheme } from '@/context/ThemeContext';
@@ -9,7 +9,7 @@ import { Icons } from '@/components/icons';
 import JoinRoomModal from './JoinRoomModal';
 import CreateRoomModal from './CreateRoomModal';
 
-export default function RoomSidebar() {
+function RoomSidebar() {
     const { rooms, loading: roomsLoading, error } = useRooms();
     const { user } = useSession();
     const router = useRouter();
@@ -25,6 +25,11 @@ export default function RoomSidebar() {
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Memoize filtered rooms
+    const filteredRooms = React.useMemo(() => {
+        return rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase()));
+    }, [rooms, search]);
 
     return (
         <>
@@ -68,17 +73,14 @@ export default function RoomSidebar() {
 
                 {/* Room List */}
                 <div className="flex-1 px-3 space-y-2 overflow-y-auto">
-                    {rooms
-                        .filter(room => room.name.toLowerCase().includes(search.toLowerCase()))
-                        .map(room => (
-                            <RoomItem
-                                key={room.$id}
-                                name={room.name}
-                                status={room.status}
-                                active={room.$id === currentRoomId}
-                                onClick={() => router.push(`/room/${room.$id}`)}
-                            />
-                        ))}
+                    {filteredRooms.map(room => (
+                        <RoomItem
+                            key={room.$id}
+                            room={room} // Updated to pass room object
+                            onClick={() => router.push(`/room/${room.$id}`)}
+                            isActive={room.$id === currentRoomId}
+                        />
+                    ))}
 
                     {!roomsLoading && rooms.length === 0 && (
                         <div className="text-center py-8">
@@ -124,29 +126,33 @@ export default function RoomSidebar() {
     );
 }
 
+export default React.memo(RoomSidebar);
+
+// Import Room type if not globally available, or assume it's passed or defined. 
+// Ideally it should be imported. let's import it.
+import { Room } from "@/types/room";
+
 function RoomItem({
-    name,
-    status,
-    active,
+    room,
+    isActive,
     onClick
 }: {
-    name: string;
-    status: string;
-    active?: boolean;
+    room: Room;
+    isActive: boolean;
     onClick?: () => void;
 }) {
     return (
         <div
             onClick={onClick}
-            className={`px-4 py-3 rounded-xl cursor-pointer transition flex items-center gap-3 ${active
+            className={`px-4 py-3 rounded-xl cursor-pointer transition flex items-center gap-3 ${isActive
                 ? "bg-brand-primary dark:bg-brand-primaryDark text-text-inverse shadow-md"
                 : "hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle text-text-secondary dark:text-text-darkSecondary"
                 }`}
         >
-            <Icons.Hash className={`w-4 h-4 shrink-0 ${active ? "text-white" : "text-gray-400 dark:text-gray-500"}`} />
+            <Icons.Hash className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-gray-400 dark:text-gray-500"}`} />
             <div className="min-w-0">
-                <p className="font-medium truncate">{name}</p>
-                <p className={`text-xs ${active ? "opacity-90" : "opacity-60"}`}>{status}</p>
+                <p className="font-medium truncate">{room.name}</p>
+                <p className={`text-xs ${isActive ? "opacity-90" : "opacity-60"}`}>{room.status}</p>
             </div>
         </div>
     );
