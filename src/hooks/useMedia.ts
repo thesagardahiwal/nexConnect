@@ -1,16 +1,21 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchMedia, addMedia, uploadMedia, removeMedia } from "@/store/slices/mediaSlice";
+import { fetchMedia, addMedia, uploadMedia, removeMedia, clearMedia } from "@/store/slices/mediaSlice";
 import { client, COLLECTIONS, DB_ID } from "@/lib/appwrite";
 import { Media } from "@/types/media";
 // import { StorageService } from "@/services/storage.service";
 
 export function useMedia(roomId: string) {
     const dispatch = useAppDispatch();
-    const { media, loading, error } = useAppSelector((state) => state.media);
+    const { media: globalMedia, loading, error } = useAppSelector((state) => state.media);
+
+    const media = useMemo(() => globalMedia.filter(m => m.room === roomId), [globalMedia, roomId]);
 
     const refresh = useCallback(() => {
-        if (roomId) dispatch(fetchMedia(roomId));
+        if (roomId) {
+            dispatch(clearMedia()); // Clear previous room's media
+            dispatch(fetchMedia(roomId));
+        }
     }, [dispatch, roomId]);
 
     // Initial Fetch

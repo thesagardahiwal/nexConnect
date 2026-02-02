@@ -183,7 +183,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                     <span className="text-[10px] text-text-secondary dark:text-text-darkSecondary font-medium">Uploading...</span>
                                 </div>
                             )}
-                            {mediaItems.slice(0, 6).map(m => {
+                            {!loading && mediaItems.slice(0, 6).map(m => {
                                 if (!m.fileId) return null;
 
                                 return (

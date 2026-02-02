@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Message, MessagePayload } from "@/types/message";
+import React from "react";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
 // import { StorageService } from "@/services/storage.service";
@@ -175,7 +176,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
     );
 }
 
-import React from "react";
+
 
 // ... existing component ...
 

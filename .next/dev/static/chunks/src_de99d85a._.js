@@ -16,6 +16,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
 function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggleDetails, detailsOpen }) {
     _s();
     const [inputText, setInputText] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
@@ -73,7 +74,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                     className: "w-8 h-8 animate-spin text-brand-primary dark:text-brand-primaryDark"
                 }, void 0, false, {
                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                    lineNumber: 72,
+                    lineNumber: 73,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -81,13 +82,13 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                     children: "Loading chat..."
                 }, void 0, false, {
                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                    lineNumber: 73,
+                    lineNumber: 74,
                     columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/room/ChatArea.tsx",
-            lineNumber: 71,
+            lineNumber: 72,
             columnNumber: 13
         }, this);
     }
@@ -97,7 +98,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
             children: "Select a room"
         }, void 0, false, {
             fileName: "[project]/src/components/room/ChatArea.tsx",
-            lineNumber: 79,
+            lineNumber: 80,
             columnNumber: 16
         }, this);
     }
@@ -117,12 +118,12 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                     className: "w-6 h-6"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                                    lineNumber: 88,
+                                    lineNumber: 89,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 87,
+                                lineNumber: 88,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -134,7 +135,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                                 className: "w-4 h-4 text-brand-primary dark:text-brand-primaryDark"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                                lineNumber: 92,
+                                                lineNumber: 93,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -142,7 +143,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                                 children: room.name
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                                lineNumber: 93,
+                                                lineNumber: 94,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -150,13 +151,13 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                                 children: room.status
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                                lineNumber: 94,
+                                                lineNumber: 95,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                                        lineNumber: 91,
+                                        lineNumber: 92,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -167,19 +168,19 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                                        lineNumber: 98,
+                                        lineNumber: 99,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 90,
+                                lineNumber: 91,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 86,
+                        lineNumber: 87,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -191,12 +192,12 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                                    lineNumber: 103,
+                                    lineNumber: 104,
                                     columnNumber: 109
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 103,
+                                lineNumber: 104,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -206,12 +207,12 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                                    lineNumber: 108,
+                                    lineNumber: 109,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 104,
+                                lineNumber: 105,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -220,24 +221,24 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                                    lineNumber: 110,
+                                    lineNumber: 111,
                                     columnNumber: 151
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 110,
+                                lineNumber: 111,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 102,
+                        lineNumber: 103,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 85,
+                lineNumber: 86,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -248,7 +249,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                         children: "No messages yet. Say hello!"
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 117,
+                        lineNumber: 118,
                         columnNumber: 21
                     }, this),
                     messages.map((msg)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(MessageItem, {
@@ -261,20 +262,20 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                             message: msg
                         }, msg.$id, false, {
                             fileName: "[project]/src/components/room/ChatArea.tsx",
-                            lineNumber: 121,
+                            lineNumber: 122,
                             columnNumber: 21
                         }, this)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         ref: messagesEndRef
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 129,
+                        lineNumber: 130,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 115,
+                lineNumber: 116,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -291,7 +292,7 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                             className: "flex-1 border border-border-default dark:border-border-darkDefault rounded-xl px-4 py-3 text-sm bg-surface-subtle dark:bg-surface-darkSubtle text-text-primary dark:text-text-darkPrimary focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-primaryDark transition placeholder-text-muted dark:placeholder-text-darkMuted"
                         }, void 0, false, {
                             fileName: "[project]/src/components/room/ChatArea.tsx",
-                            lineNumber: 157,
+                            lineNumber: 158,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -302,41 +303,40 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                                 className: "w-5 h-5 animate-spin"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 170,
+                                lineNumber: 171,
                                 columnNumber: 36
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$icons$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icons"].Send, {
                                 className: "w-5 h-5"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 170,
+                                lineNumber: 171,
                                 columnNumber: 88
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/room/ChatArea.tsx",
-                            lineNumber: 165,
+                            lineNumber: 166,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/room/ChatArea.tsx",
-                    lineNumber: 143,
+                    lineNumber: 144,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 133,
+                lineNumber: 134,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/room/ChatArea.tsx",
-        lineNumber: 83,
+        lineNumber: 84,
         columnNumber: 9
     }, this);
 }
 _s(ChatArea, "Yt1obMEIqMYRTzdae9P5PL+etxU=");
 _c = ChatArea;
-;
 const __TURBOPACK__default__export__ = /*#__PURE__*/ _c1 = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(ChatArea);
 const MessageItem = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].memo(function MessageItem({ user, time, message, isMe }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -347,7 +347,7 @@ const MessageItem = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2
                 children: user.substring(0, 2).toUpperCase()
             }, void 0, false, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 197,
+                lineNumber: 198,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -363,13 +363,13 @@ const MessageItem = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2
                                 children: time
                             }, void 0, false, {
                                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                                lineNumber: 202,
+                                lineNumber: 203,
                                 columnNumber: 43
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 201,
+                        lineNumber: 202,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -379,24 +379,24 @@ const MessageItem = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2
                             children: message.content
                         }, void 0, false, {
                             fileName: "[project]/src/components/room/ChatArea.tsx",
-                            lineNumber: 207,
+                            lineNumber: 208,
                             columnNumber: 25
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/room/ChatArea.tsx",
-                        lineNumber: 204,
+                        lineNumber: 205,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/room/ChatArea.tsx",
-                lineNumber: 200,
+                lineNumber: 201,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/room/ChatArea.tsx",
-        lineNumber: 196,
+        lineNumber: 197,
         columnNumber: 9
     }, this);
 });
@@ -801,12 +801,23 @@ var _s = __turbopack_context__.k.signature();
 function useMedia(roomId) {
     _s();
     const dispatch = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppDispatch"])();
-    const { media, loading, error } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppSelector"])({
+    const { media: globalMedia, loading, error } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppSelector"])({
         "useMedia.useAppSelector": (state)=>state.media
     }["useMedia.useAppSelector"]);
+    const media = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "useMedia.useMemo[media]": ()=>globalMedia.filter({
+                "useMedia.useMemo[media]": (m)=>m.room === roomId
+            }["useMedia.useMemo[media]"])
+    }["useMedia.useMemo[media]"], [
+        globalMedia,
+        roomId
+    ]);
     const refresh = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "useMedia.useCallback[refresh]": ()=>{
-            if (roomId) dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$mediaSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fetchMedia"])(roomId));
+            if (roomId) {
+                dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$mediaSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearMedia"])()); // Clear previous room's media
+                dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$mediaSlice$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fetchMedia"])(roomId));
+            }
         }
     }["useMedia.useCallback[refresh]"], [
         dispatch,
@@ -887,7 +898,7 @@ function useMedia(roomId) {
         uploadMedia: handleUpload
     };
 }
-_s(useMedia, "ZGQuTqy0jKAbynwDSibV5xwWLj0=", false, function() {
+_s(useMedia, "IjqXzCctXdHWS5YAovfDn7U6LRQ=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppDispatch"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$hooks$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAppSelector"]
@@ -1303,7 +1314,7 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                         lineNumber: 181,
                                         columnNumber: 33
                                     }, this),
-                                    mediaItems.slice(0, 6).map((m)=>{
+                                    !loading && mediaItems.slice(0, 6).map((m)=>{
                                         if (!m.fileId) return null;
                                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                             href: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$storage$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StorageService"].getFileView(m.fileId).toString(),

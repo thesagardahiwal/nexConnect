@@ -59,10 +59,10 @@ export default function FinalCTASection() {
 
                     {/* Right */}
                     <div className="flex items-center gap-6">
-                        <Link href="#" className="hover:text-text-primary dark:hover:text-text-darkPrimary">
+                        <Link target="_blank" href="https://x.com/SagarDahiwal07" className="hover:text-text-primary dark:hover:text-text-darkPrimary">
                             Twitter
                         </Link>
-                        <Link href="#" className="hover:text-text-primary dark:hover:text-text-darkPrimary">
+                        <Link target="_blank" href="https://github.com/thesagardahiwal" className="hover:text-text-primary dark:hover:text-text-darkPrimary">
                             GitHub
                         </Link>
                         <Link href="#" className="hover:text-text-primary dark:hover:text-text-darkPrimary">
