@@ -1,0 +1,8 @@
+{
+  "/(rooms)/room/[roomId]/page": "app/(rooms)/room/[roomId]/page.js",
+  "/(rooms)/rooms/page": "app/(rooms)/rooms/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/session/page": "app/session/page.js"
+}
