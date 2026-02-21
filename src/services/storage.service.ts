@@ -1,15 +1,17 @@
 import { storage, STORAGE_ID } from "@/lib/appwrite";
-import { ID } from "appwrite";
+import { ID, UploadProgress } from "appwrite";
 
 const BUCKET_ID = STORAGE_ID;
 
 export const StorageService = {
-    async uploadFile(file: File) {
+    async uploadFile(file: File, onProgress?: (progress: UploadProgress) => void) {
         try {
             return await storage.createFile(
                 BUCKET_ID,
                 ID.unique(),
-                file
+                file,
+                undefined,
+                onProgress
             );
         } catch (error) {
             console.error("StorageService.uploadFile error:", error);

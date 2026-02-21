@@ -113,7 +113,38 @@ export const RoomService = {
         );
     },
 
+    async findByCode(roomCode: string) {
+        const response = await databases.listDocuments<Room>(
+            DB_ID,
+            COLLECTIONS.ROOMS,
+            [
+                Query.equal("roomCode", roomCode),
+                Query.limit(1),
+                Query.select(select),
+            ]
+        );
+        return response.documents[0] || null;
+    },
+
+    async getByIdOrCode(value: string) {
+        try {
+            return await this.get(value);
+        } catch (error: any) {
+            const isNotFound = error?.code === 404 || String(error?.message || '').includes('Document not found');
+            if (!isNotFound) throw error;
+            const byCode = await this.findByCode(value);
+            if (!byCode) throw error;
+            return byCode;
+        }
+    },
+
     async create(payload: RoomPayload) {
+        if (payload.roomCode) {
+            const existing = await this.findByCode(payload.roomCode);
+            if (existing) {
+                throw new Error("Room code already in use.");
+            }
+        }
         const room = await databases.createDocument(
             DB_ID,
             COLLECTIONS.ROOMS,

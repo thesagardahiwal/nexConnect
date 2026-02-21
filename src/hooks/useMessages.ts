@@ -19,6 +19,7 @@ export function useMessages(roomId: string) {
 
     const refresh = useCallback(() => {
         if (roomId) {
+            dispatch(clearMessages());
             dispatch(fetchMessages(roomId));
         } else {
             dispatch(clearMessages());

@@ -6,6 +6,146 @@ html {
     scroll-behavior: smooth;
 }
 
+.skeleton-shimmer {
+    background: linear-gradient(90deg, var(--skeleton-from), var(--skeleton-via), var(--skeleton-to));
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+}
+
+:root {
+    --skeleton-from: #e7e9ee;
+    --skeleton-via: #f3f4f6;
+    --skeleton-to: #e7e9ee;
+}
+
+.dark {
+    --skeleton-from: #1f2937;
+    --skeleton-via: #374151;
+    --skeleton-to: #1f2937;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+.join-backdrop {
+    animation: join-fade-in 180ms ease-out;
+}
+
+.join-modal-pop {
+    animation: join-pop 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.join-accent {
+    background: linear-gradient(90deg, #60a5fa, #34d399, #f59e0b);
+    background-size: 200% 100%;
+    animation: join-accent 2.2s ease-in-out infinite;
+}
+
+.join-bar {
+    position: relative;
+    overflow: hidden;
+}
+
+.join-bar::after {
+    content: "";
+    position: absolute;
+    left: -40%;
+    top: 0;
+    height: 100%;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), transparent);
+    animation: join-sweep 1.1s ease-in-out infinite;
+}
+
+.join-dots span {
+    display: inline-block;
+    animation: join-dots 1.2s infinite;
+}
+
+.join-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.join-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes join-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes join-pop {
+    0% {
+        transform: translateY(8px) scale(0.98);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes join-accent {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes join-sweep {
+    0% {
+        left: -40%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+@keyframes join-dots {
+    0%,
+    80%,
+    100% {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
+    40% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+}
+
+.kicked-overlay {
+    animation: join-fade-in 200ms ease-out;
+}
+
+.kicked-card {
+    animation: kicked-pop 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes kicked-pop {
+    0% {
+        transform: translateY(6px) scale(0.98);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
 .hide-scroll-bar {
     scrollbar-width: none;
     -ms-overflow-style: none;

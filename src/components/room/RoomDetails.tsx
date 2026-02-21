@@ -13,6 +13,9 @@ interface RoomDetailsProps {
     room: Room | null;
     members: RoomMember[];
     currentUserId: string | null;
+    loading?: boolean;
+    canAccessMedia?: boolean;
+    onRequireJoin?: () => void;
     onCloseRoomAction?: () => void; // Destructive action
     onToggleUI?: () => void; // UI Toggle
     onSendMessage?: (payload: import("@/types/message").MessagePayload) => Promise<void>;
@@ -20,14 +23,67 @@ interface RoomDetailsProps {
     onExitRoomAction?: () => void;
 }
 
-function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggleUI, onSendMessage, onKickMember, onExitRoomAction }: RoomDetailsProps) {
+function RoomDetails({ room, members, currentUserId, loading, canAccessMedia = true, onRequireJoin, onCloseRoomAction, onToggleUI, onSendMessage, onKickMember, onExitRoomAction }: RoomDetailsProps) {
     const [activeModal, setActiveModal] = useState<'members' | 'media' | null>(null);
     const [isUploading, setIsUploading] = useState(false);
-    const { media, loading, uploadMedia, error, refresh } = useMedia(room?.$id || '');
+    const { media, loading: mediaLoading, uploadMedia, error, refresh, uploadProgress } = useMedia(
+        room?.$id || '',
+        { enabled: !!room?.$id && canAccessMedia }
+    );
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Filter media items
     const mediaItems = useMemo(() => media?.filter(m => ['IMAGE', 'PDF', 'VIDEO'].includes(m.fileType)) || [], [media]);
+
+    if (loading) {
+        return (
+            <>
+                <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={onToggleUI} />
+                <aside className="fixed inset-y-0 right-0 z-50 w-full sm:w-80 bg-surface-base dark:bg-surface-darkElevated border-l border-border-default dark:border-border-darkDefault p-6 overflow-y-auto md:static md:block h-full animate-in slide-in-from-right-10 md:animate-none shadow-2xl md:shadow-none">
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="h-5 w-32 rounded-md skeleton-shimmer" />
+                        <div className="h-6 w-6 rounded-full skeleton-shimmer" />
+                    </div>
+
+                    <section className="mb-8">
+                        <div className="h-3 w-20 rounded-md skeleton-shimmer mb-3" />
+                        <div className="h-12 w-full rounded-xl skeleton-shimmer" />
+                    </section>
+
+                    <section className="mb-8">
+                        <div className="flex justify-between mb-4">
+                            <div className="h-3 w-24 rounded-md skeleton-shimmer" />
+                            <div className="h-3 w-12 rounded-md skeleton-shimmer" />
+                        </div>
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="flex items-center gap-3 mb-3">
+                                <div className="w-9 h-9 rounded-full skeleton-shimmer" />
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-3 w-28 rounded-md skeleton-shimmer" />
+                                    <div className="h-2 w-16 rounded-md skeleton-shimmer" />
+                                </div>
+                            </div>
+                        ))}
+                    </section>
+
+                    <section>
+                        <div className="flex justify-between mb-3 items-center">
+                            <div className="h-3 w-24 rounded-md skeleton-shimmer" />
+                            <div className="flex items-center gap-3">
+                                <div className="h-4 w-12 rounded-md skeleton-shimmer" />
+                                <div className="h-4 w-12 rounded-md skeleton-shimmer" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            {Array.from({ length: 4 }).map((_, i) => (
+                                <div key={i} className="aspect-square rounded-xl skeleton-shimmer" />
+                            ))}
+                        </div>
+                    </section>
+                </aside>
+            </>
+        );
+    }
 
     if (!room) return null;
 
@@ -36,11 +92,16 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file || !onSendMessage || !room || !currentUserId) return;
+        if (!canAccessMedia) {
+            onRequireJoin?.();
+            return;
+        }
 
         setIsUploading(true);
         try {
             console.log("Uploading file:", file);
             await uploadMedia(file, currentUserId);
+            await refresh();
         } catch (error) {
             console.error("Failed to upload file:", error);
             alert("Failed to upload file");
@@ -77,6 +138,10 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
     };
 
 
+    const normalizedProgress = typeof uploadProgress === 'number'
+        ? Math.min(100, Math.max(0, Math.round(uploadProgress)))
+        : null;
+
     return (
         <>
             {/* Overlay for mobile */}
@@ -88,6 +153,22 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                     <h3 className="font-semibold text-text-primary dark:text-text-darkPrimary">Room Details</h3>
                     <button onClick={onToggleUI} className="text-text-muted hover:text-text-primary dark:text-text-darkMuted dark:hover:text-text-darkPrimary transition"><Icons.Close className="w-5 h-5" /></button>
                 </div>
+
+                {room.roomCode && (
+                    <section className="mb-6">
+                        <p className="text-xs text-text-secondary dark:text-text-darkSecondary mb-2 font-medium">ROOM CODE</p>
+                        <div className="flex items-center justify-between rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle px-4 py-3 border border-border-default dark:border-border-darkDefault">
+                            <span className="font-mono tracking-widest text-text-primary dark:text-text-darkPrimary">{room.roomCode}</span>
+                            <button
+                                onClick={() => navigator.clipboard.writeText(room.roomCode || '')}
+                                className="text-text-secondary dark:text-text-darkSecondary hover:text-text-primary dark:hover:text-text-darkPrimary transition"
+                                title="Copy room code"
+                            >
+                                <Icons.Copy className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </section>
+                )}
 
                 {/* Creator or Actions */}
                 <section className="mb-8">
@@ -145,20 +226,57 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                                         disabled={isUploading}
                                     />
                                     <button
-                                        onClick={() => fileInputRef.current?.click()}
+                                        onClick={() => {
+                                            if (!canAccessMedia) {
+                                                onRequireJoin?.();
+                                                return;
+                                            }
+                                            fileInputRef.current?.click();
+                                        }}
                                         disabled={isUploading}
                                         className="text-xs flex items-center gap-1 text-brand-primary dark:text-brand-primaryDark hover:underline disabled:opacity-50"
                                     >
                                         {isUploading ? <Icons.Loader className="w-3 h-3 animate-spin" /> : <Icons.Plus className="w-3 h-3" />}
                                         Upload
+                                        {isUploading && typeof normalizedProgress === 'number' && (
+                                            <span className="ml-1 text-[10px] text-text-secondary dark:text-text-darkSecondary">
+                                                {normalizedProgress}%
+                                            </span>
+                                        )}
                                     </button>
                                 </>
                             )}
-                            <button onClick={() => setActiveModal('media')} className="text-xs text-brand-primary dark:text-brand-primaryDark cursor-pointer hover:underline">View All</button>
+                            <button
+                                onClick={() => {
+                                    if (!canAccessMedia) {
+                                        onRequireJoin?.();
+                                        return;
+                                    }
+                                    setActiveModal('media');
+                                }}
+                                className="text-xs text-brand-primary dark:text-brand-primaryDark cursor-pointer hover:underline"
+                            >
+                                View All
+                            </button>
                         </div>
                     </div>
 
-                    {loading && mediaItems.length === 0 ? (
+                    {!canAccessMedia ? (
+                        <div className="h-28 rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle flex items-center justify-center text-xs text-text-muted dark:text-text-darkMuted border border-border-default dark:border-border-darkDefault border-dashed">
+                            <div className="flex items-center gap-2">
+                                <Icons.Lock className="w-4 h-4" />
+                                <span>Join to view shared media</span>
+                                {onRequireJoin && (
+                                    <button
+                                        onClick={onRequireJoin}
+                                        className="ml-2 text-brand-primary dark:text-brand-primaryDark hover:underline font-medium"
+                                    >
+                                        Join
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ) : mediaLoading && mediaItems.length === 0 ? (
                         <div className="h-28 rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle flex items-center justify-center border border-border-default dark:border-border-darkDefault border-dashed">
                             <Icons.Loader className="w-5 h-5 text-brand-primary dark:text-brand-primaryDark animate-spin" />
                         </div>
@@ -181,10 +299,18 @@ function RoomDetails({ room, members, currentUserId, onCloseRoomAction, onToggle
                             {isUploading && (
                                 <div className="aspect-square rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle border border-border-default dark:border-border-darkDefault flex flex-col items-center justify-center gap-2 animate-pulse">
                                     <Icons.Loader className="w-5 h-5 text-brand-primary dark:text-brand-primaryDark animate-spin" />
-                                    <span className="text-[10px] text-text-secondary dark:text-text-darkSecondary font-medium">Uploading...</span>
+                                    <span className="text-[10px] text-text-secondary dark:text-text-darkSecondary font-medium">
+                                        Uploading{typeof normalizedProgress === 'number' ? ` ${normalizedProgress}%` : '...'}
+                                    </span>
+                                    <div className="w-20 h-1 rounded-full bg-border-default dark:bg-border-darkDefault overflow-hidden">
+                                        <div
+                                            className="h-full bg-brand-primary dark:bg-brand-primaryDark transition-[width]"
+                                            style={{ width: `${normalizedProgress ?? 0}%` }}
+                                        />
+                                    </div>
                                 </div>
                             )}
-                            {!loading && mediaItems.slice(0, 6).map(m => {
+                            {!mediaLoading && mediaItems.slice(0, 6).map(m => {
                                 if (!m.fileId) return null;
 
                                 return (

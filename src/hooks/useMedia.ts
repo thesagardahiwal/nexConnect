@@ -5,27 +5,36 @@ import { client, COLLECTIONS, DB_ID } from "@/lib/appwrite";
 import { Media } from "@/types/media";
 // import { StorageService } from "@/services/storage.service";
 
-export function useMedia(roomId: string) {
+export function useMedia(roomId: string, options?: { enabled?: boolean }) {
     const dispatch = useAppDispatch();
-    const { media: globalMedia, loading, error } = useAppSelector((state) => state.media);
+    const { media: globalMedia, loading, error, uploadProgress } = useAppSelector((state) => state.media);
+    const enabled = options?.enabled ?? true;
 
-    const media = useMemo(() => globalMedia.filter(m => m.room === roomId), [globalMedia, roomId]);
+    const media = useMemo(() => {
+        if (!enabled) return [];
+        return globalMedia.filter(m => m.room === roomId);
+    }, [globalMedia, roomId, enabled]);
 
-    const refresh = useCallback(() => {
-        if (roomId) {
-            dispatch(clearMedia()); // Clear previous room's media
-            dispatch(fetchMedia(roomId));
+    const refresh = useCallback((options?: { clear?: boolean }) => {
+        if (roomId && enabled) {
+            if (options?.clear) {
+                dispatch(clearMedia()); // Clear previous room's media
+            }
+            return dispatch(fetchMedia(roomId));
         }
-    }, [dispatch, roomId]);
+        return undefined;
+    }, [dispatch, roomId, enabled]);
 
     // Initial Fetch
     useEffect(() => {
-        refresh();
+        if (enabled) {
+            refresh({ clear: true });
+        }
     }, [refresh]);
 
     // Real-time Susbcription
     useEffect(() => {
-        if (!roomId) return;
+        if (!roomId || !enabled) return;
 
         const unsubscribe = client.subscribe(
             `databases.${DB_ID}.collections.${COLLECTIONS.MEDIA}.documents`,
@@ -50,6 +59,9 @@ export function useMedia(roomId: string) {
 
     const handleUpload = useCallback(async (file: File, userId: string) => {
         try {
+            if (!enabled) {
+                throw new Error("Media access not enabled for this room");
+            }
             // 1. Upload happens in action dispatched below
             // const fileId = await StorageService.uploadFile(file);
 
@@ -74,7 +86,7 @@ export function useMedia(roomId: string) {
             console.error("Failed to upload media:", error);
             throw error;
         }
-    }, [dispatch, roomId]);
+    }, [dispatch, roomId, enabled]);
 
-    return { media, loading, error, refresh, uploadMedia: handleUpload };
+    return { media, loading, error, uploadProgress, refresh, uploadMedia: handleUpload };
 }

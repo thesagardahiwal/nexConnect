@@ -11,13 +11,16 @@ interface ChatAreaProps {
     room: import("@/types/room").Room | null;
     messages: Message[];
     loading: boolean;
+    roomLoading?: boolean;
+    canChat?: boolean;
+    onRequireJoin?: () => void;
     currentUser: string | null;
     onSendMessage: (payload: MessagePayload) => Promise<void>;
     onToggleDetails?: () => void;
     detailsOpen?: boolean;
 }
 
-function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggleDetails, detailsOpen }: ChatAreaProps) {
+function ChatArea({ room, messages, loading, roomLoading, canChat = true, onRequireJoin, currentUser, onSendMessage, onToggleDetails, detailsOpen }: ChatAreaProps) {
     const [inputText, setInputText] = useState("");
     // const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [sending, setSending] = useState(false);
@@ -34,6 +37,10 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
 
     const handleSend = async () => {
         console.log("handleSend: Initiated");
+        if (!canChat) {
+            onRequireJoin?.();
+            return;
+        }
         if (!inputText.trim() || !room || !currentUser) {
             console.log("handleSend: Validation failed - missing content, room, or user");
             return;
@@ -67,12 +74,44 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
     //     }
     // };
 
-    if (loading && messages.length === 0) {
+    const showLoading = !!roomLoading || (loading && messages.length === 0);
+
+    if (showLoading) {
         return (
-            <div className="flex-1 flex flex-col items-center justify-center bg-surface-subtle dark:bg-surface-darkBase text-text-muted dark:text-text-darkMuted gap-3">
-                <Icons.Loader className="w-8 h-8 animate-spin text-brand-primary dark:text-brand-primaryDark" />
-                <p className="text-sm font-medium">Loading chat...</p>
-            </div>
+            <section className="flex-1 flex flex-col bg-surface-subtle dark:bg-surface-darkBase">
+                <div className="h-16 bg-surface-base dark:bg-surface-darkElevated border-b border-border-default dark:border-border-darkDefault px-4 sm:px-6 flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="h-6 w-6 rounded-full skeleton-shimmer" />
+                        <div className="space-y-2">
+                            <div className="h-4 w-40 rounded-md skeleton-shimmer" />
+                            <div className="h-3 w-24 rounded-md skeleton-shimmer" />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="h-6 w-6 rounded-full skeleton-shimmer" />
+                        <div className="h-6 w-6 rounded-full skeleton-shimmer" />
+                    </div>
+                </div>
+
+                <div className="flex-1 px-8 py-6 space-y-4 overflow-y-auto">
+                    {Array.from({ length: 6 }).map((_, i) => (
+                        <div key={i} className={`flex gap-4 ${i % 2 === 0 ? "" : "flex-row-reverse"}`}>
+                            <div className="w-10 h-10 rounded-full skeleton-shimmer shrink-0" />
+                            <div className={`flex flex-col ${i % 2 === 0 ? "items-start" : "items-end"} gap-2`}>
+                                <div className="h-3 w-20 rounded-md skeleton-shimmer" />
+                                <div className="h-10 w-64 max-w-[70vw] rounded-xl skeleton-shimmer" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="border-t border-border-default dark:border-border-darkDefault p-4 bg-surface-base dark:bg-surface-darkElevated shrink-0">
+                    <div className="flex items-center gap-3">
+                        <div className="flex-1 h-12 rounded-xl skeleton-shimmer" />
+                        <div className="w-12 h-12 rounded-xl skeleton-shimmer" />
+                    </div>
+                </div>
+            </section>
         );
     }
 
@@ -97,6 +136,18 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                             </span>
                         </h3>
                         <p className="text-xs text-text-secondary dark:text-text-darkSecondary hidden sm:block">ID: {room.$id}</p>
+                        {room.roomCode && (
+                            <div className="hidden sm:flex items-center gap-2 text-xs text-text-secondary dark:text-text-darkSecondary">
+                                <span>Code: <span className="font-mono tracking-widest">{room.roomCode}</span></span>
+                                <button
+                                    onClick={() => navigator.clipboard.writeText(room.roomCode || '')}
+                                    className="hover:text-text-primary dark:hover:text-text-darkPrimary transition"
+                                    title="Copy room code"
+                                >
+                                    <Icons.Copy className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -162,17 +213,28 @@ function ChatArea({ room, messages, loading, currentUser, onSendMessage, onToggl
                         onChange={(e) => setInputText(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         disabled={room.status !== 'OPEN'}
-                        placeholder={room.status === 'OPEN' ? "Type your message..." : "Room is closed"}
+                        placeholder={room.status === 'OPEN' ? (canChat ? "Type your message..." : "Join to chat in this room") : "Room is closed"}
                         className="flex-1 border border-border-default dark:border-border-darkDefault rounded-xl px-4 py-3 text-sm bg-surface-subtle dark:bg-surface-darkSubtle text-text-primary dark:text-text-darkPrimary focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-primaryDark transition placeholder-text-muted dark:placeholder-text-darkMuted"
                     />
                     <button
                         onClick={handleSend}
-                        disabled={!inputText.trim() || sending || room.status !== 'OPEN'}
+                        disabled={sending || room.status !== 'OPEN' || (canChat && !inputText.trim())}
                         className={`w-12 h-12 rounded-xl flex items-center justify-center text-white transition ${(inputText.trim() && !sending) ? 'bg-brand-primary hover:bg-brand-secondary dark:bg-brand-primaryDark' : 'bg-border-default dark:bg-surface-darkSubtle cursor-not-allowed'}`}
                     >
                         {sending ? <Icons.Loader className="w-5 h-5 animate-spin" /> : <Icons.Send className="w-5 h-5" />}
                     </button>
                 </div>
+                {!canChat && room.status === 'OPEN' && (
+                    <div className="mt-3 flex items-center justify-between rounded-xl border border-border-default dark:border-border-darkDefault bg-surface-subtle dark:bg-surface-darkSubtle px-4 py-2">
+                        <span className="text-xs text-text-secondary dark:text-text-darkSecondary">Join to chat and share media in this room.</span>
+                        <button
+                            onClick={onRequireJoin}
+                            className="text-xs font-semibold text-brand-primary dark:text-brand-primaryDark hover:underline"
+                        >
+                            Join
+                        </button>
+                    </div>
+                )}
             </div>
         </section>
     );

@@ -37,9 +37,9 @@ function RoomSidebar() {
                 {/* Header */}
                 <div className="px-4 py-4 shrink-0 space-y-4">
                     <div className="flex items-center justify-between">
-                        <h2 className="font-semibold text-text-primary dark:text-text-darkPrimary flex items-center gap-2">
+                        <Link href={"/rooms"} className="font-semibold text-text-primary dark:text-text-darkPrimary flex items-center gap-2">
                             <Icons.Hash className="w-4 h-4 text-brand-primary dark:text-brand-primaryDark" /> Rooms
-                        </h2>
+                        </Link>
                         <div className="flex gap-2">
                             <button
                                 onClick={() => setIsJoinModalOpen(true)}
@@ -131,6 +131,7 @@ export default React.memo(RoomSidebar);
 // Import Room type if not globally available, or assume it's passed or defined. 
 // Ideally it should be imported. let's import it.
 import { Room } from "@/types/room";
+import Link from 'next/link';
 
 function RoomItem({
     room,

@@ -13,10 +13,12 @@ import {
     removeMember as removeMemberAction
 } from '@/store/slices/roomSlice';
 
-export function useRoomMembers(roomId: string) {
+export function useRoomMembers(roomId: string, options?: { currentUserId?: string; onKicked?: () => void }) {
     const { isAuthenticated, session } = useSession();
     const dispatch = useAppDispatch();
     const { members, loading, error } = useAppSelector((state) => state.rooms);
+    const currentUserId = options?.currentUserId;
+    const onKicked = options?.onKicked;
 
     const fetchMembers = useCallback(() => {
         if (roomId) dispatch(enterRoom(roomId));
@@ -46,6 +48,9 @@ export function useRoomMembers(roomId: string) {
                         const payloadRoomId = typeof payload.room === 'object' ? (payload.room as any).$id : payload.room;
 
                         if (payloadRoomId !== roomId) return;
+                        const payloadUserId = typeof (payload as any).user === 'object'
+                            ? (payload as any).user.$id
+                            : (payload as any).user;
 
                         if (response.events.includes('databases.*.collections.*.documents.*.create')) {
                             // Fetch full member details to get expanded user
@@ -66,9 +71,15 @@ export function useRoomMembers(roomId: string) {
                                 }
                             } else {
                                 if (mounted) dispatch(removeMemberAction(payload));
+                                if (currentUserId && payloadUserId === currentUserId) {
+                                    onKicked?.();
+                                }
                             }
                         } else if (response.events.includes('databases.*.collections.*.documents.*.delete')) {
                             if (mounted) dispatch(removeMemberAction(payload));
+                            if (currentUserId && payloadUserId === currentUserId) {
+                                onKicked?.();
+                            }
                         }
                     }
                 );

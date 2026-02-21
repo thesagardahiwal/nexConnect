@@ -168,6 +168,8 @@ const roomSlice = createSlice({
         builder.addCase(enterRoom.pending, (state) => {
             state.loading = true;
             state.error = null;
+            state.currentRoom = null;
+            state.members = [];
         });
         builder.addCase(enterRoom.fulfilled, (state, action) => {
             state.loading = false;
