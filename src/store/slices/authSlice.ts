@@ -5,6 +5,7 @@ import { Session } from '@/types/session';
 import { SessionService } from '@/services/session.service';
 import { UserService } from '@/services/user.service';
 import { account } from '@/lib/appwrite';
+import CryptoJS from 'crypto-js';
 
 interface AuthState {
     user: User | null;
@@ -121,6 +122,47 @@ export const updateUsername = createAsyncThunk(
     }
 );
 
+export const updateProfile = createAsyncThunk(
+    'auth/updateProfile',
+    async ({ username, password }: { username?: string; password?: string }, { getState, rejectWithValue }) => {
+        try {
+            const state = (getState() as any).auth;
+            const userId = state.user?.$id || state.userId;
+            if (!userId) throw new Error("User not found");
+
+            const payload: Partial<UserPayload> = {};
+            if (username && username.trim()) payload.username = username.trim();
+            if (password) {
+                payload.passwordHash = CryptoJS.SHA256(password).toString();
+                payload.isGuest = false;
+            }
+
+            if (Object.keys(payload).length === 0) {
+                return await UserService.get(userId);
+            }
+
+            try {
+                await UserService.update(userId, payload);
+            } catch (error: any) {
+                const message = String(error?.message || '');
+                if (message.includes('Unknown attribute: \"passwordHash\"')) {
+                    const fallbackPayload: Partial<UserPayload> = { ...payload };
+                    delete (fallbackPayload as any).passwordHash;
+                    await UserService.update(userId, fallbackPayload);
+                    if (password) {
+                        localStorage.setItem(`nexconnect_password_hash_${userId}`, payload.passwordHash as string);
+                    }
+                } else {
+                    throw error;
+                }
+            }
+            return await UserService.get(userId);
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to update profile');
+        }
+    }
+);
+
 export const logout = createAsyncThunk(
     'auth/logout',
     async (_, { getState, rejectWithValue }) => {
@@ -132,8 +174,8 @@ export const logout = createAsyncThunk(
             // We do NOT delete the account, just the internal session
             localStorage.removeItem('nexconnect_session_id');
             localStorage.removeItem('nexconnect_private_id');
-            // Force reload to reset application state
-            window.location.reload();
+            // Return to landing page
+            window.location.href = '/';
             return null;
         } catch (error: any) {
             return rejectWithValue(error.message || 'Logout failed');
@@ -170,6 +212,11 @@ const authSlice = createSlice({
 
         // updateUsername
         builder.addCase(updateUsername.fulfilled, (state, action) => {
+            state.user = action.payload;
+        });
+
+        // updateProfile
+        builder.addCase(updateProfile.fulfilled, (state, action) => {
             state.user = action.payload;
         });
 

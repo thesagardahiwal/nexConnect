@@ -38,12 +38,20 @@ export default function HomePage() {
                             Privacy
                         </Link>
                         {/* CTA */}
-                        <Link
-                            href="/session"
-                            className="bg-text-primary dark:bg-text-inverse text-text-inverse dark:text-text-primary px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
-                        >
-                            Start Secure Session
-                        </Link>
+                        <div className="flex items-center gap-3">
+                            <Link
+                                href="/session"
+                                className="px-5 py-2.5 rounded-full text-sm font-medium border border-border-default dark:border-border-darkDefault hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle transition"
+                            >
+                                Login / Resume
+                            </Link>
+                            <Link
+                                href="/session?mode=new"
+                                className="bg-text-primary dark:bg-text-inverse text-text-inverse dark:text-text-primary px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
+                            >
+                                Anonymous Session
+                            </Link>
+                        </div>
                     </nav>
 
                     {/* Mobile Menu Button */}
@@ -81,10 +89,17 @@ export default function HomePage() {
                         </Link>
                         <Link
                             href="/session"
+                            className="text-lg font-medium text-text-primary dark:text-text-darkPrimary py-2"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Login / Resume
+                        </Link>
+                        <Link
+                            href="/session?mode=new"
                             className="bg-brand-primary dark:bg-brand-primaryDark text-text-inverse text-center py-3 rounded-xl font-medium mt-2"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            Start Secure Session
+                            Anonymous Session
                         </Link>
                     </div>
                 )}
@@ -120,18 +135,18 @@ export default function HomePage() {
                     <FadeIn delay={0.4}>
                         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Link
-                                href="/session"
+                                href="/session?mode=new"
                                 className="inline-flex items-center gap-2 bg-text-primary dark:bg-text-inverse text-text-inverse dark:text-text-primary px-8 py-4 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition"
                             >
-                                Start Secure Session
+                                Anonymous Session
                                 <Icons.ChevronRight className="w-5 h-5" />
                             </Link>
 
                             <Link
-                                href="#how"
+                                href="/session"
                                 className="inline-flex items-center justify-center px-8 py-4 rounded-full border border-border-default dark:border-border-darkDefault text-text-primary dark:text-text-darkPrimary font-medium hover:bg-surface-subtle dark:hover:bg-surface-darkSubtle transition"
                             >
-                                How it Works
+                                Login / Resume
                             </Link>
                         </div>
                     </FadeIn>

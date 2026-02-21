@@ -5,6 +5,7 @@ export interface User extends Models.Document {
     username: string;
     avatarUrl?: string;
     isGuest: boolean;
+    passwordHash?: string;
 }
 
 export interface UserPayload {
@@ -12,4 +13,5 @@ export interface UserPayload {
     username: string;
     avatarUrl?: string;
     isGuest: boolean;
+    passwordHash?: string;
 }

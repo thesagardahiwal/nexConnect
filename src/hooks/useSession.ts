@@ -1,5 +1,5 @@
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { updateUsername, logout as logoutAction } from '@/store/slices/authSlice';
+import { updateUsername, updateProfile as updateProfileAction, logout as logoutAction } from '@/store/slices/authSlice';
 import { useAuth } from './useAuth';
 
 export function useSession() {
@@ -12,6 +12,10 @@ export function useSession() {
 
     const createSession = async (username: string) => {
         await dispatch(updateUsername(username)).unwrap();
+    };
+
+    const updateProfile = async (payload: { username?: string; password?: string }) => {
+        await dispatch(updateProfileAction(payload)).unwrap();
     };
 
     const logout = async () => {
@@ -31,6 +35,7 @@ export function useSession() {
         loading,
         error,
         createSession,
+        updateProfile,
         logout,
         isAuthenticated
     };

@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRooms } from '@/hooks/useRooms';
 import { useSession } from '@/hooks/useSession';
 import { useTheme } from '@/context/ThemeContext';
@@ -8,6 +10,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import JoinRoomModal from './JoinRoomModal';
 import CreateRoomModal from './CreateRoomModal';
+import { Room } from "@/types/room";
+import ProfileModal from './ProfileModal';
 
 function RoomSidebar() {
     const { rooms, loading: roomsLoading, error } = useRooms();
@@ -20,6 +24,7 @@ function RoomSidebar() {
     const [search, setSearch] = useState('');
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -38,7 +43,15 @@ function RoomSidebar() {
                 <div className="px-4 py-4 shrink-0 space-y-4">
                     <div className="flex items-center justify-between">
                         <Link href={"/rooms"} className="font-semibold text-text-primary dark:text-text-darkPrimary flex items-center gap-2">
-                            <Icons.Hash className="w-4 h-4 text-brand-primary dark:text-brand-primaryDark" /> Rooms
+                            <span className="w-7 h-7 rounded-lg bg-surface-subtle dark:bg-surface-darkSubtle border border-border-default dark:border-border-darkDefault flex items-center justify-center overflow-hidden">
+                                <Image
+                                    src={theme === 'dark' ? "/Dark Logo.png" : "/Light Logo.png"}
+                                    alt="NexConnect"
+                                    width={20}
+                                    height={20}
+                                />
+                            </span>
+                            Rooms
                         </Link>
                         <div className="flex gap-2">
                             <button
@@ -106,32 +119,38 @@ function RoomSidebar() {
                             <p className="text-xs text-status-success dark:text-status-successDark flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-status-success dark:bg-status-successDark"></span>
                                 Online
+                                {user?.isGuest && <span className="ml-2 text-[10px] text-text-secondary dark:text-text-darkSecondary">Guest</span>}
                             </p>
                         </div>
                     </div>
 
-                    <button
-                        onClick={toggleTheme}
-                        className="p-2 rounded-full hover:bg-surface-base dark:hover:bg-surface-darkElevated text-text-secondary dark:text-text-darkSecondary transition"
-                        title="Toggle Theme"
-                    >
-                        {mounted ? (theme === 'light' ? <Icons.Moon className="w-5 h-5" /> : <Icons.Sun className="w-5 h-5" />) : <div className="w-5 h-5" />}
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setIsProfileModalOpen(true)}
+                            className="p-2 rounded-full hover:bg-surface-base dark:hover:bg-surface-darkElevated text-text-secondary dark:text-text-darkSecondary transition"
+                            title="Edit Profile"
+                        >
+                            <Icons.Settings className="w-5 h-5" />
+                        </button>
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2 rounded-full hover:bg-surface-base dark:hover:bg-surface-darkElevated text-text-secondary dark:text-text-darkSecondary transition"
+                            title="Toggle Theme"
+                        >
+                            {mounted ? (theme === 'light' ? <Icons.Moon className="w-5 h-5" /> : <Icons.Sun className="w-5 h-5" />) : <div className="w-5 h-5" />}
+                        </button>
+                    </div>
                 </div>
             </aside>
 
             <JoinRoomModal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)} />
             <CreateRoomModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+            <ProfileModal isOpen={isProfileModalOpen} onClose={() => setIsProfileModalOpen(false)} />
         </>
     );
 }
 
 export default React.memo(RoomSidebar);
-
-// Import Room type if not globally available, or assume it's passed or defined. 
-// Ideally it should be imported. let's import it.
-import { Room } from "@/types/room";
-import Link from 'next/link';
 
 function RoomItem({
     room,

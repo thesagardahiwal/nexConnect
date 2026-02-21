@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from '@/hooks/useSession';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { SessionService } from '@/services/session.service';
 import { Session } from '@/types/session';
@@ -11,10 +11,17 @@ export default function SessionPage() {
     const [username, setUsername] = useState('');
     const { createSession, loading, error, user } = useSession();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const forceNew = searchParams.get('mode') === 'new';
     const [existingSessions, setExistingSessions] = useState<Session[]>([]);
     const [checkingSessions, setCheckingSessions] = useState(true);
 
     useEffect(() => {
+        if (forceNew) {
+            setExistingSessions([]);
+            setCheckingSessions(false);
+            return;
+        }
         if (user?.$id) {
             SessionService.listActive(user.$id)
                 .then(sessions => setExistingSessions(sessions))
@@ -23,7 +30,7 @@ export default function SessionPage() {
         } else {
             setCheckingSessions(false);
         }
-    }, [user]);
+    }, [user, forceNew]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,7 +53,9 @@ export default function SessionPage() {
                     <Icons.Lock className="w-8 h-8 text-white" />
                 </div>
 
-                <h1 className="text-3xl font-bold text-text-primary dark:text-text-darkPrimary mb-2">Secure Session</h1>
+                <h1 className="text-3xl font-bold text-text-primary dark:text-text-darkPrimary mb-2">
+                    {forceNew ? 'Anonymous Session' : 'Secure Session'}
+                </h1>
 
                 {checkingSessions ? (
                     <div className="py-8 flex justify-center">
@@ -116,7 +125,7 @@ export default function SessionPage() {
                             >
                                 {loading ? 'Creating Identity...' : (
                                     <>
-                                        Start Secure Session <Icons.ChevronRight className="w-5 h-5" />
+                                        Start Anonymous Session <Icons.ChevronRight className="w-5 h-5" />
                                     </>
                                 )}
                             </button>
