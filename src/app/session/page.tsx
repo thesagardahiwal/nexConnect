@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSession } from '@/hooks/useSession';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { SessionService } from '@/services/session.service';
 import { Session } from '@/types/session';
 
-export default function SessionPage() {
+function SessionPageContent() {
     const [username, setUsername] = useState('');
     const { createSession, loading, error, user } = useSession();
     const router = useRouter();
@@ -137,5 +137,19 @@ export default function SessionPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function SessionPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="min-h-screen bg-surface-base dark:bg-surface-darkBase flex flex-col items-center justify-center p-4">
+                    <Icons.Loader className="w-6 h-6 animate-spin text-brand-primary" />
+                </div>
+            }
+        >
+            <SessionPageContent />
+        </Suspense>
     );
 }

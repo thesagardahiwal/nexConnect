@@ -284,7 +284,7 @@ function RoomDetails({ room, members, currentUserId, loading, canAccessMedia = t
                         <div className="h-28 rounded-xl bg-surface-subtle dark:bg-surface-darkSubtle flex flex-col items-center justify-center text-xs text-status-danger dark:text-status-dangerDark border border-border-default dark:border-border-darkDefault border-dashed p-4 text-center">
                             <p className="mb-2">Failed to load media</p>
                             <button
-                                onClick={refresh}
+                                onClick={() => refresh()}
                                 className="text-brand-primary dark:text-brand-primaryDark hover:underline font-medium"
                             >
                                 Retry
